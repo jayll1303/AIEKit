@@ -1,6 +1,6 @@
 ---
 name: ollama-local-llm
-description: "Run and manage local LLMs with Ollama. Use when running ollama run, ollama pull, creating Modelfiles, serving local LLM APIs, using ollama serve, configuring GPU layers, or integrating Ollama REST/OpenAI-compatible endpoints."
+description: "Run and manage local LLMs with Ollama. Use when running ollama run, ollama pull, creating Modelfiles, serving local LLM APIs, using ollama serve, or integrating Ollama REST/OpenAI-compatible API."
 ---
 
 # Ollama — Local LLM Runner
@@ -21,7 +21,7 @@ This skill handles:
 Does NOT handle:
 - Training or fine-tuning models (→ hf-transformers-trainer)
 - Quantizing models to GGUF format from HuggingFace (→ model-quantization)
-- Running llama.cpp server directly without Ollama wrapper (→ vllm-tgi-inference)
+- Running llama.cpp server directly without Ollama wrapper (→ llama-cpp-inference)
 - Docker GPU passthrough and NVIDIA Container Toolkit setup (→ docker-gpu-setup)
 
 ## When to Use
@@ -62,6 +62,9 @@ brew install ollama
 # Verify
 ollama --version
 ```
+
+⚠️ **HARD GATE:** Do NOT proceed trước khi verify: (1) `ollama --version` trả về version ≥ 0.1, (2) `nvidia-smi` hiển thị GPU nếu muốn GPU inference. Nếu không có GPU → Ollama tự fallback CPU nhưng sẽ chậm hơn nhiều.
+
 **Validate:** `ollama --version` prints version ≥ 0.1. If not → check PATH or reinstall.
 
 ### Step 2: Pull and Run

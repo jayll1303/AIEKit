@@ -1,6 +1,6 @@
 ---
 name: llama-cpp-inference
-description: "Run GGUF models locally with llama.cpp ecosystem. Use when launching llama-server, running llama-cli, using llama-cpp-python bindings, configuring GGUF inference on CPU+GPU, tuning continuous batching, or setting up local GGUF model serving."
+description: "Run GGUF models locally with llama.cpp. Use when launching llama-server, running llama-cli, using llama-cpp-python, configuring GGUF inference on CPU+GPU, or tuning continuous batching."
 ---
 
 # llama.cpp Inference
@@ -178,7 +178,7 @@ app = create_app(settings=settings)
 | Batch size | `-b` | Prompt processing speed | 512-2048, tăng nếu prompt dài |
 | Continuous batching | `-cb` | Multi-request throughput | Auto khi `-np > 1` |
 
-## Diagnostic Checklist
+## Troubleshooting
 
 ```
 Model fails to load or slow generation?

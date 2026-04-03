@@ -1,6 +1,6 @@
 ---
 name: tensorrt-llm
-description: "Optimize LLM inference with NVIDIA TensorRT-LLM. Use when building TensorRT engines, running trtllm-build, converting HF checkpoints, serving with FP8/INT4 quantization, or maximizing GPU throughput on NVIDIA hardware."
+description: "Optimize LLM inference with NVIDIA TensorRT-LLM. Use when running trtllm-build, converting HF checkpoints, serving with FP8/INT4, or maximizing GPU throughput."
 ---
 
 # TensorRT-LLM Engine Building & Serving

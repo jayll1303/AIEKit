@@ -1,6 +1,6 @@
 ---
 name: sglang-serving
-description: "Serve LLMs with SGLang for structured generation and high-throughput inference. Use when launching SGLang server, using RadixAttention prefix caching, constrained JSON/regex output, structured decoding, or when needing faster inference than vLLM."
+description: "Serve LLMs with SGLang for structured generation and high-throughput inference. Use when launching SGLang server, using RadixAttention, constrained JSON/regex output, or structured decoding."
 ---
 
 # SGLang Serving
@@ -189,7 +189,7 @@ curl -s http://localhost:30000/v1/chat/completions \
   }' | python -m json.tool
 ```
 
-## Diagnostic Checklist
+## Troubleshooting
 
 ```
 Model fails to load or OOM?

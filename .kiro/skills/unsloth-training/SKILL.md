@@ -1,6 +1,6 @@
 ---
 name: unsloth-training
-description: "Fine-tune LLMs 2x faster with 70% less VRAM using Unsloth FastLanguageModel. Use when using unsloth, FastLanguageModel, Unsloth SFT, Unsloth GRPO, 2x faster fine-tuning, 70% less VRAM, or exporting to GGUF/vLLM with Unsloth."
+description: "Fine-tune LLMs 2x faster with 70% less VRAM using Unsloth. Use when using FastLanguageModel, Unsloth SFT/DPO/GRPO, 2x faster fine-tuning, or exporting to GGUF/vLLM."
 ---
 
 # Unsloth LLM Fine-Tuning
@@ -22,6 +22,15 @@ Does NOT handle:
 - Serving fine-tuned models via vLLM or TGI (→ vllm-tgi-inference)
 - Downloading datasets or models from HuggingFace Hub (→ hf-hub-datasets)
 - Installing CUDA-aware Python dependencies (→ python-ml-deps)
+
+## When to Use
+
+- Fine-tuning a language model with 2x speed and 70% less VRAM on a single GPU
+- Applying QLoRA with Unsloth-optimized Triton kernels
+- Running SFT, DPO, or GRPO training via TRL + Unsloth
+- Training reasoning models (GRPO) with as little as 5 GB VRAM
+- Exporting fine-tuned models to GGUF, merged 16bit, or vLLM-ready format
+- Model is in the Supported Models list below
 
 ## Unsloth vs Standard HF Trainer
 
