@@ -2,10 +2,11 @@
 
 Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup Python project, fine-tune LLM, đến deploy inference server.
 
-## Skills (17)
+## Skills (18)
 
 | Skill | Mô tả |
 |-------|--------|
+| `aie-skills-installer` | Install AIE-Skills (skills, steering, hooks) vào bất kỳ Kiro project nào |
 | `arxiv-reader` | Đọc và phân tích paper arXiv qua HTML |
 | `docker-gpu-setup` | Dockerfile & docker-compose cho GPU/CUDA workloads |
 | `experiment-tracking` | Selfhosted experiment tracking với MLflow / W&B |
@@ -42,6 +43,26 @@ Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup 
 ## Powers
 
 _Chưa có power nào._
+
+## Installation (inspired from [everything-claude-code](https://github.com/affaan-m/everything-claude-code/blob/main/.kiro/install.sh))
+
+Copy toàn bộ skills, steering, hooks vào project khác:
+
+```bash
+# Clone repo
+git clone <repo-url> /tmp/aie-skills
+
+# Install vào project hiện tại
+bash /tmp/aie-skills/.kiro/install.sh
+
+# Hoặc install vào thư mục cụ thể
+bash /tmp/aie-skills/.kiro/install.sh /path/to/your/project
+
+# Install globally (vào ~/.kiro/)
+bash /tmp/aie-skills/.kiro/install.sh ~
+```
+
+Script chỉ copy components chưa tồn tại — không overwrite file đã có.
 
 ## Docs
 
