@@ -158,6 +158,7 @@ All pre-trained models: `https://github.com/k2-fsa/sherpa-onnx/releases`
 
 | Situation | Skill | Why |
 |---|---|---|
+| Train custom ASR/TTS models | k2-training-pipeline | k2 + icefall + lhotse training |
 | Need to download models from HuggingFace | hf-hub-datasets | Some models hosted on HF |
 | Need Docker for deployment | docker-gpu-setup | Container setup |
 | Need to serve via Triton | triton-deployment | Production serving |
