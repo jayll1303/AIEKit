@@ -1,8 +1,9 @@
 ---
-name: "power-gpu-monitor"
+name: "gpu-monitor"
 displayName: "GPU Monitor & VRAM Planner"
-description: "Monitor GPU status, VRAM usage, estimate memory requirements for ML models. Use when checking GPU availability, diagnosing OOM errors, planning model deployment, estimating VRAM for training or inference."
-keywords: ["gpu", "vram", "nvidia", "cuda", "memory", "oom", "nvidia-smi", "gpu-monitor", "out of memory", "gpu utilization", "memory estimation"]
+description: "Monitor GPU status, VRAM usage, estimate memory requirements for ML models. Diagnose OOM errors and plan model deployment."
+keywords: ["gpu", "vram", "nvidia", "cuda", "nvidia-smi", "gpu-monitor", "out of memory", "gpu utilization", "memory estimation"]
+author: "AIE-Skills"
 ---
 
 # GPU Monitor & VRAM Planner Power
@@ -137,6 +138,17 @@ Training đang chạy
 | Cần Docker GPU setup | docker-gpu-setup | NVIDIA Container Toolkit |
 | Cần estimate trước khi serve | sglang-serving, tensorrt-llm | Serving config |
 | Fast training, less VRAM | unsloth-training | 70% less VRAM |
+
+## MCP Config Placeholders
+
+Trước khi dùng power này, set environment variable hoặc update mcp.json:
+
+- **`MCP_SYSTEM_MONITOR_PATH`**: Path tới thư mục chứa `mcp_system_monitor_server.py`.
+  - **Cách lấy:**
+    1. Clone repo: `git clone https://github.com/huhabla/mcp-system-monitor.git`
+    2. Install: `cd mcp-system-monitor && uv pip install -e .`
+    3. Set env: `export MCP_SYSTEM_MONITOR_PATH="/path/to/mcp-system-monitor"`
+    4. Hoặc update trực tiếp trong mcp.json `args` field thành path tuyệt đối
 
 ## Anti-Patterns
 

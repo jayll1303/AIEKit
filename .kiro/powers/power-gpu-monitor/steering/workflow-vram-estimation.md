@@ -1,9 +1,3 @@
----
-inclusion: auto
-name: vram-estimation
-description: VRAM estimation formulas for LLM training and inference. Use when estimating GPU memory, planning model deployment, sizing hardware, or diagnosing OOM errors.
----
-
 # VRAM Estimation Guide
 
 ## Quick Formula

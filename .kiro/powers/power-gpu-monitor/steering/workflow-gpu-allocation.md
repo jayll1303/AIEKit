@@ -1,9 +1,3 @@
----
-inclusion: auto
-name: gpu-allocation
-description: Multi-GPU allocation strategies and memory budgeting. Use when planning multi-GPU training, tensor parallelism, pipeline parallelism, or optimizing GPU resource sharing.
----
-
 # GPU Allocation & Multi-GPU Strategies
 
 ## Single GPU Budgeting
