@@ -54,9 +54,14 @@ Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup 
 | `skill-quality-on-edit` | `fileEdited` | Check SKILL.md đã sửa theo best practices + interconnection map |
 | `steering-consistency` | `fileCreated` | Check steering mới: frontmatter, domain overlap, cross-references |
 
-## Powers
+## Powers (2)
 
-_Chưa có power nào._
+| Power | MCP Server | Mô tả |
+|-------|------------|--------|
+| `power-huggingface` | [HF MCP Server](https://huggingface.co/mcp) (remote HTTP) | Search models, datasets, papers, spaces trên HuggingFace Hub. Compare models, check configs, discover trending papers |
+| `power-gpu-monitor` | [mcp-system-monitor](https://github.com/huhabla/mcp-system-monitor) (local Python) | Monitor GPU/VRAM/CPU real-time, estimate memory cho ML models, diagnose OOM errors |
+
+Mỗi power bao gồm: `POWER.md` + `mcp.json` + `steering/` workflows.
 
 ## Installation (inspired from [everything-claude-code](https://github.com/affaan-m/everything-claude-code/blob/main/.kiro/install.sh))
 

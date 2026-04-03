@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "gpu-monitor": {
+      "command": "python",
+      "args": ["${MCP_SYSTEM_MONITOR_PATH}/mcp_system_monitor_server.py"],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "get_gpu_info",
+        "get_memory_info",
+        "get_cpu_info",
+        "get_system_snapshot",
+        "get_enhanced_memory_info",
+        "get_top_processes",
+        "get_system_load",
+        "get_io_performance",
+        "get_performance_snapshot",
+        "monitor_cpu_usage"
+      ]
+    }
+  }
+}

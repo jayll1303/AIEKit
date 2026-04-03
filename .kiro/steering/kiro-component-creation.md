@@ -92,18 +92,95 @@ license: MIT                  # optional
 
 ## Power Rules (advanced)
 
-- Cấu trúc:
+### Hai loại Power
+
+| Loại | Có mcp.json? | Khi nào dùng |
+|------|-------------|--------------|
+| **Guided MCP Power** | ✅ Có | Document MCP server + workflows |
+| **Knowledge Base Power** | ❌ Không | Pure docs: CLI guide, best practices, troubleshooting |
+
+### Cấu trúc thư mục
 
 ```
-power-<name>/
-├── POWER.md
-├── mcp.json
-└── steering/
+power-<name>/                    # hoặc <name>/ — prefix "power-" optional
+├── POWER.md                     # bắt buộc
+├── mcp.json                     # chỉ cho Guided MCP Power
+└── steering/                    # optional, chỉ khi >500 lines hoặc workflows độc lập
     └── workflow-*.md
 ```
 
-- POWER.md frontmatter: name, displayName, description, keywords (array)
-- keywords phải chứa từ khóa domain để Kiro auto-match
+### POWER.md Frontmatter
+
+Chỉ có 5 fields hợp lệ — KHÔNG dùng version, tags, repository, license:
+
+```yaml
+---
+name: "power-name"              # required, kebab-case, KHÔNG prefix "power-"
+displayName: "Human Readable"   # required, Title Case
+description: "Max 3 câu."       # required, ngắn gọn
+keywords: ["specific", "terms"] # optional, 5-7 keywords, tránh từ quá chung
+author: "Author Name"           # optional nhưng recommended
+---
+```
+
+### Naming Convention
+
+- Default: `{tool-name}` (e.g., `huggingface`, `terraform`)
+- Chỉ split khi workflows hoàn toàn độc lập: `{tool-name}-{workflow}` (e.g., `supabase-local-dev`)
+- Tên kebab-case, không prefix `power-` trong field `name`
+
+### Keyword Rules
+
+- 5-7 keywords specific cho domain
+- TRÁNH keywords quá chung: "test", "debug", "data", "api", "help" → gây false activation
+- Ưu tiên từ khóa cụ thể: "postgresql" thay vì "database", "huggingface" thay vì "model"
+
+### Khi nào tạo steering/ directory
+
+- POWER.md > 500 lines
+- Có workflows độc lập mà user không cần load cùng lúc
+- Mặc định: giữ mọi thứ trong POWER.md, chỉ split khi thực sự cần
+
+### Steering files trong Power
+
+- KHÔNG cần frontmatter (khác với `.kiro/steering/` files)
+- Được load on-demand qua `readSteering` action, không phải auto-inclusion
+- Đặt tên mô tả: `workflow-model-discovery.md`, `troubleshooting.md`
+
+### mcp.json Rules
+
+- Chỉ chứa MCP server config, KHÔNG chứa metadata (metadata ở POWER.md frontmatter)
+- `autoApprove`: chỉ list read-only/safe tools
+- `disabledTools`: chỉ disable khi user đồng ý explicitly
+- Env vars dùng `${VAR_NAME}` syntax cho sharing
+
+### MCP Config Placeholders (cho sharing)
+
+Nếu mcp.json có giá trị user-specific (API keys, paths), PHẢI:
+1. Thay bằng placeholder: `YOUR_API_KEY_HERE`, `PLACEHOLDER_PATH`
+2. Thêm section "MCP Config Placeholders" trong POWER.md giải thích cách lấy từng giá trị
+3. Mỗi placeholder cần: tên, mô tả, hướng dẫn cụ thể cách lấy
+
+### Granularity — Khi nào split Power
+
+Mặc định: KHÔNG split. Giữ single power.
+
+Chỉ split khi TẤT CẢ điều kiện đúng:
+1. Workflows hoàn toàn độc lập, không bao giờ dùng cùng nhau
+2. Khác environment (local vs remote, dev vs prod)
+3. User chỉ cần 1 workflow tại 1 thời điểm
+4. Có strong conviction rằng split cải thiện usability
+
+### POWER.md Recommended Sections
+
+1. Overview — power làm gì, tại sao hữu ích
+2. Onboarding — prerequisites, installation, setup
+3. Available Tools — list tools với mô tả ngắn (Guided MCP)
+4. Common Workflows — step-by-step cho use cases chính
+5. Connected Skills — bảng liên kết sang skills liên quan
+6. MCP Config Placeholders — hướng dẫn thay placeholder (nếu có)
+7. Troubleshooting — common errors + solutions
+8. Anti-Patterns — những gì KHÔNG nên làm
 
 ## Skill Interconnection Requirements
 
@@ -141,4 +218,9 @@ Khi tạo steering mới: check danh sách trên để tránh overlap domain.
 - [ ] Với Skills: description chứa keyword + "Use when..." + scope boundary
 - [ ] Với Skills: Update `docs/skill-interconnection-map.md` nếu thêm skill mới
 - [ ] Với Steering: Không overlap domain với steering hiện có
-- [ ] Với Powers: kiểm tra mcp.json env vars
+- [ ] Với Powers: chỉ dùng 5 frontmatter fields hợp lệ (name, displayName, description, keywords, author)
+- [ ] Với Powers: description max 3 câu, keywords specific (không quá chung)
+- [ ] Với Powers: steering files trong power KHÔNG có frontmatter
+- [ ] Với Powers: mcp.json chỉ chứa server config, không metadata
+- [ ] Với Powers: có MCP Config Placeholders section nếu mcp.json có user-specific values
+- [ ] Với Powers: autoApprove chỉ list safe/read-only tools
