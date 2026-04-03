@@ -2,7 +2,7 @@
 
 Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup Python project, fine-tune LLM, đến deploy inference server.
 
-## Skills (15)
+## Skills (16)
 
 | Skill | Mô tả |
 |-------|--------|
@@ -17,6 +17,7 @@ Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup 
 | `python-ml-deps` | Cài ML deps với uv, xử lý CUDA version conflicts |
 | `python-project-setup` | Bootstrap Python projects với uv, ruff, pytest |
 | `python-quality-testing` | Type annotations, Hypothesis testing, mutation testing |
+| `sherpa-onnx` | Offline speech processing: ASR, TTS, VAD, speaker diarization, speech enhancement |
 | `text-embeddings-inference` | Deploy embedding/reranker models với HuggingFace TEI |
 | `text-embeddings-rag` | RAG pipelines với sentence-transformers, FAISS, ChromaDB, Qdrant |
 | `triton-deployment` | Deploy models trên NVIDIA Triton Inference Server |
