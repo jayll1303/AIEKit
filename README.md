@@ -2,7 +2,7 @@
 
 Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup Python project, fine-tune LLM, đến deploy inference server.
 
-## Skills (19)
+## Skills (20)
 
 | Skill | Mô tả |
 |-------|--------|
@@ -16,6 +16,7 @@ Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup 
 | `k2-training-pipeline` | Train speech models với Next-gen Kaldi: k2 (FSA/FST loss), icefall (Zipformer/Conformer recipes), lhotse (data prep) |
 | `model-quantization` | Quantize LLMs với GGUF, GPTQ, AWQ, bitsandbytes |
 | `notebook-workflows` | Tạo & chỉnh sửa Jupyter/Colab notebooks programmatically |
+| `paddleocr` | OCR với PaddlePaddle: text detection, recognition, fine-tuning, dataset prep, PP-OCRv5, PP-StructureV3 |
 | `python-ml-deps` | Cài ML deps với uv, xử lý CUDA version conflicts |
 | `python-project-setup` | Bootstrap Python projects với uv, ruff, pytest |
 | `python-quality-testing` | Type annotations, Hypothesis testing, mutation testing |
