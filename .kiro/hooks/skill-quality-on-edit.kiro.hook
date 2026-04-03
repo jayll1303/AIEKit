@@ -1,0 +1,15 @@
+{
+  "name": "Skill Quality Gate (Edit)",
+  "version": "1.0.0",
+  "description": "Khi agent edit SKILL.md hiện có, nhắc check best practices và interconnection map.",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".kiro/skills/**/SKILL.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A SKILL.md was just edited. Verify the changes still meet quality standards per docs/skill-creation-best-practices.md:\n\n1. **Frontmatter**: name (kebab-case, = folder name), description (≤200 chars, starts with verb, contains trigger phrases + 'Use when...')\n2. **Scope**: Has 'This skill handles:' AND 'Does NOT handle:' with cross-references using → syntax\n3. **Decision Table**: At least 1 table mapping scenario → recommendation\n4. **Anti-Patterns**: Table of 'Agent thinks X → Reality Y'\n5. **Cross-References**: Related skills referenced, paths exist\n6. **Line Count**: SKILL.md < 300 lines (detail in references/)\n7. **Interconnection Map**: If scope boundaries changed, update docs/skill-interconnection-map.md accordingly\n\nFix any issues found."
+  }
+}

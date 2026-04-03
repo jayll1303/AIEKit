@@ -127,6 +127,7 @@ Steering hiện có:
 - `ml-training-workflow.md` (auto) — Training/fine-tuning conventions
 - `inference-deployment.md` (auto) — Serving/deployment conventions
 - `gpu-environment.md` (fileMatch: Dockerfile*, docker-compose*) — GPU container conventions
+- `python-project-conventions.md` (auto) — Python project setup, uv, ruff, pytest
 
 Khi tạo steering mới: check danh sách trên để tránh overlap domain.
 

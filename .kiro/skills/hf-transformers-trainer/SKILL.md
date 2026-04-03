@@ -359,6 +359,7 @@ Out of memory during training?
 | Need to log training metrics to MLflow or W&B | experiment-tracking | Handles MLflow/W&B setup, metric logging, model registry |
 | Need to quantize fine-tuned model to GGUF/GPTQ/AWQ after training | model-quantization | Handles post-training quantization methods and VRAM budget |
 | Need to install transformers, peft, trl, bitsandbytes with CUDA | python-ml-deps | Handles uv pip install with CUDA version resolution |
+| Want 2x faster training with 70% less VRAM on single GPU | unsloth-training | Covers Unsloth FastLanguageModel, optimized Triton kernels, built-in GGUF export |
 
 ## References
 

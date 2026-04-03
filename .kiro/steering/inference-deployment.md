@@ -15,6 +15,10 @@ Tham khảo #[[file:docs/skill-interconnection-map.md]] section "Serving Alterna
 | Cần gì? | Dùng skill nào |
 |---------|---------------|
 | LLM + OpenAI-compatible API | vllm-tgi-inference |
+| Structured output, prefix caching | sglang-serving |
+| Max NVIDIA throughput, FP8 | tensorrt-llm |
+| Local LLM, single-user, CLI | ollama-local-llm |
+| GGUF inference, CPU+GPU, max control | llama-cpp-inference |
 | Multi-model ensemble, custom pipeline | triton-deployment |
 | Embedding models | text-embeddings-inference |
 | Offline/edge speech | sherpa-onnx |
