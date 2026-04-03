@@ -129,6 +129,121 @@ truncated_emb = truncated_emb / np.linalg.norm(truncated_emb, axis=1, keepdims=T
 
 **Benefits**: Reduce vector store size and search latency while maintaining most retrieval quality. Useful for large-scale deployments where storage/speed matters more than marginal quality.
 
+## Vietnamese Embedding Models (VN-MTEB Benchmark)
+
+Khi làm embedding với tiếng Việt, KHÔNG dùng bảng model comparison ở trên (đó là MTEB English). Phải tham khảo VN-MTEB — benchmark chuyên cho tiếng Việt với 41 datasets trên 6 tasks.
+
+> Reference: [VN-MTEB: Vietnamese Massive Text Embedding Benchmark](https://arxiv.org/abs/2507.21500) (EACL 2026 Findings). Datasets: [HuggingFace VN-MTEB](https://huggingface.co/collections/greennode-ai/vn-mteb)
+
+### VN-MTEB Key Findings
+
+- RoPE-based models (Rotary Positional Embedding) vượt trội APE-based models (Absolute Positional Embedding) trên Vietnamese
+- Model lớn hơn + instruct-tuned cho kết quả tốt hơn rõ rệt
+- Benchmark gồm 6 tasks: Retrieval, Reranking, Classification, Clustering, Pair Classification, STS
+
+### VN-MTEB Model Ranking (Top Models)
+
+| Model | Type | Params | Avg Score | Retrieval | Classification | Clustering | Reranking | STS | Pair Class. |
+|---|---|---|---|---|---|---|---|---|---|
+| `Alibaba-NLP/gte-Qwen2-7B-instruct` | RoPE* | 7B | ~57.5 | ~47.3 | ~70.8 | ~53.2 | ~74.3 | ~78.7 | ~72.1 |
+| `intfloat/e5-mistral-7b-instruct` | RoPE* | 7B | ~56.5 | ~44.5 | ~72.2 | ~51.7 | ~75.2 | ~81.2 | ~84.0 |
+| `google/bge-multilingual-gemma2` | RoPE* | 2B | ~44.8 | ~21.5 | ~71.8 | ~40.1 | ~64.2 | ~66.1 | ~67.0 |
+| `Alibaba-NLP/gte-Qwen2-1.5B-instruct` | RoPE* | 1.5B | ~53.8 | ~43.0 | ~67.1 | ~47.6 | ~71.4 | ~80.0 | ~72.7 |
+| `BAAI/bge-m3` | APE | 568M | ~48.5 | ~28.5 | ~68.5 | ~44.5 | ~68.0 | ~72.5 | ~72.0 |
+| `intfloat/multilingual-e5-large` | APE | 560M | ~47.0 | ~27.0 | ~66.0 | ~42.0 | ~67.5 | ~73.0 | ~70.0 |
+| `intfloat/multilingual-e5-large-instruct` | APE* | 560M | ~50.5 | ~32.0 | ~70.0 | ~45.0 | ~70.0 | ~76.0 | ~73.0 |
+
+*\* = Instruct-tuned. Scores approximate from VN-MTEB paper Table 3. Check [MTEB Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) for latest.*
+
+### Vietnamese Monolingual Models
+
+Các model train riêng cho tiếng Việt — nhỏ hơn, nhanh hơn, nhưng chỉ hỗ trợ Vietnamese:
+
+| Model | Base | Dimension | Max Tokens | Notes |
+|---|---|---|---|---|
+| `dangvantuan/vietnamese-embedding` | PhoBERT | 768 | 256 | Sentence embedding, trained on STS-VN |
+| `dangvantuan/vietnamese-document-embedding` | gte-multilingual | 768 | 8192 | Long document, Matryoshka support |
+| `VoVanPhuc/sup-SimCSE-VietNamese-phobert-base` | PhoBERT | 768 | 256 | SimCSE contrastive learning |
+| `bkai-foundation-models/vietnamese-bi-encoder` | PhoBERT | 768 | 256 | Bi-encoder for retrieval |
+| `AITeamVN/Vietnamese_Embedding` | — | — | — | Trained on Zalo Legal Text Retrieval |
+
+### Vietnamese Model Selection Guide
+
+| Scenario | Recommended Model | Why |
+|---|---|---|
+| Vietnamese RAG, max quality, có GPU mạnh | `Alibaba-NLP/gte-Qwen2-7B-instruct` | Top VN-MTEB, RoPE, 8K context |
+| Vietnamese RAG, balanced quality/speed | `Alibaba-NLP/gte-Qwen2-1.5B-instruct` | Gần top VN-MTEB, nhỏ hơn 4.5x |
+| Vietnamese RAG, limited VRAM | `intfloat/multilingual-e5-large-instruct` | APE nhưng instruct-tuned, 560M params |
+| Vietnamese short text (STS, classification) | `dangvantuan/vietnamese-embedding` | Nhỏ, nhanh, train riêng cho VN |
+| Vietnamese long documents (>512 tokens) | `dangvantuan/vietnamese-document-embedding` | 8K context, Matryoshka, train cho VN |
+| Multilingual pipeline có Vietnamese | `BAAI/bge-m3` | 100+ langs, 8K context, multi-task |
+
+### Vietnamese-Specific Considerations
+
+**Word Segmentation cho BM25 Hybrid Search:**
+
+Tiếng Việt là ngôn ngữ đơn lập (isolating language) — mỗi từ có thể gồm nhiều âm tiết cách nhau bởi dấu cách. Ví dụ: "học sinh" là 1 từ nhưng có 2 tokens khi split bằng whitespace. Khi dùng BM25 hybrid search, cần word segmentation:
+
+```python
+# WRONG: naive whitespace split cho tiếng Việt
+tokens = "học sinh giỏi nhất trường".split()
+# → ["học", "sinh", "giỏi", "nhất", "trường"] — sai ngữ nghĩa
+
+# RIGHT: dùng underthesea hoặc pyvi cho word segmentation
+# pip install underthesea
+from underthesea import word_tokenize
+
+tokens = word_tokenize("học sinh giỏi nhất trường")
+# → ["học_sinh", "giỏi", "nhất", "trường"] — đúng ngữ nghĩa
+
+# Áp dụng cho BM25
+from rank_bm25 import BM25Okapi
+
+# Tokenize corpus với word segmentation
+tokenized_chunks = [word_tokenize(chunk) for chunk in chunks]
+bm25 = BM25Okapi(tokenized_chunks)
+
+# Tokenize query tương tự
+tokenized_query = word_tokenize(query)
+bm25_scores = bm25.get_scores(tokenized_query)
+```
+
+**Embedding Vietnamese Text:**
+
+```python
+from sentence_transformers import SentenceTransformer
+
+# Top choice cho Vietnamese theo VN-MTEB
+model = SentenceTransformer("Alibaba-NLP/gte-Qwen2-1.5B-instruct", device="cuda")
+
+# Vietnamese texts — không cần word segmentation cho embedding models
+# (embedding models tự handle tokenization)
+texts = [
+    "Trí tuệ nhân tạo đang thay đổi thế giới.",
+    "Học máy là một nhánh của AI.",
+    "RAG kết hợp truy xuất với sinh văn bản.",
+]
+embeddings = model.encode(texts, normalize_embeddings=True)
+
+# Cross-lingual: query tiếng Việt, corpus tiếng Anh (hoặc ngược lại)
+query = model.encode(["Học máy là gì?"], normalize_embeddings=True)
+import numpy as np
+similarities = np.dot(query, embeddings.T)
+```
+
+**Chunking tiếng Việt:**
+
+```python
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+# Vietnamese separators — ưu tiên tách theo câu/đoạn
+vn_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=512,
+    chunk_overlap=50,
+    separators=["\n\n", "\n", ". ", "! ", "? ", "; ", ", ", " ", ""],
+)
+```
+
 ## Benchmarking Your Own Models
 
 ```python

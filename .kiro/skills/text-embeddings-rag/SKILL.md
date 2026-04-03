@@ -316,6 +316,17 @@ Poor retrieval quality?
 
 > For detailed optimization techniques, see [retrieval-optimization](references/retrieval-optimization.md)
 
+## Vietnamese Embedding Exception
+
+Khi user làm embedding/RAG với tiếng Việt, KHÔNG dùng MTEB English benchmarks để chọn model. Phải tham khảo VN-MTEB (Vietnamese Massive Text Embedding Benchmark) — 41 datasets, 6 tasks, chuyên đánh giá cho tiếng Việt.
+
+**Key points:**
+- RoPE-based models (gte-Qwen2-7B-instruct, e5-Mistral-7B-instruct) vượt trội APE-based models trên Vietnamese
+- BM25 hybrid search cần Vietnamese word segmentation (underthesea/pyvi), KHÔNG dùng naive whitespace split
+- Có Vietnamese monolingual models (dangvantuan/vietnamese-embedding, vietnamese-document-embedding) cho use case nhỏ/nhanh
+
+> Chi tiết: xem [embedding-model-guide → Vietnamese Embedding Models](references/embedding-model-guide.md#vietnamese-embedding-models-vn-mteb-benchmark)
+
 ## Anti-Patterns
 
 | Agent nghĩ | Thực tế |
@@ -323,6 +334,8 @@ Poor retrieval quality?
 | "Embedding model nào cũng được, chọn cái nhỏ nhất cho nhanh" | Chất lượng retrieval phụ thuộc lớn vào model; luôn check MTEB leaderboard và chọn model phù hợp domain trước khi build pipeline |
 | "Không cần normalize embeddings, cosine similarity tự xử lý" | FAISS `IndexFlatIP` yêu cầu L2-normalized vectors để dot product == cosine similarity; thiếu normalize → kết quả search sai hoàn toàn |
 | "Chunk size 512 là chuẩn, không cần tune" | Chunk size tối ưu phụ thuộc vào document type; code cần chunk nhỏ hơn (~256), long-form text có thể cần lớn hơn (~1024); luôn evaluate retrieval quality |
+| "Dùng bge-base-en cho tiếng Việt cũng OK" | English-only models kém hẳn trên Vietnamese; phải dùng multilingual hoặc Vietnamese-specific models; check VN-MTEB benchmark thay vì MTEB English |
+| "BM25 tiếng Việt chỉ cần split whitespace" | Tiếng Việt là ngôn ngữ đơn lập — "học sinh" = 1 từ nhưng 2 tokens khi split space; cần word segmentation (underthesea) để BM25 hoạt động đúng |
 
 ## Related Skills
 
@@ -335,8 +348,8 @@ Poor retrieval quality?
 
 ## References
 
-- [Embedding Model Guide](references/embedding-model-guide.md) — Model selection guide comparing popular models by dimension, speed, quality metrics (MTEB), and multilingual support
-  **Load when:** choosing an embedding model or comparing MTEB benchmarks for a specific domain or language
+- [Embedding Model Guide](references/embedding-model-guide.md) — Model selection guide comparing popular models by dimension, speed, quality metrics (MTEB), multilingual support, and Vietnamese-specific recommendations (VN-MTEB benchmark)
+  **Load when:** choosing an embedding model, comparing MTEB benchmarks for a specific domain or language, or building RAG pipeline cho tiếng Việt
 - [Vector Store Setup](references/vector-store-setup.md) — Detailed setup for FAISS, ChromaDB, Qdrant: index creation, document insertion, similarity search, persistence, production config
   **Load when:** configuring vector store persistence, production indexing options, or switching between FAISS/ChromaDB/Qdrant
 - [RAG Pipeline Patterns](references/rag-pipeline-patterns.md) — Advanced RAG patterns: document chunking strategies, prompt templates, context window management, multi-hop retrieval
