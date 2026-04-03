@@ -1,6 +1,63 @@
-# AIE-Skills
+<p align="center">
+  <img src="assets/banner.jpg" alt="AIE-Skills Banner" width="100%" />
+</p>
 
-Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup Python project, fine-tune LLM, đến deploy inference server.
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Kiro-Skills-6C5CE7?style=for-the-badge&logoColor=white" alt="Kiro Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/AI%2FML-Engineering-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="AI/ML Engineering" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white" alt="CUDA" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" alt="HuggingFace" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" /></a>
+</p>
+
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Skills-25-blue?style=flat-square" alt="Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Hooks-6-orange?style=flat-square" alt="Hooks" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Powers-2-purple?style=flat-square" alt="Powers" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square" alt="Maintained" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License" /></a>
+</p>
+
+<h1 align="center">AIE-Skills</h1>
+
+<p align="center">
+  Bộ Kiro Skills & Steering cho workflow AI/ML Engineering — từ setup Python project, fine-tune LLM, đến deploy inference server.
+</p>
+
+---
+
+## Quickstart
+
+### Smart Install (recommended)
+
+Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
+
+1. Scan codebase target (deps, imports, Dockerfiles, notebooks...)
+2. Recommend chỉ skills có signal cụ thể từ project
+3. Chờ user confirm trước khi cài
+4. Cài selective + steering files tương ứng
+
+### Full Install (shell script)
+
+```bash
+# Clone repo
+git clone <repo-url> /tmp/aie-skills
+
+# Install vào project hiện tại
+bash /tmp/aie-skills/.kiro/install.sh
+
+# Hoặc install vào thư mục cụ thể
+bash /tmp/aie-skills/.kiro/install.sh /path/to/your/project
+
+# Install globally (vào ~/.kiro/)
+bash /tmp/aie-skills/.kiro/install.sh ~
+```
+
+Script chỉ copy components chưa tồn tại — không overwrite file đã có.
+
+---
 
 ## Skills (25)
 
@@ -62,42 +119,3 @@ Bộ Kiro Skills & Steering dành cho workflow AI/ML Engineering — từ setup 
 | `power-gpu-monitor` | [mcp-system-monitor](https://github.com/huhabla/mcp-system-monitor) (local Python) | Monitor GPU/VRAM/CPU real-time, estimate memory cho ML models, diagnose OOM errors |
 
 Mỗi power bao gồm: `POWER.md` + `mcp.json` + `steering/` workflows.
-
-## Installation
-
-### Smart Install (recommended)
-
-Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
-
-1. Scan codebase target (deps, imports, Dockerfiles, notebooks...)
-2. Recommend chỉ skills có signal cụ thể từ project
-3. Chờ user confirm trước khi cài
-4. Cài selective + steering files tương ứng
-
-### Full Install (shell script)
-
-Copy toàn bộ skills, steering, hooks (không khuyến khích — tốn context):
-
-```bash
-# Clone repo
-git clone <repo-url> /tmp/aie-skills
-
-# Install vào project hiện tại
-bash /tmp/aie-skills/.kiro/install.sh
-
-# Hoặc install vào thư mục cụ thể
-bash /tmp/aie-skills/.kiro/install.sh /path/to/your/project
-
-# Install globally (vào ~/.kiro/)
-bash /tmp/aie-skills/.kiro/install.sh ~
-```
-
-Script chỉ copy components chưa tồn tại — không overwrite file đã có.
-
-## Docs
-
-| File | Mô tả |
-|------|--------|
-| `docs/kiro-compatible.md` | Tài liệu tham khảo về Kiro components |
-| `docs/skill-creation-best-practices.md` | Best practices khi tạo skills |
-| `docs/skill-interconnection-map.md` | Bản đồ quan hệ giữa 25 skills — layers, dependencies, workflow chains |
