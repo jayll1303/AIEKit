@@ -1,0 +1,15 @@
+{
+  "name": "Steering Consistency Check",
+  "version": "1.0.0",
+  "description": "Khi tạo steering file mới, nhắc agent check frontmatter hợp lệ, cross-references, và không overlap với steering khác.",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      ".kiro/steering/*.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A new steering file was just created. Verify it meets standards per docs/kiro-compatible.md:\n\n1. **Frontmatter**: Valid YAML with correct inclusion type (always/fileMatch/manual/auto)\n   - fileMatch: must have fileMatchPattern\n   - auto: must have name + description with keywords\n   - manual: must have name\n2. **Single Domain**: File covers ONE domain only — not overlapping with existing steering files\n3. **File References**: Any #[[file:...]] references point to files that actually exist\n4. **No Secrets**: No API keys, tokens, or credentials\n5. **Kebab-case**: Filename is kebab-case\n6. **Cross-reference**: If steering references skills, verify those skills exist in .kiro/skills/\n\nScan existing .kiro/steering/*.md files to check for domain overlap. Fix any issues found."
+  }
+}

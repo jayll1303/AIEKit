@@ -105,6 +105,31 @@ power-<name>/
 - POWER.md frontmatter: name, displayName, description, keywords (array)
 - keywords phải chứa từ khóa domain để Kiro auto-match
 
+## Skill Interconnection Requirements
+
+Khi tạo hoặc sửa skill, PHẢI maintain interconnection map.
+Tham khảo: #[[file:docs/skill-interconnection-map.md]]
+
+1. **Scope boundary**: Mỗi skill PHẢI có "Does NOT handle:" với `→ skill-name` syntax
+2. **Layer assignment**: Xác định skill thuộc layer nào (Application / Workflow / Serving / Infrastructure)
+3. **Dependency matrix**: Update matrix trong interconnection map khi thêm skill mới
+4. **Workflow chains**: Nếu skill tham gia pipeline phổ biến, thêm vào workflow chains
+5. **Reverse update**: Khi thêm skill mới, check xem skills hiện tại có cần update scope boundary không
+
+## Steering Domain Rules
+
+Mỗi steering file = một domain. Không overlap.
+Tham khảo: #[[file:docs/skill-creation-best-practices.md]]
+
+Steering hiện có:
+- `kiro-component-creation.md` (always) — Quy tắc tạo components
+- `notebook-conventions.md` (fileMatch: *.ipynb) — Notebook editing
+- `ml-training-workflow.md` (auto) — Training/fine-tuning conventions
+- `inference-deployment.md` (auto) — Serving/deployment conventions
+- `gpu-environment.md` (fileMatch: Dockerfile*, docker-compose*) — GPU container conventions
+
+Khi tạo steering mới: check danh sách trên để tránh overlap domain.
+
 ## Checklist trước khi hoàn thành
 
 - [ ] Đúng thư mục scope (workspace `.kiro/` vs global `~/.kiro/`)
@@ -112,5 +137,7 @@ power-<name>/
 - [ ] Không chứa secret/API key
 - [ ] Tên file kebab-case
 - [ ] Với Hooks: event type và action type khớp nhau
-- [ ] Với Skills: description chứa keyword + "Use when..."
+- [ ] Với Skills: description chứa keyword + "Use when..." + scope boundary
+- [ ] Với Skills: Update `docs/skill-interconnection-map.md` nếu thêm skill mới
+- [ ] Với Steering: Không overlap domain với steering hiện có
 - [ ] Với Powers: kiểm tra mcp.json env vars
