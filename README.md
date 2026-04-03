@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Skills-25-blue?style=flat-square" alt="Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Skills-26-blue?style=flat-square" alt="Skills" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Hooks-6-orange?style=flat-square" alt="Hooks" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Powers-2-purple?style=flat-square" alt="Powers" /></a>
@@ -59,7 +59,7 @@ Script chỉ copy components chưa tồn tại — không overwrite file đã c�
 
 ---
 
-## Skills (25)
+## Skills (26)
 
 | Skill | Mô tả |
 |-------|--------|
@@ -67,6 +67,7 @@ Script chỉ copy components chưa tồn tại — không overwrite file đã c�
 | `arxiv-reader` | Đọc và phân tích paper arXiv qua HTML |
 | `docker-gpu-setup` | Dockerfile & docker-compose cho GPU/CUDA workloads |
 | `experiment-tracking` | Selfhosted experiment tracking với MLflow / W&B |
+| `fastapi-at-scale` | Build production-grade FastAPI at scale: project structure, async SQLAlchemy, Alembic migrations, JWT auth, rate limiting, testing với httpx, deploy uvicorn/gunicorn/Docker |
 | `freqtrade` | Phát triển crypto trading strategies với Freqtrade |
 | `hf-hub-datasets` | Download, upload, stream models & datasets từ HuggingFace Hub |
 | `hf-transformers-trainer` | Fine-tune & align LLMs với Trainer, TRL, PEFT (LoRA/QLoRA) |
