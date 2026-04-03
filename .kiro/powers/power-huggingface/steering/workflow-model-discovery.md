@@ -1,3 +1,9 @@
+---
+inclusion: auto
+name: hf-model-discovery
+description: Guide for searching and selecting models from HuggingFace Hub. Use when user asks to find, compare, or choose pretrained models.
+---
+
 # Model Discovery Workflow
 
 ## Search Strategy
