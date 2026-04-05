@@ -30,6 +30,21 @@
 
 ## Quickstart
 
+### One-liner Install
+
+```bash
+# Install vào project hiện tại
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash
+
+# Install vào thư mục cụ thể
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- /path/to/project
+
+# Install globally (vào ~/.kiro/)
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --global
+```
+
+Script chỉ copy components chưa tồn tại — không overwrite file đã có.
+
 ### Smart Install (recommended)
 
 Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
@@ -39,23 +54,13 @@ Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
 3. Chờ user confirm trước khi cài
 4. Cài selective + steering files tương ứng
 
-### Full Install (shell script)
+### Manual Install
 
 ```bash
-# Clone repo
-git clone <repo-url> /tmp/aie-skills
-
-# Install vào project hiện tại
+git clone https://github.com/jayll1303/AIEKit.git /tmp/aie-skills
 bash /tmp/aie-skills/.kiro/install.sh
-
-# Hoặc install vào thư mục cụ thể
-bash /tmp/aie-skills/.kiro/install.sh /path/to/your/project
-
-# Install globally (vào ~/.kiro/)
-bash /tmp/aie-skills/.kiro/install.sh ~
+rm -rf /tmp/aie-skills
 ```
-
-Script chỉ copy components chưa tồn tại — không overwrite file đã có.
 
 ---
 
