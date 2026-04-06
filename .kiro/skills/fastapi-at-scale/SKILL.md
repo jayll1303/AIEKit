@@ -26,6 +26,7 @@ This skill handles:
 Does NOT handle:
 - Generic backend concepts (REST design, GraphQL, gRPC theory) (→ backend-development)
 - ML model serving behind FastAPI (→ vllm-tgi-inference, triton-deployment)
+- Audio/TTS API serving (→ openai-audio-api)
 - Python project bootstrapping (uv, ruff, pyproject.toml) (→ python-project-setup)
 - Docker GPU setup for ML workloads (→ docker-gpu-setup)
 - Frontend/full-stack frameworks (Next.js, React) (→ web-frameworks)
@@ -208,6 +209,7 @@ Slow endpoints?
 | Deploying FastAPI in GPU Docker container | docker-gpu-setup | NVIDIA Container Toolkit, GPU passthrough |
 | Adding type annotations and property-based testing | python-quality-testing | Hypothesis, mutation testing, type coverage |
 | Serving ML models behind FastAPI | vllm-tgi-inference | LLM inference server patterns |
+| Building OpenAI-compatible audio/TTS API | openai-audio-api | Concurrency, streaming, batching for audio inference |
 
 ## References
 

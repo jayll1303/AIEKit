@@ -5,7 +5,8 @@ description: >
   Use when building speech-to-speech pipelines, adding STT/LLM/TTS handlers, wiring queue-based
   audio processing stages, implementing VAD with progressive streaming, or designing real-time
   voice agent architectures. Does NOT handle: model training → hf-transformers-trainer,
-  model serving at scale → inference-deployment, Docker/GPU setup → docker-gpu-setup.
+  model serving at scale → inference-deployment, Docker/GPU setup → docker-gpu-setup,
+  HTTP API wrapper for audio models → openai-audio-api.
 ---
 
 # HuggingFace Speech-to-Speech Pipeline
