@@ -100,7 +100,7 @@ rm -rf /tmp/aie-skills
 
 | File | Inclusion | Mô tả |
 |------|-----------|--------|
-| `kiro-component-creation.md` | `always` | Quy tắc tạo Steering, Skills, Hooks, Powers cho Kiro |
+| `kiro-component-creation.md` | `always` → `auto` khi install | Quy tắc tạo Steering, Skills, Hooks, Powers cho Kiro |
 | `notebook-conventions.md` | `fileMatch` (`**/*.ipynb`) | Conventions khi làm việc với file `.ipynb` |
 | `ml-training-workflow.md` | `auto` | Conventions cho ML training & fine-tuning workflows |
 | `inference-deployment.md` | `auto` | Conventions cho model serving & deployment |

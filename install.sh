@@ -140,11 +140,24 @@ if [ -d "$SOURCE_KIRO/skills" ]; then
 fi
 
 # Steering
+# Files that should switch from "always" to "auto" when installed to other repos
+AUTO_ON_INSTALL="kiro-component-creation.md"
+
 if [ -d "$SOURCE_KIRO/steering" ]; then
   for f in "$SOURCE_KIRO/steering"/*.md; do
     local_name=$(basename "$f")
     if [ ! -f "$TARGET/.kiro/steering/$local_name" ]; then
       cp "$f" "$TARGET/.kiro/steering/" 2>/dev/null || true
+
+      # Convert dev-only steering from "always" to "auto" for target repos
+      for auto_file in $AUTO_ON_INSTALL; do
+        if [ "$local_name" = "$auto_file" ]; then
+          sed -i 's/^inclusion: always$/inclusion: auto\nname: kiro-component-creation\ndescription: Quy tắc tạo Kiro components (steering, skills, hooks, powers). Use when creating or modifying Kiro skills, steering files, hooks, or powers./' \
+            "$TARGET/.kiro/steering/$local_name"
+          break
+        fi
+      done
+
       steering=$((steering + 1))
     else
       skipped=$((skipped + 1))
