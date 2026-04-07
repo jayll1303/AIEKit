@@ -36,11 +36,16 @@ err()   { echo "${RED}✗${RESET} $*" >&2; }
 # ── Parse arguments ─────────────────────────────────────
 TARGET=""
 SELECTIVE=false
+INSTALL_POWERS=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --global|-g)
       TARGET="$HOME"
+      shift
+      ;;
+    --powers|-p)
+      INSTALL_POWERS=true
       shift
       ;;
     --help|-h)
@@ -51,9 +56,11 @@ while [[ $# -gt 0 ]]; do
       echo "  curl -fsSL <url>/install.sh | bash                        # Install to ./  "
       echo "  curl -fsSL <url>/install.sh | bash -s -- /path/to/project # Install to dir "
       echo "  curl -fsSL <url>/install.sh | bash -s -- --global         # Install to ~/.kiro/"
+      echo "  curl -fsSL <url>/install.sh | bash -s -- -p               # Include powers "
       echo ""
       echo "Options:"
       echo "  --global, -g    Install globally to ~/.kiro/"
+      echo "  --powers, -p    Also install Powers (MCP integrations, disabled by default)"
       echo "  --help, -h      Show this help"
       echo ""
       exit 0
@@ -211,8 +218,24 @@ if [ -d "$SOURCE_KIRO/settings" ]; then
   done
 fi
 
+# Powers (only with -p/--powers flag)
+powers=0
+if [ "$INSTALL_POWERS" = true ] && [ -d "$SOURCE_KIRO/powers" ]; then
+  mkdir -p "$TARGET/.kiro/powers"
+  for d in "$SOURCE_KIRO/powers"/*/; do
+    [ -d "$d" ] || continue
+    power_name="$(basename "$d")"
+    if [ ! -d "$TARGET/.kiro/powers/$power_name" ]; then
+      cp -r "$d" "$TARGET/.kiro/powers/$power_name" 2>/dev/null || true
+      powers=$((powers + 1))
+    else
+      skipped=$((skipped + 1))
+    fi
+  done
+fi
+
 # ── Summary ─────────────────────────────────────────────
-total=$((skills + steering + hooks + scripts + settings))
+total=$((skills + steering + hooks + scripts + settings + powers))
 
 echo ""
 echo "${BOLD}Installation complete!${RESET}"
@@ -222,6 +245,7 @@ echo "  ${GREEN}Steering:${RESET}  $steering"
 echo "  ${GREEN}Hooks:${RESET}     $hooks"
 echo "  ${GREEN}Scripts:${RESET}   $scripts"
 echo "  ${GREEN}Settings:${RESET}  $settings"
+echo "  ${GREEN}Powers:${RESET}    $powers"
 
 if [ "$skipped" -gt 0 ]; then
   echo "  ${YELLOW}Skipped:${RESET}   $skipped (already exist)"
@@ -241,8 +265,16 @@ echo "  1. Open your project in Kiro"
 echo "  2. Skills are available via ${CYAN}/${RESET} menu in chat"
 echo "  3. Steering files with 'always' inclusion load automatically"
 echo "  4. Toggle hooks in the ${CYAN}Agent Hooks${RESET} panel"
-echo ""
-echo "${YELLOW}Powers (MCP integrations) are NOT installed by default.${RESET}"
-echo "  To install powers: use ${CYAN}aie-skills-installer${RESET} skill in Kiro"
-echo "  Or manually copy from .kiro/powers/ in the AIE-Skills repo."
+
+if [ "$INSTALL_POWERS" = true ] && [ "$powers" -gt 0 ]; then
+  echo ""
+  echo "${YELLOW}Powers installed with MCP servers disabled.${RESET}"
+  echo "  To enable: set ${CYAN}\"disabled\": false${RESET} in each .kiro/powers/*/mcp.json"
+  echo "  after configuring credentials (API keys, login, etc.)"
+elif [ "$INSTALL_POWERS" = false ]; then
+  echo ""
+  echo "${YELLOW}Powers (MCP integrations) were not installed.${RESET}"
+  echo "  To include powers: re-run with ${CYAN}-p${RESET} flag"
+  echo "  Or use ${CYAN}aie-skills-installer${RESET} skill in Kiro for selective install"
+fi
 echo ""

@@ -142,7 +142,7 @@ Follow Steps 1-4 above. Copy only confirmed skill directories recursively.
 
 ### Method 2: Shell Script (skills + steering only, no powers)
 
-`bash <source>/.kiro/install.sh <target>` — installs skills, steering, hooks. Powers are excluded by default.
+`bash <source>/.kiro/install.sh <target>` — installs skills, steering, hooks. Add `-p` flag to include powers.
 
 ## Power Detection Table
 

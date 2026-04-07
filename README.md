@@ -41,6 +41,9 @@ curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | 
 
 # Install globally (vào ~/.kiro/)
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --global
+
+# Include Powers (MCP integrations, disabled by default)
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- -p
 ```
 
 Script chỉ copy components chưa tồn tại — không overwrite file đã có. Powers (MCP) không được cài mặc định.
