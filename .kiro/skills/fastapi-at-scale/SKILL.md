@@ -210,6 +210,7 @@ Slow endpoints?
 | Adding type annotations and property-based testing | python-quality-testing | Hypothesis, mutation testing, type coverage |
 | Serving ML models behind FastAPI | vllm-tgi-inference | LLM inference server patterns |
 | Building OpenAI-compatible audio/TTS API | openai-audio-api | Concurrency, streaming, batching for audio inference |
+| Adding error tracking and monitoring | power-sentry | Sentry SDK setup for FastAPI, error capture, performance tracing |
 
 ## References
 

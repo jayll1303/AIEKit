@@ -286,6 +286,7 @@ uv venv --python 3.12         # Create with specific Python version
 | Cần install PyTorch, CUDA, Flash-Attention, hoặc ML dependencies | python-ml-deps | Xử lý CUDA version conflicts và ML-specific pip index URLs |
 | Cần setup type annotations, property-based testing, hoặc mutation testing | python-quality-testing | Chuyên về code quality audits và testing strategies nâng cao |
 | Cần cấu hình ruff rules nâng cao cho ML codebases | python-quality-testing | Có ruff-ml-config reference với rule sets tối ưu cho ML |
+| Cần thêm error tracking cho Python app | power-sentry | Sentry SDK setup, error capture, performance tracing |
 
 ## References
 
