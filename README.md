@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Skills-28-blue?style=flat-square" alt="Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Skills-29-blue?style=flat-square" alt="Skills" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Hooks-6-orange?style=flat-square" alt="Hooks" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Powers-3-purple?style=flat-square" alt="Powers" /></a>
@@ -67,7 +67,7 @@ rm -rf /tmp/aie-skills
 
 ---
 
-## Skills (28)
+## Skills (29)
 
 | Skill | Mô tả |
 |-------|--------|
@@ -86,6 +86,7 @@ rm -rf /tmp/aie-skills
 | `notebook-workflows` | Tạo & chỉnh sửa Jupyter/Colab notebooks programmatically |
 | `ollama-local-llm` | Chạy và quản lý local LLMs với Ollama: pull, run, Modelfile, REST API |
 | `openai-audio-api` | Build OpenAI-compatible audio/speech APIs với FastAPI: concurrency control, dynamic batching, streaming synthesis, adapter pattern |
+| `opentelemetry` | Instrument apps với OpenTelemetry cho distributed tracing, metrics, logs. Auto/manual instrumentation Python/Node.js, OTel Collector pipelines, sampling strategies, K8s deployment |
 | `paddleocr` | OCR với PaddlePaddle: text detection, recognition, fine-tuning, dataset prep, PP-OCRv5, PP-StructureV3 |
 | `python-ml-deps` | Cài ML deps với uv, xử lý CUDA version conflicts |
 | `python-project-setup` | Bootstrap Python projects với uv, ruff, pytest |

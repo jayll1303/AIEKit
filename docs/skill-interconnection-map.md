@@ -1,6 +1,6 @@
 # Skill Interconnection Map
 
-> Bản đồ quan hệ giữa 28 AIE-Skills + 3 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
+> Bản đồ quan hệ giữa 29 AIE-Skills + 3 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
 
 ## Skill Layers
 
@@ -14,7 +14,7 @@
 │  freqtrade  │  ultralytics-yolo  │  k2-training-pipeline    │
 │  sherpa-onnx │  arxiv-reader      │  notebook-workflows      │
 │  paddleocr   │  fastapi-at-scale  │  hf-speech-to-speech-pipeline │
-│  openai-audio-api                                            │
+│  openai-audio-api  │  opentelemetry                           │
 ├─────────────────────────────────────────────────────────────┤
 │                    WORKFLOW LAYER                             │
 │  hf-transformers-trainer  │  text-embeddings-rag             │
@@ -61,6 +61,7 @@
 | hf-speech-to-speech-pipeline | ● | ○ | ○ | | | | | |
 | fastapi-at-scale | | | ○ | | | | | |
 | openai-audio-api | ○ | | ○ | | | | | |
+| opentelemetry | ○ | | ○ | | | | | |
 
 ● = hard dependency (thường cần)  ○ = soft dependency (optional, tùy workflow)
 
@@ -163,6 +164,15 @@ python-project-setup → python-ml-deps (torch, torchaudio)
 python-project-setup → fastapi-at-scale (structure, auth, DB)
     → power-sentry (Sentry SDK init, error capture, tracing)
     → docker-gpu-setup (containerize with SENTRY_DSN env var)
+```
+
+### 10. Observable Service with OpenTelemetry
+
+```
+python-project-setup → python-ml-deps (otel packages)
+    → fastapi-at-scale (structure, auth, DB)
+    → opentelemetry (instrument + collector + sampling)
+    → docker-gpu-setup (containerize with collector sidecar)
 ```
 
 ## Serving Alternatives

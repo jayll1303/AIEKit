@@ -27,6 +27,7 @@ Does NOT handle:
 - Generic backend concepts (REST design, GraphQL, gRPC theory) (→ backend-development)
 - ML model serving behind FastAPI (→ vllm-tgi-inference, triton-deployment)
 - Audio/TTS API serving (→ openai-audio-api)
+- Observability, distributed tracing, OTel instrumentation (→ opentelemetry)
 - Python project bootstrapping (uv, ruff, pyproject.toml) (→ python-project-setup)
 - Docker GPU setup for ML workloads (→ docker-gpu-setup)
 - Frontend/full-stack frameworks (Next.js, React) (→ web-frameworks)
@@ -211,6 +212,7 @@ Slow endpoints?
 | Serving ML models behind FastAPI | vllm-tgi-inference | LLM inference server patterns |
 | Building OpenAI-compatible audio/TTS API | openai-audio-api | Concurrency, streaming, batching for audio inference |
 | Adding error tracking and monitoring | power-sentry | Sentry SDK setup for FastAPI, error capture, performance tracing |
+| Adding distributed tracing and observability | opentelemetry | OTel SDK setup, Collector config, sampling strategies |
 
 ## References
 
