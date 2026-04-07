@@ -1,4 +1,4 @@
-docs/
+docs/*
 !docs/skill-interconnection-map.md
 plans/
 .kiro/specs/
