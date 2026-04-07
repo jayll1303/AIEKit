@@ -14,6 +14,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "A new Kiro component file was created. Please:\n1. Scan all current skills (.kiro/skills/*/SKILL.md), steering (.kiro/steering/*.md), hooks (.kiro/hooks/*.kiro.hook), and powers (.kiro/powers/*/POWER.md).\n2. Regenerate the README.md tables to reflect the current state (keep the same format/structure, update counts, add/remove rows as needed).\n3. After updating README.md, stage all changes and commit with message \"docs: update README index\" then ask the user for confirmation before pushing."
+    "prompt": "A new Kiro component file was created. Please:\n1. Scan all current skills (.kiro/skills/*/SKILL.md), steering (.kiro/steering/*.md), hooks (.kiro/hooks/*.kiro.hook), and powers (.kiro/powers/*/POWER.md).\n2. Regenerate the README.md tables to reflect the current state (keep the same format/structure, update counts, add/remove rows as needed).\n3. After updating README.md, run: git add . && git commit -m \"docs: update README index\" — then ask user for confirmation before git push origin main."
   }
 }
