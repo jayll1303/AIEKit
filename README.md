@@ -43,7 +43,7 @@ curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | 
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --global
 ```
 
-Script chỉ copy components chưa tồn tại — không overwrite file đã có.
+Script chỉ copy components chưa tồn tại — không overwrite file đã có. Powers (MCP) không được cài mặc định.
 
 ### Smart Install (recommended)
 
@@ -119,7 +119,10 @@ rm -rf /tmp/aie-skills
 | `skill-quality-on-edit` | `fileEdited` | Check SKILL.md đã sửa theo best practices + interconnection map |
 | `steering-consistency` | `fileCreated` | Check steering mới: frontmatter, domain overlap, cross-references |
 
-## Powers (3)
+## Powers (3) — Optional, not installed by default
+
+Powers require MCP server auth/API keys. Install via `aie-skills-installer` skill or manual copy.
+MCP servers ship `"disabled": true` — enable after configuring credentials.
 
 | Power | MCP Server | Mô tả |
 |-------|------------|--------|
@@ -127,4 +130,4 @@ rm -rf /tmp/aie-skills
 | `power-gpu-monitor` | [mcp-system-monitor](https://github.com/huhabla/mcp-system-monitor) (local Python) | Monitor GPU/VRAM/CPU real-time, estimate memory cho ML models, diagnose OOM errors |
 | `power-sentry` | [@sentry/mcp-server](https://github.com/getsentry/sentry-mcp) (local npx) | Integrate Sentry SDK cho error tracking, performance monitoring, debug production issues via MCP. Setup patterns cho JS, Python, React, Next.js, FastAPI |
 
-Mỗi power bao gồm: `POWER.md` + `mcp.json` + optional `steering/` workflows.
+Mỗi power bao gồm: `POWER.md` + `mcp.json` (disabled) + optional `steering/` workflows.

@@ -4,7 +4,7 @@
       "command": "python",
       "args": ["${MCP_SYSTEM_MONITOR_PATH}/mcp_system_monitor_server.py"],
       "env": {},
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "get_gpu_info",
         "get_memory_info",

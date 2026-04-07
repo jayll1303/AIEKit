@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["@sentry/mcp-server@latest"],
       "env": {},
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "list_projects",
         "list_project_issues",

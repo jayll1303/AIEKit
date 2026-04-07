@@ -119,6 +119,10 @@ fi
 shopt -s nullglob
 
 SUBDIRS="skills steering hooks scripts settings"
+# NOTE: powers/ is intentionally excluded from default install.
+# Powers contain MCP servers that require API keys/auth — auto-connecting
+# causes popup prompts in Kiro when credentials aren't configured.
+# Install powers via: aie-skills-installer skill (recommended) or manual copy.
 for dir in $SUBDIRS; do
   mkdir -p "$TARGET/.kiro/$dir"
 done
@@ -237,4 +241,8 @@ echo "  1. Open your project in Kiro"
 echo "  2. Skills are available via ${CYAN}/${RESET} menu in chat"
 echo "  3. Steering files with 'always' inclusion load automatically"
 echo "  4. Toggle hooks in the ${CYAN}Agent Hooks${RESET} panel"
+echo ""
+echo "${YELLOW}Powers (MCP integrations) are NOT installed by default.${RESET}"
+echo "  To install powers: use ${CYAN}aie-skills-installer${RESET} skill in Kiro"
+echo "  Or manually copy from .kiro/powers/ in the AIE-Skills repo."
 echo ""

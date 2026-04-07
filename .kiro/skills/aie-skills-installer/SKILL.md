@@ -140,9 +140,38 @@ hf-hub-datasets   → auto-recommend if ANY HF-based skill is selected
 
 Follow Steps 1-4 above. Copy only confirmed skill directories recursively.
 
-### Method 2: Shell Script (full install, not recommended)
+### Method 2: Shell Script (skills + steering only, no powers)
 
-`bash <source>/.kiro/install.sh <target>` — installs everything. Use only when user explicitly wants all skills.
+`bash <source>/.kiro/install.sh <target>` — installs skills, steering, hooks. Powers are excluded by default.
+
+## Power Detection Table
+
+Powers are optional MCP integrations. Only recommend when strong signals exist AND user confirms.
+
+| Power | Detect by | Prerequisites |
+|-------|-----------|---------------|
+| power-huggingface | `transformers`, `datasets`, `huggingface_hub` in deps; HF model refs in code | HF_TOKEN env var or HF CLI login |
+| power-gpu-monitor | NVIDIA GPU present; CUDA refs in deps/Docker; ML training/serving skills selected | Python + mcp-system-monitor installed |
+| power-sentry | `sentry-sdk`, `@sentry/node`, `@sentry/react` in deps; Sentry DSN in env/config | Node.js 18+ for npx; Sentry account |
+
+### Power Install Workflow
+
+1. After skill recommendations, present powers separately:
+   ```
+   ## Optional Powers (MCP Integrations)
+   
+   Powers provide external tool access but require auth setup.
+   MCP servers are disabled by default — enable after configuring credentials.
+   
+   | Power | Why | Setup needed |
+   |-------|-----|-------------|
+   | power-name | signal found | what user needs to do |
+   ```
+2. Wait for explicit user confirmation
+3. Copy power directory to `<target>/.kiro/powers/<power-name>/`
+4. Powers ship with `"disabled": true` in mcp.json — remind user to:
+   - Configure credentials (API key, login, etc.)
+   - Set `"disabled": false` in mcp.json when ready
 
 ## Anti-Patterns
 
@@ -152,6 +181,7 @@ Follow Steps 1-4 above. Copy only confirmed skill directories recursively.
 | "Skip analysis, just ask user" | User may not know all 25 skills. Analysis provides informed recommendations. |
 | "No Python deps found, skip all" | Check README, code files, Docker — deps file isn't the only signal. |
 | "Install hooks too" | Hooks are repo-specific (README indexing). Ask first. |
+| "Install powers by default" | Powers require MCP auth/API keys. Only install when user explicitly confirms and understands setup. |
 
 ## Troubleshooting
 

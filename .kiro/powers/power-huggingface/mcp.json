@@ -5,7 +5,7 @@
       "headers": {
         "Authorization": "Bearer ${HF_TOKEN}"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": []
     }
   }
