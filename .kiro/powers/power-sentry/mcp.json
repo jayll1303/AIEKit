@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "sentry": {
+      "command": "npx",
+      "args": ["@sentry/mcp-server@latest"],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "list_projects",
+        "list_project_issues",
+        "get_sentry_issue",
+        "get_sentry_event",
+        "list_issue_events",
+        "list_error_events_in_project",
+        "resolve_short_id",
+        "list_organization_replays"
+      ]
+    }
+  }
+}

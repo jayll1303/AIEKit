@@ -15,7 +15,7 @@
   <a href="#"><img src="https://img.shields.io/badge/Skills-28-blue?style=flat-square" alt="Skills" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Hooks-6-orange?style=flat-square" alt="Hooks" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Powers-2-purple?style=flat-square" alt="Powers" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Powers-3-purple?style=flat-square" alt="Powers" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square" alt="Maintained" /></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License" /></a>
 </p>
@@ -119,11 +119,12 @@ rm -rf /tmp/aie-skills
 | `skill-quality-on-edit` | `fileEdited` | Check SKILL.md đã sửa theo best practices + interconnection map |
 | `steering-consistency` | `fileCreated` | Check steering mới: frontmatter, domain overlap, cross-references |
 
-## Powers (2)
+## Powers (3)
 
 | Power | MCP Server | Mô tả |
 |-------|------------|--------|
 | `power-huggingface` | [HF MCP Server](https://huggingface.co/mcp) (remote HTTP) | Search models, datasets, papers, spaces trên HuggingFace Hub. Compare models, check configs, discover trending papers |
 | `power-gpu-monitor` | [mcp-system-monitor](https://github.com/huhabla/mcp-system-monitor) (local Python) | Monitor GPU/VRAM/CPU real-time, estimate memory cho ML models, diagnose OOM errors |
+| `power-sentry` | [@sentry/mcp-server](https://github.com/getsentry/sentry-mcp) (local npx) | Integrate Sentry SDK cho error tracking, performance monitoring, debug production issues via MCP. Setup patterns cho JS, Python, React, Next.js, FastAPI |
 
-Mỗi power bao gồm: `POWER.md` + `mcp.json` + `steering/` workflows.
+Mỗi power bao gồm: `POWER.md` + `mcp.json` + optional `steering/` workflows.
