@@ -63,71 +63,13 @@ Access UI at `http://localhost:5000`.
 
 ### Docker Compose Deployment (Team)
 
-```yaml
-# docker-compose.yml
-services:
-  mlflow:
-    image: ghcr.io/mlflow/mlflow:v2.16.0
-    command: >
-      mlflow server
-      --backend-store-uri postgresql://mlflow:mlflow@postgres:5432/mlflow
-      --default-artifact-root s3://mlflow-artifacts/
-      --host 0.0.0.0
-      --port 5000
-    ports:
-      - "5000:5000"
-    environment:
-      - AWS_ACCESS_KEY_ID=minioadmin
-      - AWS_SECRET_ACCESS_KEY=minioadmin
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-    depends_on:
-      postgres:
-        condition: service_healthy
-      minio:
-        condition: service_started
+For team setup with PostgreSQL + MinIO (S3-compatible artifacts), see [MLflow Server Setup](references/mlflow-server-setup.md) for the full `docker-compose.yml` and nginx reverse proxy config.
 
-  postgres:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: mlflow
-      POSTGRES_PASSWORD: mlflow
-      POSTGRES_DB: mlflow
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U mlflow"]
-      interval: 5s
-      retries: 5
-
-  minio:
-    image: minio/minio
-    command: server /data --console-address ":9001"
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    volumes:
-      - miniodata:/data
-
-volumes:
-  pgdata:
-  miniodata:
-```
-
+Quick validation after deployment:
 ```bash
-# Start the stack
-docker compose up -d
-
-# Create the S3 bucket for artifacts
-docker compose exec minio mc alias set local http://localhost:9000 minioadmin minioadmin
-docker compose exec minio mc mb local/mlflow-artifacts
+docker compose ps          # All services must show "running"
+curl http://localhost:5000/health  # Must return OK
 ```
-
-**Validate:** Run `docker compose ps` — all 3 services must show "running". Then `curl http://localhost:5000/health` must return OK. If not → check `docker compose logs mlflow` for connection errors.
-
-> For detailed server setup including nginx reverse proxy, see [mlflow-server-setup](references/mlflow-server-setup.md)
 
 ### Log an Experiment (Python)
 
@@ -231,61 +173,36 @@ wandb sync ./wandb/offline-run-*
 
 ```python
 import os
-from transformers import TrainingArguments, Trainer
+from transformers import TrainingArguments
 
 os.environ["MLFLOW_TRACKING_URI"] = "http://localhost:5000"
 os.environ["MLFLOW_EXPERIMENT_NAME"] = "my-fine-tuning"
 
 training_args = TrainingArguments(
     output_dir="./output",
-    num_train_epochs=3,
-    per_device_train_batch_size=4,
-    learning_rate=2e-4,
-    logging_steps=10,
     report_to="mlflow",          # Enable MLflow logging
     run_name="llama-lora-run1",  # MLflow run name
+    # ... other args
 )
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
-)
-
-trainer.train()
 ```
 
 ### W&B with HuggingFace Trainer
 
 ```python
 import os
-from transformers import TrainingArguments, Trainer
+from transformers import TrainingArguments
 
 os.environ["WANDB_PROJECT"] = "my-fine-tuning"
-# os.environ["WANDB_MODE"] = "offline"  # Uncomment for offline
 
 training_args = TrainingArguments(
     output_dir="./output",
-    num_train_epochs=3,
-    per_device_train_batch_size=4,
-    learning_rate=2e-4,
-    logging_steps=10,
     report_to="wandb",           # Enable W&B logging
     run_name="llama-lora-run1",  # W&B run name
+    # ... other args
 )
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
-)
-
-trainer.train()
 ```
 
-> For PyTorch training loop integration and custom callback patterns, see [integration-recipes](references/integration-recipes.md)
+> For full examples with PyTorch loops and custom callbacks, see [Integration Recipes](references/integration-recipes.md)
 
 ## Comparison Patterns
 
@@ -293,11 +210,7 @@ trainer.train()
 
 ```python
 import mlflow
-
-mlflow.set_tracking_uri("http://localhost:5000")
 client = mlflow.tracking.MlflowClient()
-
-# Search runs in an experiment
 experiment = client.get_experiment_by_name("my-fine-tuning")
 runs = client.search_runs(
     experiment_ids=[experiment.experiment_id],
@@ -305,34 +218,21 @@ runs = client.search_runs(
     order_by=["metrics.eval_loss ASC"],
     max_results=10,
 )
-
-# Compare top runs
 for run in runs:
-    print(f"Run: {run.info.run_name}")
-    print(f"  eval_loss: {run.data.metrics.get('eval_loss', 'N/A')}")
-    print(f"  method: {run.data.params.get('method', 'N/A')}")
-    print(f"  lr: {run.data.params.get('learning_rate', 'N/A')}")
+    print(f"{run.info.run_name}: eval_loss={run.data.metrics.get('eval_loss')}")
 ```
 
 ### W&B: Query and Compare Runs
 
 ```python
 import wandb
-
 api = wandb.Api()
-
-# Get runs from a project
-runs = api.runs(
-    "my-team/my-fine-tuning",
+runs = api.runs("my-team/my-fine-tuning",
     filters={"$and": [{"summary_metrics.eval_loss": {"$lt": 1.5}}]},
     order="+summary_metrics.eval_loss",
 )
-
-# Compare runs
 for run in runs:
-    print(f"Run: {run.name}")
-    print(f"  eval_loss: {run.summary.get('eval_loss', 'N/A')}")
-    print(f"  config: {run.config}")
+    print(f"{run.name}: eval_loss={run.summary.get('eval_loss')}")
 ```
 
 ## Troubleshooting Checklist
@@ -372,13 +272,26 @@ Tracking data loss or connectivity issues?
     └─ Fix: Verify MinIO/S3 bucket exists and is writable
 ```
 
+## Results Self-Check Protocol
+
+<HARD-GATE>
+Do NOT present experiment results to user before completing the self-check checklist.
+Do NOT claim "training complete" without verifying metrics are logged correctly.
+</HARD-GATE>
+
+Before reporting or comparing results, complete the full checklist covering correctness (data split, metric variant, multi-seed), reproducibility (hyperparams, config artifact, environment), consistency (no hardcoded params, naming), and documentation (UI visibility, comparison conditions).
+
+> See [Results Self-Check](references/results-self-check.md) for the full checklist.
+
 ## Anti-Patterns
 
-| Agent nghĩ | Thực tế |
-|---|---|
-| "Training script runs fine, I'll add tracking later" | Tracking must be set up BEFORE training starts. Retroactively recovering metrics from logs is error-prone and loses step-level granularity. Always configure `report_to` in TrainingArguments or `mlflow.start_run()` before `trainer.train()`. |
-| "I'll log metrics to both MLflow and W&B simultaneously for redundancy" | Dual logging doubles API calls and can cause timeout-related training slowdowns. Pick one tracker per project. If migration is needed, export from one and import to the other after training. |
-| "The MLflow server is on localhost, so I don't need to set MLFLOW_TRACKING_URI" | MLflow defaults to local file storage (`./mlruns`), not `localhost:5000`. Always explicitly set `MLFLOW_TRACKING_URI` or `mlflow.set_tracking_uri()` — even for local servers. Forgetting this is the #1 cause of "runs not appearing in UI". |
+| ID | Agent nghĩ | Thực tế | Detection | Fix |
+|---|---|---|---|---|
+| AP-01 | "Training script runs fine, I'll add tracking later" | Tracking must be set up BEFORE training. Retroactively recovering metrics from logs is error-prone and loses step-level granularity | Check: is `report_to` set in TrainingArguments? Is `mlflow.start_run()` called before `trainer.train()`? | Always configure tracking integration before any `trainer.train()` call |
+| AP-02 | "I'll log metrics to both MLflow and W&B for redundancy" | Dual logging doubles API calls and can cause timeout-related training slowdowns | Check: `report_to` contains multiple trackers | Pick one tracker per project. Export + import if migration needed |
+| AP-03 | "MLflow server is on localhost, no need to set TRACKING_URI" | MLflow defaults to local file storage (`./mlruns`), not `localhost:5000` | Check: `MLFLOW_TRACKING_URI` env var or `mlflow.get_tracking_uri()` output | Always explicitly set `MLFLOW_TRACKING_URI` — even for local servers |
+| AP-04 | "Metrics look good, reporting results now" | Results without self-check may have wrong split, wrong metric variant, or cherry-picked seed | Check: self-check protocol above completed? | Run full self-check checklist before any result comparison or reporting |
+| AP-05 | "I'll compare this run against the paper's reported numbers" | Paper numbers may use different conditions (split, preprocessing, prompt, model version) | Check: BASELINES documented with exact conditions? | Always reproduce baselines yourself under your exact conditions, then compare |
 
 ## Related Skills
 
@@ -398,3 +311,5 @@ Tracking data loss or connectivity issues?
   **Load when:** integrating tracking into PyTorch training loops, writing custom Trainer callbacks, or logging non-standard artifact types
 - [Model Registry](references/model-registry.md) — MLflow model registry: versioning, staging, promotion workflows, model serving
   **Load when:** managing model versions, promoting models between staging/production, or setting up model serving from the registry
+- [Results Self-Check](references/results-self-check.md) — Full checklist for verifying experiment results before reporting: correctness, reproducibility, consistency, documentation
+  **Load when:** comparing experiment runs, reporting results, or claiming training is complete

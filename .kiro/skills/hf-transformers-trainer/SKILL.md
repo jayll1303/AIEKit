@@ -344,12 +344,14 @@ Out of memory during training?
 
 ## Anti-Patterns
 
-| Agent nghĩ | Thực tế |
-|---|---|
-| "GPU 24 GB chắc đủ cho full fine-tune 7B" | Full fine-tune 7B cần ~28 GB (weights + optimizer + gradients). Luôn check VRAM Estimation table trước khi chọn method |
-| "LoRA rank cao hơn = kết quả tốt hơn" | r quá cao (>64) tăng VRAM mà không cải thiện quality; r=16 là default tốt cho hầu hết tasks. Benchmark trước khi tăng |
-| "Không cần gradient checkpointing, VRAM còn dư" | Gradient checkpointing giảm ~30-40% VRAM với chỉ ~20% slower. Luôn bật cho model ≥7B để có headroom cho batch size lớn hơn |
-| "Dataset nhỏ thì train nhiều epoch cho tốt" | Overfitting xảy ra nhanh với dataset nhỏ; monitor eval_loss và dùng early stopping. 1-3 epochs thường đủ cho fine-tuning |
+| ID | Agent nghĩ | Thực tế | Detection | Fix |
+|---|---|---|---|---|
+| AP-01 | "GPU 24 GB chắc đủ cho full fine-tune 7B" | Full fine-tune 7B cần ~28 GB (weights + optimizer + gradients) | Check VRAM Estimation table trước khi chọn method. `nvidia-smi` cho available VRAM | Luôn estimate VRAM trước. Nếu thiếu → chuyển QLoRA hoặc giảm batch size |
+| AP-02 | "LoRA rank cao hơn = kết quả tốt hơn" | r quá cao (>64) tăng VRAM mà không cải thiện quality | So sánh trainable params: `model.print_trainable_parameters()`. r=16 → ~0.17% params | Bắt đầu r=16, benchmark trước khi tăng. Chỉ tăng nếu eval metrics cải thiện rõ |
+| AP-03 | "Không cần gradient checkpointing, VRAM còn dư" | Gradient checkpointing giảm ~30-40% VRAM với chỉ ~20% slower | Check `gradient_checkpointing` trong TrainingArguments | Luôn bật cho model ≥7B để có headroom cho batch size lớn hơn |
+| AP-04 | "Dataset nhỏ thì train nhiều epoch cho tốt" | Overfitting xảy ra nhanh với dataset nhỏ | Monitor `eval_loss` — nếu tăng trong khi `train_loss` giảm → overfitting | Dùng early stopping. 1-3 epochs thường đủ. Set `load_best_model_at_end=True` |
+| AP-05 | "Thay đổi cả model, data, và hyperparams cùng lúc" | Không thể attribute kết quả cho bất kỳ thay đổi nào | So sánh 2 experiment configs liên tiếp — nếu >1 biến thay đổi → flag | Mỗi experiment chỉ thay đổi 1 biến. Log rõ biến nào thay đổi và tại sao |
+| AP-06 | "Train xong, report kết quả luôn" | Kết quả chưa verify có thể sai split, sai metric, hoặc cherry-picked seed | Check: đã chạy multi-seed chưa? Metric đúng variant chưa? Đúng eval split chưa? | Chạy self-check protocol (→ experiment-tracking) trước khi report bất kỳ kết quả nào |
 
 ## Related Skills
 

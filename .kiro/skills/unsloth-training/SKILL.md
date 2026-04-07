@@ -236,13 +236,14 @@ Unsloth issues?
 
 ## Anti-Patterns
 
-| Agent nghĩ | Thực tế |
-|---|---|
-| "Dùng `use_gradient_checkpointing=True` cho Unsloth" | Phải dùng `use_gradient_checkpointing="unsloth"` (string). `True` dùng standard HF checkpointing, mất lợi thế VRAM của Unsloth |
-| "Load model bằng AutoModelForCausalLM rồi wrap Unsloth" | Phải dùng `FastLanguageModel.from_pretrained()` từ đầu. Unsloth cần control loading process để apply Triton kernels |
-| "Unsloth hỗ trợ multi-GPU training" | Unsloth tối ưu cho single GPU. Multi-GPU → dùng hf-transformers-trainer với DeepSpeed/FSDP |
-| "Export GGUF cần cài llama.cpp riêng" | Unsloth có built-in `save_pretrained_gguf()` — không cần llama.cpp. Chỉ cần llama.cpp khi muốn custom quantization |
-| "lora_dropout > 0 tốt hơn cho regularization" | Unsloth khuyến nghị `lora_dropout=0` vì Triton kernels đã optimize cho case này. Dropout > 0 có thể giảm speed |
+| ID | Agent nghĩ | Thực tế | Detection | Fix |
+|---|---|---|---|---|
+| AP-01 | "Dùng `use_gradient_checkpointing=True`" | Phải dùng `="unsloth"` (string). `True` dùng standard HF checkpointing, mất lợi thế VRAM | Grep code cho `use_gradient_checkpointing=True` (bool thay vì string) | Thay bằng `use_gradient_checkpointing="unsloth"`. Verify VRAM giảm so với `True` |
+| AP-02 | "Load model bằng AutoModelForCausalLM rồi wrap" | Phải dùng `FastLanguageModel.from_pretrained()` từ đầu. Unsloth cần control loading để apply Triton kernels | Check import: nếu dùng `AutoModelForCausalLM` thay vì `FastLanguageModel` → sai | Thay toàn bộ model loading bằng `FastLanguageModel.from_pretrained()` |
+| AP-03 | "Unsloth hỗ trợ multi-GPU training" | Unsloth tối ưu cho single GPU | Check: `device_map` hoặc DeepSpeed config → Unsloth không hỗ trợ | Multi-GPU → dùng hf-transformers-trainer với DeepSpeed/FSDP |
+| AP-04 | "Export GGUF cần cài llama.cpp riêng" | Unsloth có built-in `save_pretrained_gguf()` | Check: nếu đang cài llama.cpp chỉ để export → không cần | Dùng `model.save_pretrained_gguf()`. Chỉ cần llama.cpp cho custom quantization |
+| AP-05 | "lora_dropout > 0 tốt hơn cho regularization" | Unsloth khuyến nghị `lora_dropout=0` vì Triton kernels optimize cho case này | Check LoRA config: `lora_dropout > 0` → có thể giảm speed | Set `lora_dropout=0`. Nếu cần regularization → giảm epochs hoặc tăng weight_decay |
+| AP-06 | "Train xong, report best seed luôn" | Cherry-picking best seed là p-hacking. Cần mean±std over 3+ seeds | Check: chỉ report 1 seed? Không có std? | Chạy 3+ seeds, report mean±std. Dùng self-check protocol (→ experiment-tracking) |
 
 ## Related Skills
 
