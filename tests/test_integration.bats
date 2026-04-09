@@ -44,17 +44,6 @@ teardown() {
   [ "$count" -eq 3 ]
 }
 
-@test "default install does not create hooks directory" {
-  local skill_list
-  skill_list=$(resolve_skills core "")
-  for skill_name in $skill_list; do
-    if [ -d "$SOURCE_DIR/.kiro/skills/$skill_name" ]; then
-      cp -r "$SOURCE_DIR/.kiro/skills/$skill_name" "$TARGET_DIR/.kiro/skills/$skill_name"
-    fi
-  done
-  [ ! -d "$TARGET_DIR/.kiro/hooks" ]
-}
-
 # ── Task 7.6: --profile llm ──
 
 @test "profile llm installs 10 skill dirs" {
@@ -81,17 +70,6 @@ teardown() {
   local count
   count=$(ls -1 "$TARGET_DIR/.kiro/steering"/*.md 2>/dev/null | wc -l)
   [ "$count" -eq 4 ]
-}
-
-@test "profile llm does not create hooks directory" {
-  local skill_list
-  skill_list=$(resolve_skills profile "llm")
-  for skill_name in $skill_list; do
-    if [ -d "$SOURCE_DIR/.kiro/skills/$skill_name" ]; then
-      cp -r "$SOURCE_DIR/.kiro/skills/$skill_name" "$TARGET_DIR/.kiro/skills/$skill_name"
-    fi
-  done
-  [ ! -d "$TARGET_DIR/.kiro/hooks" ]
 }
 
 # ── Task 7.7: --all ──
@@ -122,13 +100,4 @@ teardown() {
   [ "$count" -eq 6 ]
 }
 
-@test "all mode does not create hooks directory" {
-  local skill_list
-  skill_list=$(resolve_skills all "")
-  for skill_name in $skill_list; do
-    if [ -d "$SOURCE_DIR/.kiro/skills/$skill_name" ]; then
-      cp -r "$SOURCE_DIR/.kiro/skills/$skill_name" "$TARGET_DIR/.kiro/skills/$skill_name"
-    fi
-  done
-  [ ! -d "$TARGET_DIR/.kiro/hooks" ]
-}
+

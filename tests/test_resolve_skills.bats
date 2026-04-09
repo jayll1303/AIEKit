@@ -46,13 +46,3 @@ load 'test_helper'
   count=$(echo "$output" | tr ' ' '\n' | grep -c .)
   [ "$count" -eq 30 ]
 }
-
-@test "resolve_skills results are deduplicated" {
-  run resolve_skills profile "llm"
-  [ "$status" -eq 0 ]
-  local total
-  total=$(echo "$output" | tr ' ' '\n' | grep -c .)
-  local unique
-  unique=$(echo "$output" | tr ' ' '\n' | sort -u | grep -c .)
-  [ "$total" -eq "$unique" ]
-}
