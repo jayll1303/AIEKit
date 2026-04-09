@@ -1,12 +1,6 @@
 ---
 name: hf-speech-to-speech-pipeline
-description: >
-  Best practices and architecture patterns for huggingface/speech-to-speech queue-chained pipeline.
-  Use when building speech-to-speech pipelines, adding STT/LLM/TTS handlers, wiring queue-based
-  audio processing stages, implementing VAD with progressive streaming, or designing real-time
-  voice agent architectures. Does NOT handle: model training → hf-transformers-trainer,
-  model serving at scale → inference-deployment, Docker/GPU setup → docker-gpu-setup,
-  HTTP API wrapper for audio models → openai-audio-api.
+description: "Best practices and architecture patterns for huggingface/speech-to-speech queue-chained pipeline. Use when building speech-to-speech pipelines, adding STT/LLM/TTS handlers, wiring queue-based audio processing stages, implementing VAD with progressive streaming, or designing real-time voice agent architectures."
 ---
 
 # HuggingFace Speech-to-Speech Pipeline
@@ -147,13 +141,26 @@ Client disconnect → SESSION_END propagates through pipeline
   → should_listen.set() (ready for next client)
 ```
 
-## Common Pitfalls
+## Anti-Patterns
 
-1. Forgetting to forward `SESSION_END` — BaseHandler handles it, but custom `run()` overrides must too
-2. Blocking in `process()` — stalls entire pipeline
-3. State leaking between sessions — always implement `on_session_end()`
-4. Top-level imports of unused handlers — use lazy imports in factories
-5. Using `b"END"` for session reset — that stops the handler thread permanently
+| Agent nghĩ | Thực tế |
+|---|---|
+| "Override run() for custom logic" | NEVER override run(). Put all logic in process(). BaseHandler.run() manages queues and signals |
+| "Use b\"END\" to reset session" | b"END" kills the handler thread permanently. Use SESSION_END for session reset |
+| "Import all handlers at top level" | Wastes memory and startup time. Use lazy imports inside factory branches only |
+| "process() can do blocking I/O" | Blocks entire pipeline. Use timeouts for all I/O in process() |
+| "Skip on_session_end(), stateless anyway" | VAD buffer, STT context, LLM history leak between sessions without proper reset |
+| "Scale by adding more threads" | Single-process, shared queues, no session isolation. Scale by running multiple instances behind LB |
+
+## Related Skills
+
+| Situation | Activate Skill | Why |
+|---|---|---|
+| Need to train/fine-tune STT or TTS models | hf-transformers-trainer | Training workflows with Trainer/TRL |
+| Need to train ASR models with k2/icefall | k2-training-pipeline | Kaldi-based speech model training |
+| Need to deploy speech models offline with ONNX | sherpa-onnx | Offline ASR/TTS with sherpa-onnx runtime |
+| Need to wrap pipeline as HTTP API | openai-audio-api | OpenAI-compatible audio API with FastAPI |
+| Need to containerize pipeline with GPU | docker-gpu-setup | GPU Docker patterns and NVIDIA setup |
 
 ## References
 

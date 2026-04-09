@@ -1,9 +1,6 @@
 ---
 name: openai-audio-api
-description: >
-  Build OpenAI-compatible audio/speech APIs with FastAPI, dynamic batching,
-  and streaming synthesis. Use when building TTS servers, audio inference
-  APIs, or wrapping audio ML models behind HTTP.
+description: "Build OpenAI-compatible audio/speech APIs with FastAPI, dynamic batching, and streaming synthesis. Use when building TTS servers, audio inference APIs, or wrapping audio ML models behind HTTP."
 ---
 
 # OpenAI-Compatible Audio API

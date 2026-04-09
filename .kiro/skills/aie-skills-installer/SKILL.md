@@ -208,6 +208,14 @@ Powers are optional MCP integrations. Only recommend when strong signals exist A
 | "Install hooks too" | Hooks are repo-specific (README indexing). Ask first. |
 | "Install powers by default" | Powers require MCP auth/API keys. Only install when user explicitly confirms and understands setup. |
 
+## Related Skills
+
+| Situation | Activate Skill | Why |
+|---|---|---|
+| Need to brainstorm which ML approach before choosing skills | ml-brainstorm | ML decision-making helps pick the right skill chain |
+| After installing, need to set up Python project structure | python-project-setup | Bootstrap pyproject.toml, ruff, pytest |
+| After installing, need to resolve CUDA/PyTorch deps | python-ml-deps | Handles uv pip install with CUDA version resolution |
+
 ## Troubleshooting
 
 ```

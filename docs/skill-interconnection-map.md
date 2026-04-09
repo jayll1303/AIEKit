@@ -50,7 +50,7 @@
 | ultralytics-yolo | ● | | ○ | | | ○ | | ○ |
 | k2-training-pipeline | ● | ● | ○ | | | | | ○ |
 | sherpa-onnx | ● | ● | | | | | | |
-| freqtrade | ● | | ○ | | | | | |
+| freqtrade | ● | | ○ | | | | | ○ |
 | experiment-tracking | ● | | | | | | ○ | |
 | unsloth-training | ● | ● | | ○ | ○ | | | ○ |
 | paddleocr | ● | | ○ | | | ○ | | ○ |

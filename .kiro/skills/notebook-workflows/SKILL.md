@@ -243,6 +243,15 @@ Colab-specific issues?
 | "Dùng indent=4 cho đẹp" | indent=1 hoặc 2 giữ file size nhỏ. Notebook 1000 cells với indent=4 rất nặng |
 | "Copy cell structure từ memory" | LUÔN check nbformat version. v4 vs v5 có khác biệt (id field bắt buộc từ v4.5) |
 
+## Related Skills
+
+| Situation | Activate Skill | Why |
+|---|---|---|
+| Notebook contains ML training code | hf-transformers-trainer | Training workflow patterns for Trainer/TRL |
+| Need to set up Colab with GPU and CUDA deps | docker-gpu-setup | GPU container and environment patterns |
+| Need to install ML packages in notebook | python-ml-deps | CUDA-aware dependency resolution |
+| Need to track experiment results from notebook runs | experiment-tracking | MLflow/W&B metric logging |
+
 ## References
 
 - [ipynb Structure](references/ipynb-structure.md) — Chi tiết JSON schema, output types, metadata fields

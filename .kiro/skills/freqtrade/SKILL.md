@@ -113,6 +113,15 @@ Bot crashes on live/dry-run?
 | "Hyperopt with all spaces at once" | Start with buy/sell, then roi/stoploss separately for better convergence |
 | "Same config for spot and futures" | Futures needs trading_mode, margin_mode, :USDT pair suffix |
 
+## Related Skills
+
+| Situation | Activate Skill | Why |
+|---|---|---|
+| Need to install Python deps, resolve version conflicts | python-ml-deps | Handles uv, CUDA deps, version resolution |
+| Need to set up pyproject.toml, ruff, pytest for strategy project | python-project-setup | Project scaffolding and tooling |
+| Need to containerize bot for deployment | docker-gpu-setup | Dockerfile patterns for GPU workloads |
+| Need to track backtest/hyperopt experiments systematically | experiment-tracking | MLflow/W&B metric logging and comparison |
+
 ## References
 
 Load as needed:

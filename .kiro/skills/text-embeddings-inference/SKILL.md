@@ -174,6 +174,15 @@ Server won't start?
 | "CPU is fine for production" | GPU is 10-50x faster. CPU only for dev/testing |
 | "Don't need to tune batch size" | Default 16384 tokens may OOM on small GPUs or waste capacity on large ones |
 
+## Related Skills
+
+| Situation | Activate Skill | Why |
+|---|---|---|
+| Need to build RAG pipeline using TEI embeddings | text-embeddings-rag | FAISS/ChromaDB/Qdrant vector store setup and retrieval |
+| Need to containerize TEI for production | docker-gpu-setup | GPU Docker patterns and NVIDIA Container Toolkit |
+| Need to download embedding model from HuggingFace Hub | hf-hub-datasets | Model download, private repo access |
+| Need to deploy TEI behind Triton for multi-model serving | triton-deployment | Triton ensemble pipelines and config |
+
 ## References
 
 - [TEI Official Docs](https://huggingface.co/docs/text-embeddings-inference) — Full documentation

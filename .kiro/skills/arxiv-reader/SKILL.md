@@ -115,6 +115,14 @@ Authors: {authors} | Published: {date} | arXiv: {id}
 **Relevance:** {why this matters for user's context}
 ```
 
+## Related Skills
+
+| Situation | Activate Skill | Why |
+|---|---|---|
+| Paper describes a training method you want to reproduce | hf-transformers-trainer | Fine-tuning workflows with Trainer/TRL/PEFT |
+| Paper references a HuggingFace model or dataset | hf-hub-datasets | Download models/datasets from HF Hub |
+| Need to brainstorm which approach from the paper to adopt | ml-brainstorm | ML decision-making and tradeoff analysis |
+
 ## References
 
 - [arXiv URL Patterns](references/arxiv-url-patterns.md) — Load when: need to construct URLs or use arXiv API
