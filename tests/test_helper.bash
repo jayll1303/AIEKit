@@ -14,12 +14,12 @@ ok()    { echo "✓ $*"; }
 warn()  { echo "⚠ $*"; }
 err()   { echo "✗ $*" >&2; }
 
-# Helper: create mock source directory with all 29 skills and 6 steering files
+# Helper: create mock source directory with all 30 skills and 6 steering files
 create_mock_source() {
   local dir="$1"
   mkdir -p "$dir/.kiro/skills" "$dir/.kiro/steering"
 
-  # Create all 29 skill directories
+  # Create all 30 skill directories
   for skill in $(all_skills | tr ' ' '\n' | sort -u); do
     mkdir -p "$dir/.kiro/skills/$skill"
     echo "mock" > "$dir/.kiro/skills/$skill/SKILL.md"

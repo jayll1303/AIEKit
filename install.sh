@@ -72,7 +72,7 @@ profile_backend() {
 
 # All skills (union of everything + standalone)
 all_skills() {
-  echo "$(core_skills) $(profile_llm) $(profile_inference) $(profile_speech) $(profile_cv) $(profile_rag) $(profile_backend) arxiv-reader freqtrade"
+  echo "$(core_skills) $(profile_llm) $(profile_inference) $(profile_speech) $(profile_cv) $(profile_rag) $(profile_backend) arxiv-reader freqtrade ml-brainstorm"
 }
 
 # Resolve skill list based on install mode
@@ -167,12 +167,12 @@ while [[ $# -gt 0 ]]; do
       echo "  install.sh                              Install core skills (default)"
       echo "  install.sh --profile llm                Install core + LLM skills"
       echo "  install.sh --profile llm,inference      Combine profiles"
-      echo "  install.sh --all                        Install all 29 skills"
+      echo "  install.sh --all                        Install all 30 skills"
       echo "  install.sh -p                           Include Powers (MCP integrations)"
       echo ""
       echo "Options:"
       echo "  --profile <names>   Install core + specified profile(s), comma-separated"
-      echo "  --all, -a           Install all 29 skills + all steering"
+      echo "  --all, -a           Install all 30 skills + all steering"
       echo "  --global, -g        Install globally to ~/.kiro/"
       echo "  --powers, -p        Also install Powers (MCP integrations, disabled by default)"
       echo "  --help, -h          Show this help"
@@ -247,7 +247,7 @@ info "Target: ${BOLD}$TARGET/.kiro/${RESET}"
 case "$INSTALL_MODE" in
   core)    info "Mode: ${BOLD}core (default)${RESET}" ;;
   profile) info "Mode: ${BOLD}profile ($PROFILES)${RESET}" ;;
-  all)     info "Mode: ${BOLD}all (29 skills)${RESET}" ;;
+  all)     info "Mode: ${BOLD}all (30 skills)${RESET}" ;;
 esac
 echo ""
 
@@ -415,7 +415,7 @@ case "$INSTALL_MODE" in
     echo "     install.sh --profile cv          Computer vision (YOLO, PaddleOCR)"
     echo "     install.sh --profile rag         RAG pipelines (embeddings, vector DB)"
     echo "     install.sh --profile backend     FastAPI, OpenTelemetry, testing"
-    echo "     install.sh --all                 Everything (29 skills)"
+    echo "     install.sh --all                 Everything (30 skills)"
     echo ""
     echo "  Combine profiles: install.sh --profile llm,inference"
     ;;

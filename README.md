@@ -13,7 +13,7 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Core_Skills-6-blue?style=flat-square" alt="Core Skills" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-29-blue?style=flat-square" alt="Total Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-30-blue?style=flat-square" alt="Total Skills" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Profiles-6-teal?style=flat-square" alt="Profiles" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Powers-3-purple?style=flat-square" alt="Powers" /></a>
@@ -51,7 +51,7 @@ Combine multiple profiles:
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --profile llm,inference
 ```
 
-Install ALL 29 skills:
+Install ALL 30 skills:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --all
@@ -76,7 +76,7 @@ curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | 
 ```
 
 - Mặc định chỉ cài **6 core skills** — đủ dùng cho hầu hết project
-- Dùng `--profile` để thêm skills theo domain, hoặc `--all` để cài toàn bộ 29 skills
+- Dùng `--profile` để thêm skills theo domain, hoặc `--all` để cài toàn bộ 30 skills
 - Script chỉ copy components chưa tồn tại — không overwrite file đã có
 - Powers (MCP) không được cài mặc định
 
@@ -95,7 +95,7 @@ Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
 git clone https://github.com/jayll1303/AIEKit.git /tmp/aie-skills
 bash /tmp/aie-skills/.kiro/install.sh          # core only
 bash /tmp/aie-skills/.kiro/install.sh --profile llm   # core + llm
-bash /tmp/aie-skills/.kiro/install.sh --all     # all 29 skills
+bash /tmp/aie-skills/.kiro/install.sh --all     # all 30 skills
 rm -rf /tmp/aie-skills
 ```
 
@@ -127,11 +127,11 @@ Thêm skills theo domain bằng `--profile`:
 
 Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai profiles, tự deduplicate.
 
-**Standalone skills** (chỉ có qua `--all` hoặc Kiro smart installer): `arxiv-reader`, `freqtrade`
+**Standalone skills** (chỉ có qua `--all` hoặc Kiro smart installer): `arxiv-reader`, `freqtrade`, `ml-brainstorm`
 
 ---
 
-## Skills (29)
+## Skills (30)
 
 | Skill | Mô tả |
 |-------|--------|
@@ -146,6 +146,7 @@ Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai 
 | `hf-transformers-trainer` | Fine-tune & align LLMs với Trainer, TRL, PEFT (LoRA/QLoRA) |
 | `k2-training-pipeline` | Train speech models với Next-gen Kaldi: k2 (FSA/FST loss), icefall (Zipformer/Conformer recipes), lhotse (data prep) |
 | `llama-cpp-inference` | Chạy GGUF models locally với llama-server, llama-cli, llama-cpp-python (CPU+GPU) |
+| `ml-brainstorm` | Brainstorm ML/AI technical decisions: training strategy, model selection, serving engine, quantization, pipeline architecture |
 | `model-quantization` | Quantize LLMs với GGUF, GPTQ, AWQ, bitsandbytes |
 | `notebook-workflows` | Tạo & chỉnh sửa Jupyter/Colab notebooks programmatically |
 | `ollama-local-llm` | Chạy và quản lý local LLMs với Ollama: pull, run, Modelfile, REST API |

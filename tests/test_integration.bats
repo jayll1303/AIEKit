@@ -96,7 +96,7 @@ teardown() {
 
 # ── Task 7.7: --all ──
 
-@test "all mode installs 29 skill dirs" {
+@test "all mode installs 30 skill dirs" {
   local skill_list
   skill_list=$(resolve_skills all "")
   for skill_name in $skill_list; do
@@ -106,7 +106,7 @@ teardown() {
   done
   local count
   count=$(ls -1d "$TARGET_DIR/.kiro/skills"/*/ 2>/dev/null | wc -l)
-  [ "$count" -eq 29 ]
+  [ "$count" -eq 30 ]
 }
 
 @test "all mode installs 6 steering files" {

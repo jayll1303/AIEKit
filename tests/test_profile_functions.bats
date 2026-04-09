@@ -122,12 +122,12 @@ load 'test_helper'
   [[ "$output" == *"python-quality-testing"* ]]
 }
 
-@test "all_skills returns exactly 29 unique skills" {
+@test "all_skills returns exactly 30 unique skills" {
   run all_skills
   [ "$status" -eq 0 ]
   local count
   count=$(echo "$output" | tr ' ' '\n' | sort -u | grep -c .)
-  [ "$count" -eq 29 ]
+  [ "$count" -eq 30 ]
 }
 
 @test "all_skills includes standalone skills arxiv-reader and freqtrade" {

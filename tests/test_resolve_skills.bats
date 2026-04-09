@@ -39,12 +39,12 @@ load 'test_helper'
   [ "$count" -eq 16 ]
 }
 
-@test "resolve_skills all returns 29 unique skills" {
+@test "resolve_skills all returns 30 unique skills" {
   run resolve_skills all ""
   [ "$status" -eq 0 ]
   local count
   count=$(echo "$output" | tr ' ' '\n' | grep -c .)
-  [ "$count" -eq 29 ]
+  [ "$count" -eq 30 ]
 }
 
 @test "resolve_skills results are deduplicated" {

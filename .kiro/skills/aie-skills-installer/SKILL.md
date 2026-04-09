@@ -112,6 +112,7 @@ For confirmed skills only:
 | paddleocr | `paddleocr`, `paddlepaddle` in deps/imports |
 | freqtrade | `freqtrade` in deps; `IStrategy` in code |
 | arxiv-reader | arxiv URLs in docs/code; research paper workflow |
+| ml-brainstorm | Multiple competing approaches detected (e.g., both vLLM and TGI refs, both LoRA and full fine-tune code); early planning stage; user asks "nên dùng gì" or "compare approaches" |
 
 ## Steering Mapping
 
@@ -157,7 +158,7 @@ bash install.sh --profile llm
 # Combine profiles
 bash install.sh --profile llm,inference
 
-# All 29 skills
+# All 30 skills
 bash install.sh --all
 
 # Include Powers (MCP integrations)

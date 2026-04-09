@@ -1,6 +1,6 @@
 # Skill Interconnection Map
 
-> Bản đồ quan hệ giữa 29 AIE-Skills + 3 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
+> Bản đồ quan hệ giữa 30 AIE-Skills + 3 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
 
 ## Skill Layers
 
@@ -31,7 +31,7 @@
 │  python-quality-testing │  hf-hub-datasets                   │
 ├─────────────────────────────────────────────────────────────┤
 │                    META LAYER                                 │
-│  aie-skills-installer                                        │
+│  aie-skills-installer  │  ml-brainstorm                      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
