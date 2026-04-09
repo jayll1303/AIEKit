@@ -1,6 +1,6 @@
 ---
 name: aie-skills-installer
-description: "Analyze target project codebase and recommend relevant AIE-Skills to install. Use when installing, setting up, or copying ML skills to a new project, bootstrapping AI/ML workflow, or sharing skills across repos."
+description: "Analyze project and recommend relevant AIE-Skills. Use when installing, setting up ML skills, bootstrapping AI/ML workflow, or sharing skills across repos."
 ---
 
 # AIE-Skills Smart Installer
@@ -18,6 +18,9 @@ Does NOT handle: creating new skills (→ skill-creator), editing existing skill
 - User wants to bootstrap ML/AI workflow in a new Kiro workspace
 - User says "install skills", "setup ML skills", "bootstrap AI workflow"
 - User wants to know which skills are relevant for their project
+- User already ran `install.sh` (which installs only 6 core skills by default) and wants project-specific recommendations for additional skills
+
+> **Note:** `install.sh` now installs only the **Core_Set** (6 skills) by default: `aie-skills-installer`, `python-project-setup`, `python-ml-deps`, `hf-hub-datasets`, `docker-gpu-setup`, `notebook-workflows`. Users can expand with `--profile <name>` or `--all`. This smart installer complements the CLI by analyzing the project and recommending specific skills beyond the Core_Set based on concrete signals found in the codebase.
 
 ## Core Workflow
 
@@ -140,9 +143,30 @@ hf-hub-datasets   → auto-recommend if ANY HF-based skill is selected
 
 Follow Steps 1-4 above. Copy only confirmed skill directories recursively.
 
-### Method 2: Shell Script (skills + steering only, no powers)
+### Method 2: Shell Script
 
-`bash <source>/.kiro/install.sh <target>` — installs skills, steering, hooks. Add `-p` flag to include powers.
+`install.sh` now supports tiered installation:
+
+```bash
+# Core only (6 skills — default)
+bash install.sh
+
+# Core + specific profile
+bash install.sh --profile llm
+
+# Combine profiles
+bash install.sh --profile llm,inference
+
+# All 29 skills
+bash install.sh --all
+
+# Include Powers (MCP integrations)
+bash install.sh -p
+```
+
+Available profiles: `llm`, `inference`, `speech`, `cv`, `rag`, `backend`
+
+> **Smart installer vs CLI:** After running `install.sh` (which gives you the core foundation), use this skill in Kiro to get project-specific recommendations for additional skills. The smart installer analyzes your codebase and recommends only skills that have concrete signals, complementing the profile-based CLI approach.
 
 ## Power Detection Table
 

@@ -33,13 +33,124 @@ ok()    { echo "${GREEN}✓${RESET} $*"; }
 warn()  { echo "${YELLOW}⚠${RESET} $*"; }
 err()   { echo "${RED}✗${RESET} $*" >&2; }
 
+# ── Profile Definitions ─────────────────────────────────
+
+# Core set — always installed
+core_skills() {
+  echo "aie-skills-installer python-project-setup python-ml-deps hf-hub-datasets docker-gpu-setup notebook-workflows"
+}
+
+# Profile: llm
+profile_llm() {
+  echo "hf-transformers-trainer unsloth-training model-quantization experiment-tracking"
+}
+
+# Profile: inference
+profile_inference() {
+  echo "vllm-tgi-inference sglang-serving llama-cpp-inference ollama-local-llm tensorrt-llm triton-deployment"
+}
+
+# Profile: speech
+profile_speech() {
+  echo "k2-training-pipeline sherpa-onnx hf-speech-to-speech-pipeline openai-audio-api"
+}
+
+# Profile: cv
+profile_cv() {
+  echo "ultralytics-yolo paddleocr"
+}
+
+# Profile: rag
+profile_rag() {
+  echo "text-embeddings-rag text-embeddings-inference"
+}
+
+# Profile: backend
+profile_backend() {
+  echo "fastapi-at-scale opentelemetry python-quality-testing"
+}
+
+# All skills (union of everything + standalone)
+all_skills() {
+  echo "$(core_skills) $(profile_llm) $(profile_inference) $(profile_speech) $(profile_cv) $(profile_rag) $(profile_backend) arxiv-reader freqtrade"
+}
+
+# Resolve skill list based on install mode
+# $1 = mode (core|profile|all), $2 = comma-separated profiles
+resolve_skills() {
+  local mode="$1"
+  local profiles="$2"
+
+  case "$mode" in
+    core)
+      core_skills
+      ;;
+    profile)
+      local skills="$(core_skills)"
+      IFS=',' read -ra PROFILE_ARRAY <<< "$profiles"
+      for p in "${PROFILE_ARRAY[@]}"; do
+        p=$(echo "$p" | tr -d ' ')
+        local fn="profile_${p}"
+        if declare -f "$fn" > /dev/null 2>&1; then
+          skills="$skills $(${fn})"
+        else
+          err "Unknown profile: $p"
+          echo ""
+          echo "Valid profiles: llm, inference, speech, cv, rag, backend"
+          exit 1
+        fi
+      done
+      echo "$skills" | tr ' ' '\n' | sort -u | tr '\n' ' '
+      ;;
+    all)
+      all_skills | tr ' ' '\n' | sort -u | tr '\n' ' '
+      ;;
+  esac
+}
+
+# Resolve steering files based on active profiles
+# $1 = comma-separated profile names, "core", or "all"
+resolve_steering() {
+  local profiles="$1"
+  local steering="python-project-conventions.md gpu-environment.md notebook-conventions.md"
+
+  if [[ "$profiles" == *"llm"* ]] || [[ "$profiles" == *"speech"* ]] || [[ "$profiles" == "all" ]]; then
+    steering="$steering ml-training-workflow.md"
+  fi
+
+  if [[ "$profiles" == *"inference"* ]] || [[ "$profiles" == "all" ]]; then
+    steering="$steering inference-deployment.md"
+  fi
+
+  if [[ "$profiles" == "all" ]]; then
+    steering="$steering kiro-component-creation.md"
+  fi
+
+  echo "$steering"
+}
+
 # ── Parse arguments ─────────────────────────────────────
 TARGET=""
-SELECTIVE=false
+INSTALL_MODE="core"    # core | profile | all
+PROFILES=""            # comma-separated profile names
 INSTALL_POWERS=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --profile)
+      if [[ -z "${2:-}" ]] || [[ "$2" == --* ]]; then
+        err "--profile requires a profile name"
+        echo "Valid profiles: llm, inference, speech, cv, rag, backend"
+        exit 1
+      fi
+      PROFILES="$2"
+      INSTALL_MODE="profile"
+      shift 2
+      ;;
+    --all|-a)
+      INSTALL_MODE="all"
+      shift
+      ;;
     --global|-g)
       TARGET="$HOME"
       shift
@@ -50,18 +161,31 @@ while [[ $# -gt 0 ]]; do
       ;;
     --help|-h)
       echo ""
-      echo "${BOLD}${SCRIPT_NAME}${RESET}"
+      echo "${BOLD}AIE-Skills Installer${RESET}"
       echo ""
       echo "Usage:"
-      echo "  curl -fsSL <url>/install.sh | bash                        # Install to ./  "
-      echo "  curl -fsSL <url>/install.sh | bash -s -- /path/to/project # Install to dir "
-      echo "  curl -fsSL <url>/install.sh | bash -s -- --global         # Install to ~/.kiro/"
-      echo "  curl -fsSL <url>/install.sh | bash -s -- -p               # Include powers "
+      echo "  install.sh                              Install core skills (default)"
+      echo "  install.sh --profile llm                Install core + LLM skills"
+      echo "  install.sh --profile llm,inference      Combine profiles"
+      echo "  install.sh --all                        Install all 29 skills"
+      echo "  install.sh -p                           Include Powers (MCP integrations)"
       echo ""
       echo "Options:"
-      echo "  --global, -g    Install globally to ~/.kiro/"
-      echo "  --powers, -p    Also install Powers (MCP integrations, disabled by default)"
-      echo "  --help, -h      Show this help"
+      echo "  --profile <names>   Install core + specified profile(s), comma-separated"
+      echo "  --all, -a           Install all 29 skills + all steering"
+      echo "  --global, -g        Install globally to ~/.kiro/"
+      echo "  --powers, -p        Also install Powers (MCP integrations, disabled by default)"
+      echo "  --help, -h          Show this help"
+      echo ""
+      echo "Profiles:"
+      echo "  llm          Fine-tune LLMs (Trainer, Unsloth, LoRA, quantization)"
+      echo "  inference    Deploy LLM servers (vLLM, SGLang, Ollama, TensorRT)"
+      echo "  speech       Speech processing (Kaldi, sherpa-onnx, TTS)"
+      echo "  cv           Computer vision (YOLO, PaddleOCR)"
+      echo "  rag          RAG pipelines (embeddings, vector DB)"
+      echo "  backend      FastAPI, OpenTelemetry, testing"
+      echo ""
+      echo "Default: installs 6 core skills only. Use --profile or --all for more."
       echo ""
       exit 0
       ;;
@@ -71,6 +195,24 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+# --all overrides --profile
+if [ "$INSTALL_MODE" = "all" ]; then
+  PROFILES="all"
+fi
+
+# Validate profile names early
+if [ "$INSTALL_MODE" = "profile" ]; then
+  IFS=',' read -ra _VALIDATE_PROFILES <<< "$PROFILES"
+  for _vp in "${_VALIDATE_PROFILES[@]}"; do
+    _vp=$(echo "$_vp" | tr -d ' ')
+    if ! declare -f "profile_${_vp}" > /dev/null 2>&1; then
+      err "Unknown profile: $_vp"
+      echo "Valid profiles: llm, inference, speech, cv, rag, backend"
+      exit 1
+    fi
+  done
+fi
 
 # Default: current directory
 if [ -z "$TARGET" ]; then
@@ -102,6 +244,11 @@ echo "${BOLD}${CYAN}║       AIE-Skills Kiro Installer      ║${RESET}"
 echo "${BOLD}${CYAN}╚══════════════════════════════════════╝${RESET}"
 echo ""
 info "Target: ${BOLD}$TARGET/.kiro/${RESET}"
+case "$INSTALL_MODE" in
+  core)    info "Mode: ${BOLD}core (default)${RESET}" ;;
+  profile) info "Mode: ${BOLD}profile ($PROFILES)${RESET}" ;;
+  all)     info "Mode: ${BOLD}all (29 skills)${RESET}" ;;
+esac
 echo ""
 
 # ── Clone to temp directory ─────────────────────────────
@@ -125,7 +272,7 @@ fi
 # ── Install components ──────────────────────────────────
 shopt -s nullglob
 
-SUBDIRS="skills steering hooks scripts settings"
+SUBDIRS="skills steering scripts settings"
 # NOTE: powers/ is intentionally excluded from default install.
 # Powers contain MCP servers that require API keys/auth — auto-connecting
 # causes popup prompts in Kiro when credentials aren't configured.
@@ -134,31 +281,28 @@ for dir in $SUBDIRS; do
   mkdir -p "$TARGET/.kiro/$dir"
 done
 
-skills=0; steering=0; hooks=0; scripts=0; settings=0; skipped=0
+skills=0; steering=0; scripts=0; settings=0; skipped=0
 
-# Skills
-if [ -d "$SOURCE_KIRO/skills" ]; then
-  for d in "$SOURCE_KIRO/skills"/*/; do
-    [ -d "$d" ] || continue
-    skill_name="$(basename "$d")"
+# Skills (selective based on mode)
+SKILL_LIST=$(resolve_skills "$INSTALL_MODE" "$PROFILES")
+for skill_name in $SKILL_LIST; do
+  if [ -d "$SOURCE_KIRO/skills/$skill_name" ]; then
     if [ ! -d "$TARGET/.kiro/skills/$skill_name" ]; then
-      cp -r "$d" "$TARGET/.kiro/skills/$skill_name" 2>/dev/null || true
+      cp -r "$SOURCE_KIRO/skills/$skill_name" "$TARGET/.kiro/skills/$skill_name" 2>/dev/null || true
       skills=$((skills + 1))
     else
       skipped=$((skipped + 1))
     fi
-  done
-fi
+  fi
+done
 
-# Steering
-# Files that should switch from "always" to "auto" when installed to other repos
+# Steering (selective based on mode)
 AUTO_ON_INSTALL="kiro-component-creation.md"
-
-if [ -d "$SOURCE_KIRO/steering" ]; then
-  for f in "$SOURCE_KIRO/steering"/*.md; do
-    local_name=$(basename "$f")
+STEERING_LIST=$(resolve_steering "${PROFILES:-core}")
+for local_name in $STEERING_LIST; do
+  if [ -f "$SOURCE_KIRO/steering/$local_name" ]; then
     if [ ! -f "$TARGET/.kiro/steering/$local_name" ]; then
-      cp "$f" "$TARGET/.kiro/steering/" 2>/dev/null || true
+      cp "$SOURCE_KIRO/steering/$local_name" "$TARGET/.kiro/steering/" 2>/dev/null || true
 
       # Convert dev-only steering from "always" to "auto" for target repos
       for auto_file in $AUTO_ON_INSTALL; do
@@ -173,22 +317,8 @@ if [ -d "$SOURCE_KIRO/steering" ]; then
     else
       skipped=$((skipped + 1))
     fi
-  done
-fi
-
-# Hooks
-if [ -d "$SOURCE_KIRO/hooks" ]; then
-  for f in "$SOURCE_KIRO/hooks"/*.kiro.hook; do
-    [ -f "$f" ] || continue
-    local_name=$(basename "$f")
-    if [ ! -f "$TARGET/.kiro/hooks/$local_name" ]; then
-      cp "$f" "$TARGET/.kiro/hooks/" 2>/dev/null || true
-      hooks=$((hooks + 1))
-    else
-      skipped=$((skipped + 1))
-    fi
-  done
-fi
+  fi
+done
 
 # Scripts
 if [ -d "$SOURCE_KIRO/scripts" ]; then
@@ -235,24 +365,35 @@ if [ "$INSTALL_POWERS" = true ] && [ -d "$SOURCE_KIRO/powers" ]; then
 fi
 
 # ── Summary ─────────────────────────────────────────────
-total=$((skills + steering + hooks + scripts + settings + powers))
+total=$((skills + steering + powers))
 
 echo ""
 echo "${BOLD}Installation complete!${RESET}"
 echo ""
-echo "  ${GREEN}Skills:${RESET}    $skills"
-echo "  ${GREEN}Steering:${RESET}  $steering"
-echo "  ${GREEN}Hooks:${RESET}     $hooks"
-echo "  ${GREEN}Scripts:${RESET}   $scripts"
-echo "  ${GREEN}Settings:${RESET}  $settings"
-echo "  ${GREEN}Powers:${RESET}    $powers"
+
+case "$INSTALL_MODE" in
+  core)
+    ok "$skills skills installed"
+    ok "$steering steering files installed"
+    ;;
+  profile)
+    ok "$skills skills installed (core + $PROFILES)"
+    ok "$steering steering files installed"
+    ;;
+  all)
+    ok "$skills skills installed"
+    ok "$steering steering files installed"
+    ;;
+esac
+
+if [ "$powers" -gt 0 ]; then
+  ok "$powers powers installed"
+fi
 
 if [ "$skipped" -gt 0 ]; then
   echo "  ${YELLOW}Skipped:${RESET}   $skipped (already exist)"
 fi
 
-echo ""
-echo "${BOLD}Total: $total components installed to $TARGET/.kiro/${RESET}"
 echo ""
 
 if [ "$total" -eq 0 ] && [ "$skipped" -gt 0 ]; then
@@ -260,11 +401,32 @@ if [ "$total" -eq 0 ] && [ "$skipped" -gt 0 ]; then
   echo ""
 fi
 
-echo "Next steps:"
-echo "  1. Open your project in Kiro"
-echo "  2. Skills are available via ${CYAN}/${RESET} menu in chat"
-echo "  3. Steering files with 'always' inclusion load automatically"
-echo "  4. Toggle hooks in the ${CYAN}Agent Hooks${RESET} panel"
+# Mode-aware next steps
+case "$INSTALL_MODE" in
+  core)
+    echo "Next steps:"
+    echo "  1. Open project in Kiro"
+    echo "  2. Type \"install ML skills\" for project-specific recommendations"
+    echo "  3. Or re-run with a profile:"
+    echo ""
+    echo "     install.sh --profile llm        Fine-tune LLMs (Trainer, Unsloth, LoRA)"
+    echo "     install.sh --profile inference   Deploy LLM servers (vLLM, SGLang, Ollama)"
+    echo "     install.sh --profile speech      Speech processing (Kaldi, sherpa-onnx)"
+    echo "     install.sh --profile cv          Computer vision (YOLO, PaddleOCR)"
+    echo "     install.sh --profile rag         RAG pipelines (embeddings, vector DB)"
+    echo "     install.sh --profile backend     FastAPI, OpenTelemetry, testing"
+    echo "     install.sh --all                 Everything (29 skills)"
+    echo ""
+    echo "  Combine profiles: install.sh --profile llm,inference"
+    ;;
+  profile)
+    ;;
+  all)
+    ;;
+esac
+
+echo ""
+echo "  💡 Use aie-skills-installer skill in Kiro for project-specific recommendations"
 
 if [ "$INSTALL_POWERS" = true ] && [ "$powers" -gt 0 ]; then
   echo ""

@@ -12,9 +12,10 @@
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Skills-29-blue?style=flat-square" alt="Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Core_Skills-6-blue?style=flat-square" alt="Core Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-29-blue?style=flat-square" alt="Total Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Profiles-6-teal?style=flat-square" alt="Profiles" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Hooks-6-orange?style=flat-square" alt="Hooks" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Powers-3-purple?style=flat-square" alt="Powers" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square" alt="Maintained" /></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License" /></a>
@@ -33,8 +34,17 @@
 ### One-liner Install
 
 ```bash
-# Install vào project hiện tại
+# Install core skills (6 skills — default)
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash
+
+# Install core + a specific profile
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --profile llm
+
+# Combine multiple profiles
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --profile llm,inference
+
+# Install ALL 29 skills
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --all
 
 # Install vào thư mục cụ thể
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- /path/to/project
@@ -46,14 +56,14 @@ curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | 
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- -p
 ```
 
-Script chỉ copy components chưa tồn tại — không overwrite file đã có. Powers (MCP) không được cài mặc định.
+Mặc định chỉ cài 6 core skills — đủ dùng cho hầu hết project. Dùng `--profile` để thêm skills theo domain, hoặc `--all` để cài toàn bộ 29 skills. Script chỉ copy components chưa tồn tại — không overwrite file đã có. Powers (MCP) không được cài mặc định.
 
 ### Smart Install (recommended)
 
 Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
 
 1. Scan codebase target (deps, imports, Dockerfiles, notebooks...)
-2. Recommend chỉ skills có signal cụ thể từ project
+2. Recommend chỉ skills có signal cụ thể từ project (bổ sung thêm vào Core_Set đã cài)
 3. Chờ user confirm trước khi cài
 4. Cài selective + steering files tương ứng
 
@@ -61,9 +71,41 @@ Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
 
 ```bash
 git clone https://github.com/jayll1303/AIEKit.git /tmp/aie-skills
-bash /tmp/aie-skills/.kiro/install.sh
+bash /tmp/aie-skills/.kiro/install.sh          # core only
+bash /tmp/aie-skills/.kiro/install.sh --profile llm   # core + llm
+bash /tmp/aie-skills/.kiro/install.sh --all     # all 29 skills
 rm -rf /tmp/aie-skills
 ```
+
+---
+
+## Installation Profiles
+
+Mặc định, installer cài 6 **core skills** — foundation cho mọi AI/ML project:
+
+| Core Skill | Mô tả |
+|------------|--------|
+| `aie-skills-installer` | Analyze project và đề xuất skills cần thiết |
+| `python-project-setup` | Bootstrap Python projects với uv, ruff, pytest |
+| `python-ml-deps` | Cài ML deps với uv, xử lý CUDA version conflicts |
+| `hf-hub-datasets` | Download, upload, stream models & datasets từ HuggingFace Hub |
+| `docker-gpu-setup` | Dockerfile & docker-compose cho GPU/CUDA workloads |
+| `notebook-workflows` | Tạo & chỉnh sửa Jupyter/Colab notebooks programmatically |
+
+Thêm skills theo domain bằng `--profile`:
+
+| Profile | Flag | Skills | Mô tả |
+|---------|------|--------|--------|
+| **llm** | `--profile llm` | `hf-transformers-trainer`, `unsloth-training`, `model-quantization`, `experiment-tracking` | Fine-tune LLMs (Trainer, Unsloth, LoRA) |
+| **inference** | `--profile inference` | `vllm-tgi-inference`, `sglang-serving`, `llama-cpp-inference`, `ollama-local-llm`, `tensorrt-llm`, `triton-deployment` | Deploy LLM servers (vLLM, SGLang, Ollama) |
+| **speech** | `--profile speech` | `k2-training-pipeline`, `sherpa-onnx`, `hf-speech-to-speech-pipeline`, `openai-audio-api` | Speech processing (Kaldi, sherpa-onnx) |
+| **cv** | `--profile cv` | `ultralytics-yolo`, `paddleocr` | Computer vision (YOLO, PaddleOCR) |
+| **rag** | `--profile rag` | `text-embeddings-rag`, `text-embeddings-inference` | RAG pipelines (embeddings, vector DB) |
+| **backend** | `--profile backend` | `fastapi-at-scale`, `opentelemetry`, `python-quality-testing` | FastAPI, OpenTelemetry, testing |
+
+Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai profiles, tự deduplicate.
+
+**Standalone skills** (chỉ có qua `--all` hoặc Kiro smart installer): `arxiv-reader`, `freqtrade`
 
 ---
 
@@ -112,7 +154,9 @@ rm -rf /tmp/aie-skills
 | `python-project-conventions.md` | `auto` | Conventions cho Python projects: uv, ruff, pytest, CUDA deps |
 | `gpu-environment.md` | `fileMatch` (`Dockerfile*`, `docker-compose*`) | Conventions cho GPU Docker containers |
 
-## Hooks (6)
+## Hooks (6) — Development only
+
+> **Note:** Hooks là development-only — dùng cho việc phát triển repo AIE-Skills. Chúng **KHÔNG** được cài vào target projects bởi installer. Hooks chỉ tồn tại trong repo gốc để hỗ trợ quy trình phát triển.
 
 | Hook | Event | Mô tả |
 |------|-------|--------|
