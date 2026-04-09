@@ -33,30 +33,52 @@
 
 ### One-liner Install
 
+Install core skills (6 skills — default):
+
 ```bash
-# Install core skills (6 skills — default)
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash
+```
 
-# Install core + a specific profile
+Install core + a specific profile:
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --profile llm
+```
 
-# Combine multiple profiles
+Combine multiple profiles:
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --profile llm,inference
+```
 
-# Install ALL 29 skills
+Install ALL 29 skills:
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --all
+```
 
-# Install vào thư mục cụ thể
+Install vào thư mục cụ thể:
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- /path/to/project
+```
 
-# Install globally (vào ~/.kiro/)
+Install globally (vào ~/.kiro/):
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --global
+```
 
-# Include Powers (MCP integrations, disabled by default)
+Include Powers (MCP integrations, disabled by default):
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- -p
 ```
 
-Mặc định chỉ cài 6 core skills — đủ dùng cho hầu hết project. Dùng `--profile` để thêm skills theo domain, hoặc `--all` để cài toàn bộ 29 skills. Script chỉ copy components chưa tồn tại — không overwrite file đã có. Powers (MCP) không được cài mặc định.
+- Mặc định chỉ cài **6 core skills** — đủ dùng cho hầu hết project
+- Dùng `--profile` để thêm skills theo domain, hoặc `--all` để cài toàn bộ 29 skills
+- Script chỉ copy components chưa tồn tại — không overwrite file đã có
+- Powers (MCP) không được cài mặc định
 
 ### Smart Install (recommended)
 

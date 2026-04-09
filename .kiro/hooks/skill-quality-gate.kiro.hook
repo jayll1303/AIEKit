@@ -1,7 +1,7 @@
 {
   "name": "Skill Quality Gate",
-  "version": "1.0.0",
-  "description": "Khi agent tạo hoặc edit SKILL.md, nhắc check best practices: description ≤200 chars, scope boundary, decision table, cross-references, anti-patterns.",
+  "version": "2.0.0",
+  "description": "Khi agent tạo SKILL.md mới, check best practices + profile assignment + interconnection map.",
   "when": {
     "type": "fileCreated",
     "patterns": [
@@ -10,6 +10,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "A SKILL.md was just created. Before continuing, verify it meets quality standards per docs/skill-creation-best-practices.md:\n\n1. **Frontmatter**: name (kebab-case, = folder name), description (≤200 chars, starts with verb, contains trigger phrases + 'Use when...')\n2. **Scope**: Has 'This skill handles:' AND 'Does NOT handle:' with cross-references to other skills using → syntax\n3. **Decision Table**: At least 1 table mapping scenario → recommendation\n4. **Workflow Steps**: Numbered steps with validation gates ('Validate: ...')\n5. **Anti-Patterns**: Table of 'Agent thinks X → Reality Y'\n6. **Cross-References**: Related skills referenced, paths exist\n7. **Line Count**: SKILL.md < 300 lines (detail in references/)\n8. **Interconnection Map**: Update docs/skill-interconnection-map.md if this is a new skill — add to correct layer, update dependency matrix, update workflow chains if applicable\n\nFix any issues found. Do NOT skip this check."
+    "prompt": "A SKILL.md was just created. Before continuing, verify it meets quality standards per docs/skill-creation-best-practices.md:\n\n1. **Frontmatter**: name (kebab-case, = folder name), description (≤200 chars, starts with verb, contains trigger phrases + 'Use when...')\n2. **Scope**: Has 'This skill handles:' AND 'Does NOT handle:' with cross-references to other skills using → syntax\n3. **Decision Table**: At least 1 table mapping scenario → recommendation\n4. **Workflow Steps**: Numbered steps with validation gates ('Validate: ...')\n5. **Anti-Patterns**: Table of 'Agent thinks X → Reality Y'\n6. **Cross-References**: Related skills referenced, paths exist\n7. **Line Count**: SKILL.md < 300 lines (detail in references/)\n8. **Interconnection Map**: Update docs/skill-interconnection-map.md — add to correct layer, update dependency matrix, update workflow chains if applicable\n9. **Profile Assignment**: Determine which install.sh profile this skill belongs to (llm, inference, speech, cv, rag, backend, or standalone). Add the skill name to the appropriate profile function in install.sh. If standalone, add to all_skills() only.\n10. **README Profile Table**: Update the Installation Profiles section in README.md to include the new skill in the correct profile row.\n\nFix any issues found. Do NOT skip this check."
   }
 }

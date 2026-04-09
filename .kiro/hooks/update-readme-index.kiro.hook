@@ -1,8 +1,8 @@
 {
   "enabled": true,
   "name": "Update README Index",
-  "description": "Khi có thay đổi bất kỳ file trong .kiro/skills, .kiro/steering, .kiro/hooks, hoặc .kiro/powers — tự động cập nhật README.md (table of contents) và commit + push (cần confirm).",
-  "version": "1",
+  "description": "Khi có thay đổi file trong .kiro/skills, .kiro/steering, .kiro/hooks, hoặc .kiro/powers — tự động cập nhật README.md, install.sh profiles, và commit + push (cần confirm).",
+  "version": "2",
   "when": {
     "type": "fileEdited",
     "patterns": [
@@ -14,6 +14,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "A Kiro component file was just edited. Please:\n1. Scan all current skills (.kiro/skills/*/SKILL.md), steering (.kiro/steering/*.md), hooks (.kiro/hooks/*.kiro.hook), and powers (.kiro/powers/*/POWER.md).\n2. Regenerate the README.md tables to reflect the current state (keep the same format/structure, update counts, add/remove rows as needed).\n3. After updating README.md, run: git add . && git commit -m \"docs: update README index\" — then ask user for confirmation before git push origin main."
+    "prompt": "A Kiro component file was just edited. Please:\n1. Scan all current skills (.kiro/skills/*/SKILL.md), steering (.kiro/steering/*.md), hooks (.kiro/hooks/*.kiro.hook), and powers (.kiro/powers/*/POWER.md).\n2. Regenerate the README.md tables to reflect the current state:\n   - Skills table (count + rows)\n   - Steering table\n   - Hooks table (dev-only note)\n   - Powers table\n   - Badge counts\n   - **Installation Profiles section**: verify each profile's skill list matches install.sh profile functions. If a skill was added/removed/renamed, update the profile table in README.\n3. Verify install.sh is in sync:\n   - Check profile functions (core_skills, profile_llm, profile_inference, profile_speech, profile_cv, profile_rag, profile_backend, all_skills) match the actual skills in .kiro/skills/\n   - Check resolve_steering() maps correctly to existing steering files\n   - If a skill was renamed or removed, update the relevant profile function\n4. After updating, run: git add . && git commit -m \"docs: update README index\" — then ask user for confirmation before git push origin main."
   }
 }

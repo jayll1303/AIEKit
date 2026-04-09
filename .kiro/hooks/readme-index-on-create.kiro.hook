@@ -1,8 +1,8 @@
 {
   "enabled": true,
   "name": "README Index on Create",
-  "description": "Khi có file mới được tạo trong .kiro/skills, .kiro/steering, .kiro/hooks, hoặc .kiro/powers — tự động cập nhật README.md index và commit + push (cần confirm).",
-  "version": "1",
+  "description": "Khi có file mới trong .kiro/skills, .kiro/steering, .kiro/hooks, hoặc .kiro/powers — tự động cập nhật README.md, install.sh profiles, và commit + push (cần confirm).",
+  "version": "2",
   "when": {
     "type": "fileCreated",
     "patterns": [
@@ -14,6 +14,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "A new Kiro component file was created. Please:\n1. Scan all current skills (.kiro/skills/*/SKILL.md), steering (.kiro/steering/*.md), hooks (.kiro/hooks/*.kiro.hook), and powers (.kiro/powers/*/POWER.md).\n2. Regenerate the README.md tables to reflect the current state (keep the same format/structure, update counts, add/remove rows as needed).\n3. After updating README.md, run: git add . && git commit -m \"docs: update README index\" — then ask user for confirmation before git push origin main."
+    "prompt": "A new Kiro component file was created. Please:\n1. Scan all current skills (.kiro/skills/*/SKILL.md), steering (.kiro/steering/*.md), hooks (.kiro/hooks/*.kiro.hook), and powers (.kiro/powers/*/POWER.md).\n2. Regenerate the README.md tables to reflect the current state:\n   - Skills table (count + rows)\n   - Steering table\n   - Hooks table (dev-only note)\n   - Powers table\n   - Badge counts\n   - **Installation Profiles section**: if a new skill was created, ask user which profile it belongs to (llm, inference, speech, cv, rag, backend, or standalone). Update the profile table in README accordingly.\n3. Update install.sh:\n   - If new SKILL: add skill name to the appropriate profile function (profile_llm, profile_inference, etc.) or to all_skills() if standalone\n   - If new STEERING: check if resolve_steering() needs a new mapping rule for the steering file\n   - Update all_skills() to include the new skill\n4. Update docs/skill-interconnection-map.md if a new skill was added (layer assignment, dependency matrix).\n5. After updating, run: git add . && git commit -m \"docs: update README index\" — then ask user for confirmation before git push origin main."
   }
 }
