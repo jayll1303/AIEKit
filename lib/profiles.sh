@@ -52,7 +52,7 @@ resolve_skills() {
       core_skills
       ;;
     single)
-      echo "$profiles"
+      echo "$profiles" | tr ',' ' ' | tr ' ' '\n' | sort -u | tr '\n' ' ' | xargs
       ;;
     profile)
       local skills="$(core_skills)"
@@ -96,6 +96,43 @@ resolve_steering() {
   fi
 
   echo "$steering"
+}
+
+# ── Skill-Level Steering Mapping ────────────────────────
+
+# Returns steering file(s) needed for a specific skill
+# $1 = skill name
+resolve_skill_steering() {
+  local skill="$1"
+  case "$skill" in
+    python-project-setup|python-quality-testing)
+      echo "python-project-conventions.md" ;;
+    docker-gpu-setup)
+      echo "gpu-environment.md" ;;
+    notebook-workflows)
+      echo "notebook-conventions.md" ;;
+    hf-transformers-trainer|unsloth-training|k2-training-pipeline|experiment-tracking|hf-speech-to-speech-pipeline)
+      echo "ml-training-workflow.md" ;;
+    vllm-tgi-inference|sglang-serving|llama-cpp-inference|ollama-local-llm|tensorrt-llm|triton-deployment)
+      echo "inference-deployment.md" ;;
+    *)
+      echo "" ;;
+  esac
+}
+
+# Collect and deduplicate steering files for multiple skills
+# $1 = space-separated skill names
+resolve_skills_steering() {
+  local skills="$1"
+  local steering=""
+  for skill in $skills; do
+    local s
+    s=$(resolve_skill_steering "$skill")
+    if [ -n "$s" ]; then
+      steering="$steering $s"
+    fi
+  done
+  echo "$steering" | tr ' ' '\n' | grep . | sort -u | tr '\n' ' ' | xargs
 }
 
 # ── Steering Conversion ────────────────────────────────

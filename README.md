@@ -75,8 +75,16 @@ Include Powers (MCP integrations, disabled by default):
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- -p
 ```
 
+Install specific skills (comma-separated):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --skill ultralytics-yolo,paddleocr
+```
+
 - Mặc định chỉ cài **6 core skills** — đủ dùng cho hầu hết project
-- Dùng `--profile` để thêm skills theo domain, hoặc `--all` để cài toàn bộ 30 skills
+- Dùng `--profile` để thêm skills theo domain, `--skill` để cài skills cụ thể, hoặc `--all` để cài toàn bộ 30 skills
+- `--skill` tự động cài steering files tương ứng theo skill-level mapping
+- `--json` flag cho machine-readable output (dùng cho agent/programmatic integration)
 - Script chỉ copy components chưa tồn tại — không overwrite file đã có
 - Powers (MCP) không được cài mặc định
 
@@ -87,7 +95,7 @@ Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
 1. Scan codebase target (deps, imports, Dockerfiles, notebooks...)
 2. Recommend chỉ skills có signal cụ thể từ project (bổ sung thêm vào Core_Set đã cài)
 3. Chờ user confirm trước khi cài
-4. Cài selective + steering files tương ứng
+4. Gọi `install.sh --skill <skills> --json` để cài selective + steering files tương ứng
 
 ### Manual Install
 

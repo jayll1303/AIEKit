@@ -78,7 +78,7 @@ resolve_skills() {
       core_skills
       ;;
     single)
-      echo "$profiles"
+      echo "$profiles" | tr ',' ' ' | tr ' ' '\n' | sort -u | tr '\n' ' ' | xargs
       ;;
     profile)
       local skills="$(core_skills)"
@@ -155,6 +155,40 @@ convert_steering_frontmatter() {
   mv "$tmp" "$file"
 }
 
+# ── Skill-Level Steering Mapping ─────────────────────────
+# NOTE: Duplicated from lib/profiles.sh for curl | bash compatibility.
+
+resolve_skill_steering() {
+  local skill="$1"
+  case "$skill" in
+    python-project-setup|python-quality-testing)
+      echo "python-project-conventions.md" ;;
+    docker-gpu-setup)
+      echo "gpu-environment.md" ;;
+    notebook-workflows)
+      echo "notebook-conventions.md" ;;
+    hf-transformers-trainer|unsloth-training|k2-training-pipeline|experiment-tracking|hf-speech-to-speech-pipeline)
+      echo "ml-training-workflow.md" ;;
+    vllm-tgi-inference|sglang-serving|llama-cpp-inference|ollama-local-llm|tensorrt-llm|triton-deployment)
+      echo "inference-deployment.md" ;;
+    *)
+      echo "" ;;
+  esac
+}
+
+resolve_skills_steering() {
+  local skills="$1"
+  local steering=""
+  for skill in $skills; do
+    local s
+    s=$(resolve_skill_steering "$skill")
+    if [ -n "$s" ]; then
+      steering="$steering $s"
+    fi
+  done
+  echo "$steering" | tr ' ' '\n' | grep . | sort -u | tr '\n' ' ' | xargs
+}
+
 # ── Parse arguments ─────────────────────────────────────
 TARGET=""
 INSTALL_MODE="core"    # core | profile | all | single
@@ -163,6 +197,7 @@ INSTALL_POWERS=false
 DRY_RUN=false
 FORCE_UPDATE=false
 SINGLE_SKILL=""
+JSON_OUTPUT=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -205,6 +240,10 @@ while [[ $# -gt 0 ]]; do
       FORCE_UPDATE=true
       shift
       ;;
+    --json|-j)
+      JSON_OUTPUT=true
+      shift
+      ;;
     --list|-l)
       echo ""
       echo "${BOLD}Available Profiles:${RESET}"
@@ -221,6 +260,9 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Core skills: $(core_skills)"
       echo ""
+      echo "${BOLD}Available Skills (--skill):${RESET}"
+      all_skills | tr ' ' '\n' | sort | sed 's/^/  /'
+      echo ""
       exit 0
       ;;
     --help|-h)
@@ -233,16 +275,19 @@ while [[ $# -gt 0 ]]; do
       echo "  install.sh --profile llm,inference      Combine profiles"
       echo "  install.sh --all                        Install all 30 skills"
       echo "  install.sh --skill arxiv-reader         Install a single skill"
+      echo "  install.sh --skill yolo,paddleocr       Install multiple skills"
+      echo "  install.sh --skill yolo --json          Machine-readable JSON output"
       echo "  install.sh -p                           Include Powers (MCP integrations)"
       echo ""
       echo "Options:"
       echo "  --profile <names>   Install core + specified profile(s), comma-separated"
-      echo "  --skill, -s <name>  Install a single skill by name"
+      echo "  --skill, -s <name>  Install specific skill(s) by name, comma-separated"
       echo "  --all, -a           Install all 30 skills + all steering"
       echo "  --global, -g        Install globally to ~/.kiro/"
       echo "  --powers, -p        Also install Powers (MCP integrations, disabled by default)"
       echo "  --dry-run, -n       Preview what would be installed (no changes)"
       echo "  --update, -f        Overwrite existing components (update mode)"
+      echo "  --json, -j          Machine-readable JSON output (for agent/programmatic use)"
       echo "  --list, -l          List available profiles and skills"
       echo "  --help, -h          Show this help"
       echo ""
@@ -293,6 +338,14 @@ if [ -z "$TARGET" ]; then
   TARGET="."
 fi
 
+# Suppress human output when --json
+if [ "$JSON_OUTPUT" = true ]; then
+  info()  { :; }
+  ok()    { :; }
+  warn()  { :; }
+  # err still goes to stderr for error reporting
+fi
+
 # Expand ~ to $HOME
 if [ "$TARGET" = "~" ] || [[ "$TARGET" == "~/"* ]]; then
   TARGET="${TARGET/#\~/$HOME}"
@@ -312,11 +365,13 @@ check_dep() {
 check_dep git
 
 # ── Banner ──────────────────────────────────────────────
-echo ""
-echo "${BOLD}${CYAN}╔══════════════════════════════════════╗${RESET}"
-echo "${BOLD}${CYAN}║       AIE-Skills Kiro Installer      ║${RESET}"
-echo "${BOLD}${CYAN}╚══════════════════════════════════════╝${RESET}"
-echo ""
+if [ "$JSON_OUTPUT" = false ]; then
+  echo ""
+  echo "${BOLD}${CYAN}╔══════════════════════════════════════╗${RESET}"
+  echo "${BOLD}${CYAN}║       AIE-Skills Kiro Installer      ║${RESET}"
+  echo "${BOLD}${CYAN}╚══════════════════════════════════════╝${RESET}"
+  echo ""
+fi
 info "Target: ${BOLD}$TARGET/.kiro/${RESET}"
 case "$INSTALL_MODE" in
   core)    info "Mode: ${BOLD}core (default)${RESET}" ;;
@@ -357,15 +412,19 @@ for required_dir in skills steering; do
   fi
 done
 
-# Validate single skill exists in source
+# Validate skill names exist in source (after clone)
 if [ "$INSTALL_MODE" = "single" ]; then
-  if [ ! -d "$SOURCE_KIRO/skills/$SINGLE_SKILL" ]; then
-    err "Skill '$SINGLE_SKILL' not found in repository"
-    echo ""
-    echo "Available skills:"
-    ls -1 "$SOURCE_KIRO/skills/" | sed 's/^/  /'
-    exit 1
-  fi
+  IFS=',' read -ra _VALIDATE_SKILLS <<< "$SINGLE_SKILL"
+  for _vs in "${_VALIDATE_SKILLS[@]}"; do
+    _vs=$(echo "$_vs" | tr -d ' ')
+    if [ ! -d "$SOURCE_KIRO/skills/$_vs" ]; then
+      err "Skill '$_vs' not found in repository"
+      echo ""
+      echo "Available skills:"
+      ls -1 "$SOURCE_KIRO/skills/" | sed 's/^/  /'
+      exit 1
+    fi
+  done
 fi
 
 # ── Install components ──────────────────────────────────
@@ -379,6 +438,9 @@ if [ "$DRY_RUN" = false ]; then
 fi
 
 skills=0; steering=0; scripts=0; settings=0; skipped=0; failed=0; updated=0
+INSTALLED_SKILLS=""; SKIPPED_SKILLS=""; FAILED_SKILLS=""
+INSTALLED_STEERING=""; SKIPPED_STEERING=""
+INSTALLED_POWERS=""; SKIPPED_POWERS=""; FAILED_POWERS=""
 
 # Skills (selective based on mode)
 SKILL_LIST=$(resolve_skills "$INSTALL_MODE" "$PROFILES")
@@ -393,6 +455,7 @@ for skill_name in $SKILL_LIST; do
           info "Would install skill: $skill_name"
         fi
         skills=$((skills + 1))
+        INSTALLED_SKILLS="$INSTALLED_SKILLS $skill_name"
       else
         if [ -d "$TARGET/.kiro/skills/$skill_name" ] && [ "$FORCE_UPDATE" = true ]; then
           rm -rf "$TARGET/.kiro/skills/$skill_name"
@@ -400,21 +463,29 @@ for skill_name in $SKILL_LIST; do
         fi
         if cp -r "$SOURCE_KIRO/skills/$skill_name" "$TARGET/.kiro/skills/$skill_name" 2>/dev/null; then
           skills=$((skills + 1))
+          INSTALLED_SKILLS="$INSTALLED_SKILLS $skill_name"
         else
           warn "Failed to copy skill: $skill_name"
           failed=$((failed + 1))
+          FAILED_SKILLS="$FAILED_SKILLS $skill_name"
         fi
       fi
     else
       skipped=$((skipped + 1))
+      SKIPPED_SKILLS="$SKIPPED_SKILLS $skill_name"
     fi
   fi
 done
 
-# Steering (selective based on mode — skip for single skill install)
-if [ "$INSTALL_MODE" != "single" ]; then
-  AUTO_ON_INSTALL="kiro-component-creation.md"
+# Steering (selective based on mode)
+if [ "$INSTALL_MODE" = "single" ]; then
+  STEERING_LIST=$(resolve_skills_steering "$SKILL_LIST")
+else
   STEERING_LIST=$(resolve_steering "${PROFILES:-core}")
+fi
+
+if [ -n "$STEERING_LIST" ]; then
+  AUTO_ON_INSTALL="kiro-component-creation.md"
   for local_name in $STEERING_LIST; do
     if [ -f "$SOURCE_KIRO/steering/$local_name" ]; then
       if [ ! -f "$TARGET/.kiro/steering/$local_name" ] || [ "$FORCE_UPDATE" = true ]; then
@@ -426,6 +497,7 @@ if [ "$INSTALL_MODE" != "single" ]; then
             info "Would install steering: $local_name"
           fi
           steering=$((steering + 1))
+          INSTALLED_STEERING="$INSTALLED_STEERING $local_name"
         else
           if [ -f "$TARGET/.kiro/steering/$local_name" ] && [ "$FORCE_UPDATE" = true ]; then
             rm -f "$TARGET/.kiro/steering/$local_name"
@@ -440,6 +512,7 @@ if [ "$INSTALL_MODE" != "single" ]; then
               fi
             done
             steering=$((steering + 1))
+            INSTALLED_STEERING="$INSTALLED_STEERING $local_name"
           else
             warn "Failed to copy steering: $local_name"
             failed=$((failed + 1))
@@ -447,6 +520,7 @@ if [ "$INSTALL_MODE" != "single" ]; then
         fi
       else
         skipped=$((skipped + 1))
+        SKIPPED_STEERING="$SKIPPED_STEERING $local_name"
       fi
     fi
   done
@@ -512,6 +586,7 @@ if [ "$INSTALL_POWERS" = true ] && [ -d "$SOURCE_KIRO/powers" ]; then
           info "Would install power: $power_name"
         fi
         powers=$((powers + 1))
+        INSTALLED_POWERS="$INSTALLED_POWERS $power_name"
       else
         if [ -d "$TARGET/.kiro/powers/$power_name" ] && [ "$FORCE_UPDATE" = true ]; then
           rm -rf "$TARGET/.kiro/powers/$power_name"
@@ -519,19 +594,24 @@ if [ "$INSTALL_POWERS" = true ] && [ -d "$SOURCE_KIRO/powers" ]; then
         fi
         if cp -r "$d" "$TARGET/.kiro/powers/$power_name" 2>/dev/null; then
           powers=$((powers + 1))
+          INSTALLED_POWERS="$INSTALLED_POWERS $power_name"
         else
           warn "Failed to copy power: $power_name"
           failed=$((failed + 1))
+          FAILED_POWERS="$FAILED_POWERS $power_name"
         fi
       fi
     else
       skipped=$((skipped + 1))
+      SKIPPED_POWERS="$SKIPPED_POWERS $power_name"
     fi
   done
 fi
 
 # ── Summary ─────────────────────────────────────────────
 total=$((skills + steering + powers))
+
+if [ "$JSON_OUTPUT" = false ]; then
 
 echo ""
 if [ "$DRY_RUN" = true ]; then
@@ -555,7 +635,10 @@ case "$INSTALL_MODE" in
     ok "$steering steering files installed"
     ;;
   single)
-    ok "$skills skill installed ($SINGLE_SKILL)"
+    ok "$skills skill(s) installed ($SINGLE_SKILL)"
+    if [ "$steering" -gt 0 ]; then
+      ok "$steering steering file(s) installed"
+    fi
     ;;
 esac
 
@@ -626,3 +709,37 @@ elif [ "$INSTALL_POWERS" = false ]; then
   echo "  Or use ${CYAN}aie-skills-installer${RESET} skill in Kiro for selective install"
 fi
 echo ""
+
+fi  # end JSON_OUTPUT = false
+
+# ── JSON Output ─────────────────────────────────────────
+if [ "$JSON_OUTPUT" = true ]; then
+  # Helper: convert space-separated list to JSON array
+  to_json_array() {
+    local items="$1"
+    if [ -z "$items" ] || [ "$(echo "$items" | xargs)" = "" ]; then
+      echo "[]"
+      return
+    fi
+    echo "$items" | tr ' ' '\n' | grep . | sort -u | sed 's/.*/"&"/' | paste -sd, | sed 's/^/[/;s/$/]/'
+  }
+
+  cat <<EOF
+{
+  "mode": "$INSTALL_MODE",
+  "skills": {
+    "installed": $(to_json_array "$INSTALLED_SKILLS"),
+    "skipped": $(to_json_array "$SKIPPED_SKILLS"),
+    "failed": $(to_json_array "$FAILED_SKILLS")
+  },
+  "steering": {
+    "installed": $(to_json_array "$INSTALLED_STEERING"),
+    "skipped": $(to_json_array "$SKIPPED_STEERING")
+  },
+  "powers": {
+    "installed": $(to_json_array "$INSTALLED_POWERS"),
+    "skipped": $(to_json_array "$SKIPPED_POWERS")
+  }
+}
+EOF
+fi

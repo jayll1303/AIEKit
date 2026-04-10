@@ -75,12 +75,30 @@ ALWAYS wait for user confirmation before installing.
 
 ### Step 4: Selective Install
 
-For confirmed skills only:
+For confirmed skills, execute `install.sh` with `--skill` flag:
 
-1. Copy skill directories: `<source>/.kiro/skills/<name>/` → `<target>/.kiro/skills/<name>/`
-2. Copy relevant steering files (see steering mapping below)
-3. Skip hooks unless user explicitly requests them (hooks are repo-specific)
-4. Report summary
+```bash
+bash install.sh --skill <skill1>,<skill2>,... --json /path/to/target
+```
+
+- `--skill` accepts comma-separated skill names
+- `--json` returns machine-readable output for parsing results
+- Steering files are auto-installed based on skill-level mapping
+- If skills already exist and need update: add `--update` flag
+
+Parse JSON output to verify installation:
+```json
+{
+  "mode": "single",
+  "skills": { "installed": [...], "skipped": [...], "failed": [...] },
+  "steering": { "installed": [...], "skipped": [...] },
+  "powers": { "installed": [...], "skipped": [...] }
+}
+```
+
+<HARD-GATE>
+DO NOT copy files directly. Always use install.sh for consistency.
+</HARD-GATE>
 
 **Validate:** Only confirmed skills are installed. No extras.
 
@@ -116,16 +134,18 @@ For confirmed skills only:
 
 ## Steering Mapping
 
-Install steering files based on which skills are selected:
+Steering files are auto-installed by `install.sh` based on skill-level mapping:
 
 | Steering | Install when skills include |
 |----------|-----------------------------|
 | `python-project-conventions.md` | python-project-setup, python-quality-testing |
-| `ml-training-workflow.md` | hf-transformers-trainer, unsloth-training, k2-training-pipeline, experiment-tracking |
+| `ml-training-workflow.md` | hf-transformers-trainer, unsloth-training, k2-training-pipeline, experiment-tracking, hf-speech-to-speech-pipeline |
 | `inference-deployment.md` | vllm-tgi-inference, sglang-serving, triton-deployment, tensorrt-llm, llama-cpp-inference, ollama-local-llm |
 | `gpu-environment.md` | docker-gpu-setup |
 | `notebook-conventions.md` | notebook-workflows |
-| `kiro-component-creation.md` | Always (if installing any skill) |
+| `kiro-component-creation.md` | Only with `--all` flag |
+
+> When using `--skill` flag, steering is resolved per-skill automatically. No manual steering selection needed.
 
 ## Infrastructure Skills — Auto-include Logic
 
@@ -140,13 +160,26 @@ hf-hub-datasets   → auto-recommend if ANY HF-based skill is selected
 
 ## Installation Methods
 
-### Method 1: Agent-Driven (preferred in Kiro)
+### Method 1: Agent-Driven via install.sh (preferred in Kiro)
 
-Follow Steps 1-4 above. Copy only confirmed skill directories recursively.
+Follow Steps 1-3 above, then execute install.sh:
 
-### Method 2: Shell Script
+```bash
+# Install specific skills recommended by analysis
+bash install.sh --skill ultralytics-yolo,paddleocr --json /path/to/target
 
-`install.sh` now supports tiered installation:
+# With update flag if skills already exist
+bash install.sh --skill ultralytics-yolo,paddleocr --json --update /path/to/target
+```
+
+The agent should:
+1. Analyze project (Steps 1-3)
+2. Get user confirmation
+3. Run `install.sh --skill <skills> --json /path/to/target`
+4. Parse JSON output to report results
+5. If update needed: add `--update` flag
+
+### Method 2: Shell Script (user CLI)
 
 ```bash
 # Core only (6 skills — default)
@@ -154,6 +187,9 @@ bash install.sh
 
 # Core + specific profile
 bash install.sh --profile llm
+
+# Specific skills (comma-separated)
+bash install.sh --skill ultralytics-yolo,paddleocr
 
 # Combine profiles
 bash install.sh --profile llm,inference
@@ -163,6 +199,9 @@ bash install.sh --all
 
 # Include Powers (MCP integrations)
 bash install.sh -p
+
+# List available profiles and skills
+bash install.sh --list
 ```
 
 Available profiles: `llm`, `inference`, `speech`, `cv`, `rag`, `backend`
