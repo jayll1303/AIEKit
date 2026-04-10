@@ -16,7 +16,7 @@
   <a href="#"><img src="https://img.shields.io/badge/Total_Skills-30-blue?style=flat-square" alt="Total Skills" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Profiles-6-teal?style=flat-square" alt="Profiles" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Powers-3-purple?style=flat-square" alt="Powers" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Powers-4-purple?style=flat-square" alt="Powers" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square" alt="Maintained" /></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License" /></a>
 </p>
@@ -198,7 +198,7 @@ Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai 
 | `skill-quality-on-edit` | `fileEdited` | Check SKILL.md đã sửa theo best practices + interconnection map |
 | `steering-consistency` | `fileCreated` | Check steering mới: frontmatter, domain overlap, cross-references |
 
-## Powers (3) — Optional, not installed by default
+## Powers (4) — Optional, not installed by default
 
 Powers require MCP server auth/API keys. Install via `aie-skills-installer` skill or manual copy.
 MCP servers ship `"disabled": true` — enable after configuring credentials.
@@ -207,6 +207,7 @@ MCP servers ship `"disabled": true` — enable after configuring credentials.
 |-------|------------|--------|
 | `power-huggingface` | [HF MCP Server](https://huggingface.co/mcp) (remote HTTP) | Search models, datasets, papers, spaces trên HuggingFace Hub. Compare models, check configs, discover trending papers |
 | `power-gpu-monitor` | [mcp-system-monitor](https://github.com/huhabla/mcp-system-monitor) (local Python) | Monitor GPU/VRAM/CPU real-time, estimate memory cho ML models, diagnose OOM errors |
+| `power-remotion` | [@remotion/mcp](https://www.remotion.dev/) (local npx) | Remotion documentation và video creation workflows via MCP |
 | `power-sentry` | [@sentry/mcp-server](https://github.com/getsentry/sentry-mcp) (local npx) | Integrate Sentry SDK cho error tracking, performance monitoring, debug production issues via MCP. Setup patterns cho JS, Python, React, Next.js, FastAPI |
 
 Mỗi power bao gồm: `POWER.md` + `mcp.json` (disabled) + optional `steering/` workflows.

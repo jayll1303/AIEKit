@@ -8,7 +8,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                    POWERS (MCP Integration)                   │
 │  power-huggingface (Hub API)  │  power-gpu-monitor (GPU/VRAM)│
-│  power-sentry (Error Tracking & Debugging)                   │
+│  power-sentry (Error Tracking) │ power-remotion (Video/React)│
 ├─────────────────────────────────────────────────────────────┤
 │                    APPLICATION LAYER                         │
 │  freqtrade  │  ultralytics-yolo  │  k2-training-pipeline    │
@@ -229,3 +229,11 @@ Powers nằm trên cùng, cung cấp external tool access cho agent qua MCP prot
 | python-project-setup | Add sentry-sdk dependency |
 | docker-gpu-setup | Sentry env vars trong Docker containers |
 | backend-development | Error handling patterns → Sentry capture |
+
+### power-remotion
+
+| Connects to | How |
+|-------------|-----|
+| frontend-dev-guidelines | React/TypeScript patterns cho Player embed |
+| threejs | React Three Fiber integration cho 3D video |
+| deploy | Deploy video app lên Vercel, Netlify, AWS |
