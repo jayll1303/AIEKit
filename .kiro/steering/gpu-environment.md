@@ -1,6 +1,7 @@
 ---
 inclusion: fileMatch
 fileMatchPattern: ["**/Dockerfile*", "**/docker-compose*", "**/.dockerignore"]
+description: Conventions cho GPU-enabled Docker containers và docker-compose. Áp dụng khi edit Dockerfile, docker-compose, hoặc .dockerignore cho ML/CUDA workloads.
 ---
 
 # GPU Environment Conventions

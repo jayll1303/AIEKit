@@ -183,7 +183,7 @@ Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai 
 | `ml-training-workflow.md` | `auto` | Conventions cho ML training & fine-tuning workflows |
 | `inference-deployment.md` | `auto` | Conventions cho model serving & deployment |
 | `python-project-conventions.md` | `auto` | Conventions cho Python projects: uv, ruff, pytest, CUDA deps |
-| `gpu-environment.md` | `fileMatch` (`Dockerfile*`, `docker-compose*`) | Conventions cho GPU Docker containers |
+| `gpu-environment.md` | `fileMatch` (`Dockerfile*`, `docker-compose*`, `.dockerignore`) | Conventions cho GPU Docker containers |
 
 ## Hooks (6) — Development only
 

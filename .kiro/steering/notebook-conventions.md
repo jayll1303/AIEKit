@@ -1,6 +1,7 @@
 ---
 inclusion: fileMatch
 fileMatchPattern: ["**/*.ipynb"]
+description: Conventions cho Jupyter/Colab notebook (.ipynb). Áp dụng khi tạo, edit, hoặc parse notebook files.
 ---
 
 # Notebook File Conventions

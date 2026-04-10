@@ -1,5 +1,6 @@
 ---
 inclusion: always
+description: Quy tắc tạo Kiro components (Steering, Skills, Hooks, Powers). Luôn có trong context để đảm bảo tuân thủ cấu trúc và conventions.
 ---
 
 # Kiro Component Creation Guide
