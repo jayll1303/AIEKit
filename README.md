@@ -1,5 +1,11 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="AIE-Skills Banner" width="100%" />
+  <img src="assets/banner.png" alt="AIE-Skills Banner" width="100%" />
+</p>
+
+<p align="center">
+  <a href="assets/teaser.mp4">
+    <img src="https://img.shields.io/badge/▶_Watch_Teaser-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Teaser" />
+  </a>
 </p>
 
 <p align="center">
