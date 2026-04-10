@@ -3,9 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="assets/teaser.mp4">
-    <img src="https://img.shields.io/badge/▶_Watch_Teaser-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Teaser" />
-  </a>
+  <video src="https://github.com/user-attachments/assets/ad39c9c4-da5b-429a-8301-4ca6fb6c3c81" width="100%" autoplay loop muted playsinline></video>
 </p>
 
 <p align="center">
