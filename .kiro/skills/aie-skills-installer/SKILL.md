@@ -75,7 +75,13 @@ ALWAYS wait for user confirmation before installing.
 
 ### Step 4: Selective Install
 
-For confirmed skills, execute `install.sh` with `--skill` flag:
+For confirmed skills, use the remote installer via `curl | bash` (works from any repo):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --skill <skill1>,<skill2>,... --json /path/to/target
+```
+
+If already inside the AIEKit repo (fallback):
 
 ```bash
 bash install.sh --skill <skill1>,<skill2>,... --json /path/to/target
@@ -97,7 +103,7 @@ Parse JSON output to verify installation:
 ```
 
 <HARD-GATE>
-DO NOT copy files directly. Always use install.sh for consistency.
+DO NOT copy files directly. Always use install.sh (remote curl | bash or local) for consistency.
 </HARD-GATE>
 
 **Validate:** Only confirmed skills are installed. No extras.
@@ -165,17 +171,20 @@ hf-hub-datasets   → auto-recommend if ANY HF-based skill is selected
 Follow Steps 1-3 above, then execute install.sh:
 
 ```bash
-# Install specific skills recommended by analysis
-bash install.sh --skill ultralytics-yolo,paddleocr --json /path/to/target
+# Remote install (works from any repo — preferred)
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --skill ultralytics-yolo,paddleocr --json /path/to/target
 
 # With update flag if skills already exist
-bash install.sh --skill ultralytics-yolo,paddleocr --json --update /path/to/target
+curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --skill ultralytics-yolo,paddleocr --json --update /path/to/target
+
+# Local fallback (only when inside AIEKit repo)
+bash install.sh --skill ultralytics-yolo,paddleocr --json /path/to/target
 ```
 
 The agent should:
 1. Analyze project (Steps 1-3)
 2. Get user confirmation
-3. Run `install.sh --skill <skills> --json /path/to/target`
+3. Run remote `curl | bash` with `--skill <skills> --json /path/to/target` (or local `bash install.sh` if inside AIEKit repo)
 4. Parse JSON output to report results
 5. If update needed: add `--update` flag
 

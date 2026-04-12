@@ -105,9 +105,9 @@ Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
 
 ```bash
 git clone https://github.com/jayll1303/AIEKit.git /tmp/aie-skills
-bash /tmp/aie-skills/.kiro/install.sh          # core only
-bash /tmp/aie-skills/.kiro/install.sh --profile llm   # core + llm
-bash /tmp/aie-skills/.kiro/install.sh --all     # all 30 skills
+bash /tmp/aie-skills/install.sh          # core only
+bash /tmp/aie-skills/install.sh --profile llm   # core + llm
+bash /tmp/aie-skills/install.sh --all     # all 30 skills
 rm -rf /tmp/aie-skills
 ```
 
