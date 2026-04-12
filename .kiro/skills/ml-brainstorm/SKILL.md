@@ -41,6 +41,11 @@ Does NOT handle:
 | Quantization | GGUF vs GPTQ vs AWQ vs bitsandbytes? Bit level? Quality vs size? | model-quantization |
 | Pipeline Architecture | RAG vs fine-tune? Monolith vs microservice? Embedding model choice? | text-embeddings-rag, text-embeddings-inference, fastapi-at-scale |
 | Infrastructure | GPU selection? Docker setup? Experiment tracking? CI/CD? | docker-gpu-setup, experiment-tracking, python-ml-deps, opentelemetry |
+| Requirements & Goals | Business metrics vs model metrics? Goals hierarchy? Success criteria? Trade-offs? | ref: [mlops-requirements.md](references/mlops-requirements.md) |
+| Data Quality & Drift | Data validation strategy? Drift detection? Missing data handling? Outlier treatment? | ref: [mlops-data-quality.md](references/mlops-data-quality.md) |
+| Architecture & System Design | Batch vs stream? Monolith vs microservice? Feature store? Lambda vs Kappa? Scalability? | ref: [mlops-architecture.md](references/mlops-architecture.md) |
+| Deployment Strategy | Blue-Green vs Canary vs Rolling? Rollback plan? LLMOps? Cost optimization? | ref: [mlops-deployment.md](references/mlops-deployment.md) |
+| Fairness & Responsible AI | Bias detection? Fairness metrics? Explainability? Responsible AI compliance? | ref: [mlops-fairness.md](references/mlops-fairness.md) |
 
 ## Core Workflow
 
@@ -58,6 +63,10 @@ Scan project để hiểu constraints trước khi brainstorm:
    - Dataset size + format
    - Quality requirements vs speed/cost constraints
    - Production vs research context
+   - Business metrics + success criteria (goals hierarchy)
+   - Data quality concerns (drift, missing data, freshness)
+   - Deployment constraints (latency SLA, rollback requirements, team size)
+   - Fairness/compliance requirements (protected groups, regulatory)
 
 **Validate:** Có ít nhất 1 signal (deps, code, hoặc user answer) trước khi sang Phase 2.
 
@@ -65,11 +74,15 @@ Scan project để hiểu constraints trước khi brainstorm:
 
 1. Map user question → decision domain(s) từ bảng trên
 2. Load decision matrices từ [references/decision-matrices.md](references/decision-matrices.md)
-3. Evaluate 2-3 viable approaches:
+3. For MLOps domains (requirements, data quality, architecture, deployment, fairness), load corresponding reference file
+4. Evaluate 2-3 viable approaches:
    - Mỗi approach: pros, cons, VRAM estimate, complexity, production-readiness
+   - For deployment: include rollback strategy + blast radius analysis
+   - For data quality: include validation pyramid level + drift response plan
+   - For architecture: include scalability dimension + cost trade-off
    - Dùng VRAM estimator script nếu cần: `python scripts/vram_estimator.py --model-size <B> --method <method>`
-4. Web search cho benchmarks/papers mới nếu cần (model comparisons, latest releases)
-5. Dùng sequential-thinking cho complex multi-factor analysis
+5. Web search cho benchmarks/papers mới nếu cần (model comparisons, latest releases)
+6. Dùng sequential-thinking cho complex multi-factor analysis
 
 **Validate:** Mỗi approach có ít nhất 1 pro và 1 con. Không recommend approach mà không có evidence.
 
@@ -155,6 +168,10 @@ Brainstorm không hiệu quả?
 | "Tự implement luôn sau khi brainstorm" | Skill này CHỈ brainstorm. Implementation là việc của domain skills |
 | "VRAM không quan trọng, recommend approach tốt nhất" | VRAM là constraint #1 trong ML. Luôn check hardware trước khi recommend |
 | "Chỉ recommend 1 approach" | Luôn present ≥2 approaches. User cần thấy tradeoffs để quyết định |
+| "Model accuracy cao = project thành công" | Model metrics ≠ Business success. Luôn map model → leading indicators → business goals |
+| "Data sạch rồi, không cần validate" | Data quality là continuous process. Check 4 pillars + drift detection |
+| "Deploy xong là xong" | 70-80% effort là maintenance. Plan rollback, monitoring, retraining triggers |
+| "Fairness không quan trọng" | Removing protected attributes ≠ fair. Check proxy features + subpopulation performance |
 
 ## Related Skills
 
@@ -170,5 +187,20 @@ Brainstorm không hiệu quả?
 
 ## References
 
-- [Decision Matrices](references/decision-matrices.md) — Aggregated decision tables từ all AIEKit skills: training, quantization, serving, RAG vs fine-tune, infrastructure
+- [Decision Matrices](references/decision-matrices.md) — Aggregated decision tables từ all AIEKit skills: training, quantization, serving, RAG vs fine-tune, infrastructure, requirements, data quality, architecture, deployment, fairness
   **Load when:** Brainstorming bất kỳ ML/AI decision nào — file này chứa summary tables + cross-reference links đến full tables trong skill gốc
+
+- [MLOps Requirements](references/mlops-requirements.md) — Goals hierarchy, metrics mapping, error handling strategies, trade-off frameworks, risk analysis (FMEA)
+  **Load when:** Defining success metrics, planning error handling, analyzing trade-offs, requirements engineering
+
+- [MLOps Data Quality](references/mlops-data-quality.md) — 4 pillars of data quality, validation pyramid, drift detection (PSI), missing data handling, outlier treatment, model evaluation metrics
+  **Load when:** Assessing data quality, choosing model metrics, planning drift response, evaluation strategy
+
+- [MLOps Architecture](references/mlops-architecture.md) — Pipeline patterns (Lambda/Kappa), monolith vs microservice, batch vs stream, feature store, scalability, infrastructure choices
+  **Load when:** Designing ML system architecture, choosing pipeline pattern, infrastructure decisions
+
+- [MLOps Deployment](references/mlops-deployment.md) — Blue-Green/Canary/Rolling strategies, serving patterns, rollback, performance optimization, LLMOps, RAG vs fine-tune
+  **Load when:** Planning deployment strategy, serving pattern selection, LLM production, cost optimization
+
+- [MLOps Fairness](references/mlops-fairness.md) — Bias types, fairness definitions, explainability techniques (SHAP/LIME), responsible AI checklist, fairness tools
+  **Load when:** Evaluating fairness, bias mitigation, model interpretability, responsible AI compliance

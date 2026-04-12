@@ -3,4 +3,8 @@ docs/*
 plans/
 .kiro/specs/
 my-remotion-video/
+.venv/
+ref/extract_pdfs.py
+ref/extract_log.txt
+ref/extracted/
 ref

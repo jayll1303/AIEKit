@@ -149,3 +149,91 @@ LoRA training:   params × 2 bytes + adapter_params × 2 bytes × 3
 
 → Detailed estimation: run `../scripts/vram_estimator.py`
 → VRAM optimization: `../hf-transformers-trainer/SKILL.md` → VRAM Optimization Checklist
+
+## 7. Requirements & Goals Mapping
+
+| Level | Maps To | Example Metric | Measurement |
+|-------|---------|---------------|-------------|
+| Organizational | Business outcomes | Revenue per user | Monthly revenue reports |
+| Leading Indicators | Signals of future success | User engagement | Time spent, sessions/week |
+| User Outcomes | User achieves goal | Task success rate | % users complete target action |
+| Model Properties | Technical performance | Accuracy, F1, NDCG | Offline + online evaluation |
+
+**Key insight:** Model accuracy ≠ Business success. Always map model metrics → business metrics.
+
+→ Full framework: [mlops-requirements.md](mlops-requirements.md) → Goals Hierarchy
+
+## 8. Data Quality Assessment
+
+| Pillar | Question | Threshold |
+|--------|----------|-----------|
+| Accuracy | Is data correct? | Cross-validate with behavioral signals |
+| Completeness | Is all data there? | Critical >99%, Important >90%, Nice-to-have >70% |
+| Consistency | Is data uniform? | Format + semantic + cross-source checks |
+| Timeliness | Is data fresh? | Match freshness to business requirements |
+
+### Drift Response
+
+| PSI | Severity | Action |
+|-----|----------|--------|
+| < 0.1 | Low | Monitor |
+| 0.1–0.2 | Medium | Alert + analyze + schedule retraining |
+| > 0.2 | High | Investigate + fallback model + trigger retraining |
+| > 0.5 | Critical | Circuit breaker + rule-based fallback + incident response |
+
+→ Full framework: [mlops-data-quality.md](mlops-data-quality.md)
+
+## 9. Architecture Pattern Selection
+
+| Scenario | Pattern | Key Trade-off |
+|----------|---------|--------------|
+| Single use case, fast iteration | Simple Pipeline | Low complexity, limited scale |
+| Multiple models, feature reuse | Feature Store | Consistency, but setup overhead |
+| Accuracy + low latency | Lambda (Batch+Stream) | Best of both, but code duplication |
+| Simplicity, real-time focus | Kappa (Stream only) | Simple, but limited historical queries |
+| Small team, single model | Monolithic | Easy, but hard to scale |
+| Multiple teams, high availability | Microservices | Flexible, but operational overhead |
+| Most common production setup | Hybrid (Mono train + Micro serve) | Balanced |
+
+→ Full patterns: [mlops-architecture.md](mlops-architecture.md)
+
+## 10. Deployment Strategy Selection
+
+| Scenario | Strategy | Key Advantage |
+|----------|----------|--------------|
+| Critical system, instant rollback needed | Blue-Green | Zero downtime, instant rollback |
+| Large scale, risk-averse | Canary | Gradual rollout, real user testing |
+| Resource-constrained | Rolling | No extra infrastructure |
+| Test new model without user impact | Shadow Mode | Compare predictions safely |
+
+### Serving Pattern Selection
+
+| Requirement | Pattern | Latency |
+|-------------|---------|---------|
+| Real-time predictions | Online (REST/gRPC) | 10-50ms |
+| Large-scale pre-compute | Batch prediction | Minutes (serve <5ms) |
+| Ultra-low latency, offline | Edge deployment | 1-10ms |
+
+### LLM Deployment
+
+| Use Case | Best Option |
+|----------|-------------|
+| Startup/POC | API-Based (GPT-4, Claude) |
+| Enterprise sensitive data | Self-hosted or Hybrid |
+| High-volume consumer | Self-hosted |
+| Multi-region global | API-Based |
+
+→ Full strategies: [mlops-deployment.md](mlops-deployment.md)
+
+## 11. Fairness & Explainability
+
+| Need | Technique | Tool |
+|------|-----------|------|
+| Detect bias across groups | Fairness metrics (demographic parity, equalized odds) | Fairlearn, AI Fairness 360 |
+| Explain individual predictions | SHAP values, LIME | SHAP, LIME |
+| Global model understanding | Feature importance, PDP | InterpretML |
+| Production fairness monitoring | Drift in protected group outcomes | Evidently AI, WhyLabs, Arize |
+
+**Key insight:** Removing protected attributes doesn't guarantee fairness — proxy features can encode bias.
+
+→ Full checklist: [mlops-fairness.md](mlops-fairness.md) → Responsible AI Checklist
