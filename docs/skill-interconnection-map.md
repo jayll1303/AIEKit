@@ -1,6 +1,6 @@
 # Skill Interconnection Map
 
-> Bản đồ quan hệ giữa 30 AIE-Skills + 3 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
+> Bản đồ quan hệ giữa 31 AIE-Skills + 4 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
 
 ## Skill Layers
 
@@ -14,7 +14,7 @@
 │  freqtrade  │  ultralytics-yolo  │  k2-training-pipeline    │
 │  sherpa-onnx │  arxiv-reader      │  notebook-workflows      │
 │  paddleocr   │  fastapi-at-scale  │  hf-speech-to-speech-pipeline │
-│  openai-audio-api  │  opentelemetry                           │
+│  openai-audio-api  │  opentelemetry  │  semantic-router        │
 ├─────────────────────────────────────────────────────────────┤
 │                    WORKFLOW LAYER                             │
 │  hf-transformers-trainer  │  text-embeddings-rag             │
@@ -62,6 +62,7 @@
 | fastapi-at-scale | | | ○ | | | | | |
 | openai-audio-api | ○ | | ○ | | | | | |
 | opentelemetry | ○ | | ○ | | | | | |
+| semantic-router | ○ | | | | ○ | | | |
 
 ● = hard dependency (thường cần)  ○ = soft dependency (optional, tùy workflow)
 
@@ -173,6 +174,15 @@ python-project-setup → python-ml-deps (otel packages)
     → fastapi-at-scale (structure, auth, DB)
     → opentelemetry (instrument + collector + sampling)
     → docker-gpu-setup (containerize with collector sidecar)
+```
+
+### 11. Intent Classification / Tool Routing
+
+```
+python-project-setup → python-ml-deps (semantic-router)
+    → semantic-router (Route, SemanticRouter, HybridRouter)
+    → text-embeddings-rag (custom encoder, optional)
+    → vllm-tgi-inference (LLM for dynamic routes, optional)
 ```
 
 ## Serving Alternatives

@@ -28,7 +28,7 @@ profile_cv() {
 }
 
 profile_rag() {
-  echo "text-embeddings-rag text-embeddings-inference"
+  echo "text-embeddings-rag text-embeddings-inference semantic-router"
 }
 
 profile_backend() {

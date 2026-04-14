@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Core_Skills-6-blue?style=flat-square" alt="Core Skills" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-30-blue?style=flat-square" alt="Total Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-31-blue?style=flat-square" alt="Total Skills" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Profiles-6-teal?style=flat-square" alt="Profiles" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Powers-4-purple?style=flat-square" alt="Powers" /></a>
@@ -55,7 +55,7 @@ Combine multiple profiles:
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --profile llm,inference
 ```
 
-Install ALL 30 skills:
+Install ALL 31 skills:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --all
@@ -86,7 +86,7 @@ curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | 
 ```
 
 - Mặc định chỉ cài **6 core skills** — đủ dùng cho hầu hết project
-- Dùng `--profile` để thêm skills theo domain, `--skill` để cài skills cụ thể, hoặc `--all` để cài toàn bộ 30 skills
+- Dùng `--profile` để thêm skills theo domain, `--skill` để cài skills cụ thể, hoặc `--all` để cài toàn bộ 31 skills
 - `--skill` tự động cài steering files tương ứng theo skill-level mapping
 - `--json` flag cho machine-readable output (dùng cho agent/programmatic integration)
 - Script chỉ copy components chưa tồn tại — không overwrite file đã có
@@ -134,7 +134,7 @@ Thêm skills theo domain bằng `--profile`:
 | **inference** | `--profile inference` | `vllm-tgi-inference`, `sglang-serving`, `llama-cpp-inference`, `ollama-local-llm`, `tensorrt-llm`, `triton-deployment` | Deploy LLM servers (vLLM, SGLang, Ollama) |
 | **speech** | `--profile speech` | `k2-training-pipeline`, `sherpa-onnx`, `hf-speech-to-speech-pipeline`, `openai-audio-api` | Speech processing (Kaldi, sherpa-onnx) |
 | **cv** | `--profile cv` | `ultralytics-yolo`, `paddleocr` | Computer vision (YOLO, PaddleOCR) |
-| **rag** | `--profile rag` | `text-embeddings-rag`, `text-embeddings-inference` | RAG pipelines (embeddings, vector DB) |
+| **rag** | `--profile rag` | `text-embeddings-rag`, `text-embeddings-inference`, `semantic-router` | RAG pipelines (embeddings, vector DB, routing) |
 | **backend** | `--profile backend` | `fastapi-at-scale`, `opentelemetry`, `python-quality-testing` | FastAPI, OpenTelemetry, testing |
 
 Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai profiles, tự deduplicate.
@@ -143,7 +143,7 @@ Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai 
 
 ---
 
-## Skills (30)
+## Skills (31)
 
 | Skill | Mô tả |
 |-------|--------|
@@ -168,6 +168,7 @@ Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai 
 | `python-ml-deps` | Cài ML deps với uv, xử lý CUDA version conflicts |
 | `python-project-setup` | Bootstrap Python projects với uv, ruff, pytest |
 | `python-quality-testing` | Type annotations, Hypothesis testing, mutation testing |
+| `semantic-router` | Build superfast AI decision layers: Route, SemanticRouter, HybridRouter, dynamic routes với function calling, intent classification, Pinecone/Qdrant index |
 | `sglang-serving` | Serve LLMs với SGLang: RadixAttention prefix caching, structured output (JSON/regex/EBNF) |
 | `sherpa-onnx` | Offline speech processing: ASR, TTS, VAD, speaker diarization, speech enhancement |
 | `tensorrt-llm` | Optimize LLM inference với NVIDIA TensorRT-LLM: engine building, FP8/INT4, kernel fusion |

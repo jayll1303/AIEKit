@@ -58,7 +58,7 @@ profile_cv() {
 }
 
 profile_rag() {
-  echo "text-embeddings-rag text-embeddings-inference"
+  echo "text-embeddings-rag text-embeddings-inference semantic-router"
 }
 
 profile_backend() {
@@ -220,11 +220,11 @@ while [[ $# -gt 0 ]]; do
       INSTALL_MODE="single"
       shift 2
       ;;
-    --all|-a)
+    --all, -a)
       INSTALL_MODE="all"
       shift
       ;;
-    --global|-g)
+    --global, -g)
       TARGET="$HOME"
       shift
       ;;
@@ -273,7 +273,7 @@ while [[ $# -gt 0 ]]; do
       echo "  install.sh                              Install core skills (default)"
       echo "  install.sh --profile llm                Install core + LLM skills"
       echo "  install.sh --profile llm,inference      Combine profiles"
-      echo "  install.sh --all                        Install all 30 skills"
+      echo "  install.sh --all                        Install all 31 skills"
       echo "  install.sh --skill arxiv-reader         Install a single skill"
       echo "  install.sh --skill yolo,paddleocr       Install multiple skills"
       echo "  install.sh --skill yolo --json          Machine-readable JSON output"
@@ -376,7 +376,7 @@ info "Target: ${BOLD}$TARGET/.kiro/${RESET}"
 case "$INSTALL_MODE" in
   core)    info "Mode: ${BOLD}core (default)${RESET}" ;;
   profile) info "Mode: ${BOLD}profile ($PROFILES)${RESET}" ;;
-  all)     info "Mode: ${BOLD}all (30 skills)${RESET}" ;;
+  all)     info "Mode: ${BOLD}all (31 skills)${RESET}" ;;
   single)  info "Mode: ${BOLD}single skill ($SINGLE_SKILL)${RESET}" ;;
 esac
 if [ "$DRY_RUN" = true ]; then
@@ -683,7 +683,7 @@ if [ "$DRY_RUN" = false ] && [ "$INSTALL_MODE" != "single" ]; then
       echo "     install.sh --profile cv          Computer vision (YOLO, PaddleOCR)"
       echo "     install.sh --profile rag         RAG pipelines (embeddings, vector DB)"
       echo "     install.sh --profile backend     FastAPI, OpenTelemetry, testing"
-      echo "     install.sh --all                 Everything (30 skills)"
+      echo "     install.sh --all                 Everything (31 skills)"
       echo ""
       echo "  Combine profiles: install.sh --profile llm,inference"
       ;;
