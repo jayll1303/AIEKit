@@ -203,7 +203,7 @@ bash install.sh --skill ultralytics-yolo,paddleocr
 # Combine profiles
 bash install.sh --profile llm,inference
 
-# All 30 skills
+# All 32 skills
 bash install.sh --all
 
 # Include Powers (MCP integrations)

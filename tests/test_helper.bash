@@ -13,7 +13,7 @@ ok()    { echo "✓ $*"; }
 warn()  { echo "⚠ $*"; }
 err()   { echo "✗ $*" >&2; }
 
-# Helper: create mock source directory with all 30 skills, 6 steering, 3 powers
+# Helper: create mock source directory with all 32 skills, 6 steering, 4 powers
 create_mock_source() {
   local dir="$1"
   mkdir -p "$dir/.kiro/skills" "$dir/.kiro/steering" "$dir/.kiro/powers"

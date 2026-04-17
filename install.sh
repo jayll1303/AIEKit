@@ -66,7 +66,7 @@ profile_backend() {
 }
 
 all_skills() {
-  echo "$(core_skills) $(profile_llm) $(profile_inference) $(profile_speech) $(profile_cv) $(profile_rag) $(profile_backend) arxiv-reader freqtrade ml-brainstorm"
+  echo "$(core_skills) $(profile_llm) $(profile_inference) $(profile_speech) $(profile_cv) $(profile_rag) $(profile_backend) arxiv-reader disk-cleanup freqtrade ml-brainstorm"
 }
 
 resolve_skills() {
@@ -273,7 +273,7 @@ while [[ $# -gt 0 ]]; do
       echo "  install.sh                              Install core skills (default)"
       echo "  install.sh --profile llm                Install core + LLM skills"
       echo "  install.sh --profile llm,inference      Combine profiles"
-      echo "  install.sh --all                        Install all 31 skills"
+      echo "  install.sh --all                        Install all 32 skills"
       echo "  install.sh --skill arxiv-reader         Install a single skill"
       echo "  install.sh --skill yolo,paddleocr       Install multiple skills"
       echo "  install.sh --skill yolo --json          Machine-readable JSON output"
@@ -282,7 +282,7 @@ while [[ $# -gt 0 ]]; do
       echo "Options:"
       echo "  --profile <names>   Install core + specified profile(s), comma-separated"
       echo "  --skill, -s <name>  Install specific skill(s) by name, comma-separated"
-      echo "  --all, -a           Install all 30 skills + all steering"
+      echo "  --all, -a           Install all 32 skills + all steering"
       echo "  --global, -g        Install globally to ~/.kiro/"
       echo "  --powers, -p        Also install Powers (MCP integrations, disabled by default)"
       echo "  --dry-run, -n       Preview what would be installed (no changes)"
@@ -376,7 +376,7 @@ info "Target: ${BOLD}$TARGET/.kiro/${RESET}"
 case "$INSTALL_MODE" in
   core)    info "Mode: ${BOLD}core (default)${RESET}" ;;
   profile) info "Mode: ${BOLD}profile ($PROFILES)${RESET}" ;;
-  all)     info "Mode: ${BOLD}all (31 skills)${RESET}" ;;
+  all)     info "Mode: ${BOLD}all (32 skills)${RESET}" ;;
   single)  info "Mode: ${BOLD}single skill ($SINGLE_SKILL)${RESET}" ;;
 esac
 if [ "$DRY_RUN" = true ]; then
@@ -683,7 +683,7 @@ if [ "$DRY_RUN" = false ] && [ "$INSTALL_MODE" != "single" ]; then
       echo "     install.sh --profile cv          Computer vision (YOLO, PaddleOCR)"
       echo "     install.sh --profile rag         RAG pipelines (embeddings, vector DB)"
       echo "     install.sh --profile backend     FastAPI, OpenTelemetry, testing"
-      echo "     install.sh --all                 Everything (31 skills)"
+      echo "     install.sh --all                 Everything (32 skills)"
       echo ""
       echo "  Combine profiles: install.sh --profile llm,inference"
       ;;

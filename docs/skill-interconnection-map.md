@@ -1,6 +1,6 @@
 # Skill Interconnection Map
 
-> Bản đồ quan hệ giữa 31 AIE-Skills + 4 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
+> Bản đồ quan hệ giữa 32 AIE-Skills + 4 Powers — dùng để hiểu skill nào chain sang skill nào, tránh overlap, và guide agent chọn đúng skill.
 
 ## Skill Layers
 
@@ -28,7 +28,7 @@
 ├─────────────────────────────────────────────────────────────┤
 │                    INFRASTRUCTURE LAYER                       │
 │  python-project-setup  │  python-ml-deps  │  docker-gpu-setup│
-│  python-quality-testing │  hf-hub-datasets                   │
+│  python-quality-testing │  hf-hub-datasets │  disk-cleanup   │
 ├─────────────────────────────────────────────────────────────┤
 │                    META LAYER                                 │
 │  aie-skills-installer  │  ml-brainstorm                      │
@@ -63,6 +63,7 @@
 | openai-audio-api | ○ | | ○ | | | | | |
 | opentelemetry | ○ | | ○ | | | | | |
 | semantic-router | ○ | | | | ○ | | | |
+| disk-cleanup | | | ○ | | | | | |
 
 ● = hard dependency (thường cần)  ○ = soft dependency (optional, tùy workflow)
 
@@ -183,6 +184,14 @@ python-project-setup → python-ml-deps (semantic-router)
     → semantic-router (Route, SemanticRouter, HybridRouter)
     → text-embeddings-rag (custom encoder, optional)
     → vllm-tgi-inference (LLM for dynamic routes, optional)
+```
+
+### 12. Disk Cleanup / Maintenance
+
+```
+disk-cleanup (diagnose df/du mismatch, lsof deleted files)
+    → docker-gpu-setup (if Docker is the culprit)
+    → vllm-tgi-inference / sglang-serving (restart after cleanup)
 ```
 
 ## Serving Alternatives

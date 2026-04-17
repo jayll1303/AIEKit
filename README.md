@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Core_Skills-6-blue?style=flat-square" alt="Core Skills" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-31-blue?style=flat-square" alt="Total Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-32-blue?style=flat-square" alt="Total Skills" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Profiles-6-teal?style=flat-square" alt="Profiles" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Steering-6-green?style=flat-square" alt="Steering" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Powers-4-purple?style=flat-square" alt="Powers" /></a>
@@ -55,7 +55,7 @@ Combine multiple profiles:
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --profile llm,inference
 ```
 
-Install ALL 31 skills:
+Install ALL 32 skills:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | bash -s -- --all
@@ -86,7 +86,7 @@ curl -fsSL https://raw.githubusercontent.com/jayll1303/AIEKit/main/install.sh | 
 ```
 
 - Mặc định chỉ cài **6 core skills** — đủ dùng cho hầu hết project
-- Dùng `--profile` để thêm skills theo domain, `--skill` để cài skills cụ thể, hoặc `--all` để cài toàn bộ 31 skills
+- Dùng `--profile` để thêm skills theo domain, `--skill` để cài skills cụ thể, hoặc `--all` để cài toàn bộ 32 skills
 - `--skill` tự động cài steering files tương ứng theo skill-level mapping
 - `--json` flag cho machine-readable output (dùng cho agent/programmatic integration)
 - Script chỉ copy components chưa tồn tại — không overwrite file đã có
@@ -107,7 +107,7 @@ Dùng skill `aie-skills-installer` trong Kiro — nó sẽ:
 git clone https://github.com/jayll1303/AIEKit.git /tmp/aie-skills
 bash /tmp/aie-skills/install.sh          # core only
 bash /tmp/aie-skills/install.sh --profile llm   # core + llm
-bash /tmp/aie-skills/install.sh --all     # all 30 skills
+bash /tmp/aie-skills/install.sh --all     # all 32 skills
 rm -rf /tmp/aie-skills
 ```
 
@@ -143,12 +143,13 @@ Combine profiles: `install.sh --profile llm,inference` — cài core + cả hai 
 
 ---
 
-## Skills (31)
+## Skills (32)
 
 | Skill | Mô tả |
 |-------|--------|
 | `aie-skills-installer` | Analyze target project codebase và đề xuất chỉ cài skills cần thiết (tránh cài toàn bộ tốn context) |
 | `arxiv-reader` | Đọc và phân tích paper arXiv qua HTML |
+| `disk-cleanup` | Diagnose and clean disk space on Linux servers, especially ML/LLM servers with Docker |
 | `docker-gpu-setup` | Dockerfile & docker-compose cho GPU/CUDA workloads |
 | `experiment-tracking` | Selfhosted experiment tracking với MLflow / W&B |
 | `fastapi-at-scale` | Build production-grade FastAPI at scale: project structure, async SQLAlchemy, Alembic migrations, JWT auth, rate limiting, testing với httpx, deploy uvicorn/gunicorn/Docker |

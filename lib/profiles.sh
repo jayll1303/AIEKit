@@ -36,7 +36,7 @@ profile_backend() {
 }
 
 all_skills() {
-  echo "$(core_skills) $(profile_llm) $(profile_inference) $(profile_speech) $(profile_cv) $(profile_rag) $(profile_backend) arxiv-reader freqtrade ml-brainstorm"
+  echo "$(core_skills) $(profile_llm) $(profile_inference) $(profile_speech) $(profile_cv) $(profile_rag) $(profile_backend) arxiv-reader disk-cleanup freqtrade ml-brainstorm"
 }
 
 # ── Resolution Functions ────────────────────────────────
