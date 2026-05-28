@@ -14,7 +14,10 @@
 │  freqtrade  │  ultralytics-yolo  │  k2-training-pipeline    │
 │  sherpa-onnx │  arxiv-reader      │  notebook-workflows      │
 │  paddleocr   │  fastapi-at-scale  │  hf-speech-to-speech-pipeline │
-│  openai-audio-api  │  opentelemetry  │  semantic-router        │
+│  openai-audio-api  │  opentelemetry  │  semantic-router       │
+├─────────────────────────────────────────────────────────────┤
+│                    PLATFORM LAYER                             │
+│  modal-batch-processing  │  modal-sandbox                    │
 ├─────────────────────────────────────────────────────────────┤
 │                    WORKFLOW LAYER                             │
 │  hf-transformers-trainer  │  text-embeddings-rag             │
@@ -64,6 +67,7 @@
 | opentelemetry | ○ | | ○ | | | | | |
 | semantic-router | ○ | | | | ○ | | | |
 | disk-cleanup | | | ○ | | | | | |
+| modal-batch-processing | | | | | ○ | | | |
 
 ● = hard dependency (thường cần)  ○ = soft dependency (optional, tùy workflow)
 
@@ -186,12 +190,27 @@ python-project-setup → python-ml-deps (semantic-router)
     → vllm-tgi-inference (LLM for dynamic routes, optional)
 ```
 
-### 12. Disk Cleanup / Maintenance
+### 12. Modal Batch Processing (fan-out / job queues)
+
+```
+modal-batch-processing (.map/.starmap/.spawn/.spawn_map/@modal.batched)
+    → vllm-tgi-inference / sglang-serving (if serving, not batch orchestration)
+    → modal-sandbox (if interactive exec, not batch)
+```
+
+### 13. Disk Cleanup / Maintenance
 
 ```
 disk-cleanup (diagnose df/du mismatch, lsof deleted files)
     → docker-gpu-setup (if Docker is the culprit)
     → vllm-tgi-inference / sglang-serving (restart after cleanup)
+```
+
+### 14. Modal Sandbox (interactive execution)
+
+```
+modal-sandbox (isolated exec, tunnels, snapshots)
+    → modal-batch-processing (if need fan-out, not interactive)
 ```
 
 ## Serving Alternatives
@@ -210,7 +229,7 @@ disk-cleanup (diagnose df/du mismatch, lsof deleted files)
 
 ## Khi thêm skill mới
 
-1. Xác định skill thuộc layer nào (Application / Workflow / Serving / Infrastructure)
+1. Xác định skill thuộc layer nào (Application / Workflow / Platform / Serving / Infrastructure)
 2. Map dependencies: skill mới phụ thuộc vào skills nào? (thêm vào Dependency Matrix)
 3. Map reverse dependencies: skills nào sẽ reference đến skill mới? (update scope boundaries)
 4. Thêm vào workflow chains nếu skill tham gia pipeline phổ biến

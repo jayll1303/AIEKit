@@ -1,0 +1,82 @@
+[
+  {
+    "query": "I want to process 10,000 images through a Modal function in parallel and collect all the results back in my script",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I submit a long-running Modal job from my web server and return a job ID the client can poll later?",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to fan out a list of 50k items across Modal workers with .map and aggregate the results",
+    "should_trigger": true
+  },
+  {
+    "query": "My Modal batch job is failing on some items and I do not want the whole run to abort. How should I handle partial failures?",
+    "should_trigger": true
+  },
+  {
+    "query": "I want to use @modal.batched to coalesce incoming Whisper requests into fewer GPU calls",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I rate limit a Modal .map workflow so it never exceeds 50 concurrent containers?",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to spawn 1,000 Modal tasks in the background and write results to S3 as they finish",
+    "should_trigger": true
+  },
+  {
+    "query": "What is the difference between .map, .spawn, and .spawn_map on Modal?",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I check the status of a Modal job I spawned earlier if I saved the FunctionCall ID?",
+    "should_trigger": true
+  },
+  {
+    "query": "I want to retry failed items in a Modal .map call without reprocessing the ones that already succeeded",
+    "should_trigger": true
+  },
+  {
+    "query": "Serve Llama on Modal with vLLM and an OpenAI-compatible API",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I reduce cold-start time for my Modal vLLM deployment?",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a Modal Sandbox to run user-submitted code safely",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to deploy a FastAPI app on Modal that autos-scales based on traffic",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I mount a Modal Volume in a function and read files from it?",
+    "should_trigger": false
+  },
+  {
+    "query": "Run a GPU function on Modal that trains a neural network on one machine",
+    "should_trigger": false
+  },
+  {
+    "query": "I have a Modal function that takes 30 seconds to run. How do I make it faster with better hardware?",
+    "should_trigger": false
+  },
+  {
+    "query": "What is the max timeout I can set on a Modal function?",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I pass a large pandas DataFrame to a Modal function without hitting payload size limits?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to run a nightly Modal job that processes yesterday's data and emails a report",
+    "should_trigger": false
+  }
+]

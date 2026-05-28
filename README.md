@@ -16,8 +16,8 @@
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-32-blue?style=flat-square" alt="Total Skills" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Profiles-6-teal?style=flat-square" alt="Profiles" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Total_Skills-34-blue?style=flat-square" alt="Total Skills" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Profiles-7-teal?style=flat-square" alt="Profiles" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square" alt="Maintained" /></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License" /></a>
 </p>
@@ -58,7 +58,7 @@ npx skills add jayll1303/AIEKit --list
 
 ---
 
-## Skills (32)
+## Skills (34)
 
 | Skill | Mô tả |
 |-------|--------|
@@ -75,6 +75,8 @@ npx skills add jayll1303/AIEKit --list
 | `k2-training-pipeline` | Train speech models với Next-gen Kaldi: k2, icefall, lhotse |
 | `llama-cpp-inference` | Chạy GGUF models locally với llama-server, llama-cli, llama-cpp-python |
 | `ml-brainstorm` | Brainstorm ML/AI decisions: training, model selection, serving, quantization |
+| `modal-batch-processing` | Modal job orchestration: `.map`, `.starmap`, `.spawn`, `.spawn_map`, `@modal.batched` |
+| `modal-sandbox` | Modal Sandbox lifecycle: isolated execution, tunnels, snapshots, file IO |
 | `model-quantization` | Quantize LLMs với GGUF, GPTQ, AWQ, bitsandbytes |
 | `notebook-workflows` | Tạo & chỉnh sửa Jupyter/Colab notebooks programmatically |
 | `ollama-local-llm` | Chạy local LLMs với Ollama: pull, run, Modelfile, REST API |
@@ -110,6 +112,7 @@ Skills được nhóm theo domain:
 | **CV** | `ultralytics-yolo`, `paddleocr` | Computer vision |
 | **RAG** | `text-embeddings-rag`, `text-embeddings-inference`, `semantic-router` | RAG pipelines |
 | **Backend** | `fastapi-at-scale`, `opentelemetry`, `python-quality-testing` | API & observability |
+| **Modal** | `modal-batch-processing`, `modal-sandbox` | Modal platform orchestration |
 
 **Standalone**: `arxiv-reader`, `disk-cleanup`, `freqtrade`, `ml-brainstorm`
 

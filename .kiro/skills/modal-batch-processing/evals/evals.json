@@ -1,0 +1,47 @@
+{
+  "skill_name": "modal-batch-processing",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Process 5,000 images through a Modal function that resizes them to thumbnails and collect all results",
+      "expected_output": "Working Python code using .map() or .starmap() to fan out 5,000 image paths/bytes across a Modal resize function, collect all thumbnail results in-process, and handle concurrency limits appropriately",
+      "files": [],
+      "expectations": [
+        "The code uses .map() or .starmap() for synchronous fan-out and in-process result collection",
+        "The code does not use .spawn() since the caller needs results back immediately",
+        "The code includes a @app.function or @app.cls decorated resize function",
+        "The code demonstrates collecting all results (e.g., iterating the .map() generator or list(...))",
+        "The code sets or acknowledges max_containers or concurrency limits where relevant",
+        "The code uses a local_entrypoint or with app.run(): to orchestrate the 5,000 inputs"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I want to submit a long-running Modal job from my web server and let it run detached — the user should get a job ID they can poll later",
+      "expected_output": "Working Python code that uses .spawn() to submit a detached Modal job, returns a job ID (FunctionCall object or serialized handle), and shows how to poll or retrieve the result later without blocking the web server",
+      "files": [],
+      "expectations": [
+        "The code uses .spawn() to submit the job asynchronously",
+        "The code captures and returns a job ID or FunctionCall handle to the caller",
+        "The code demonstrates how to poll or retrieve the result using the job ID (e.g., fc.get() or polling fc.get(timeout=0))",
+        "The code deploys the function with modal deploy or uses Function.from_name() so the web server can reference a stable remote function",
+        "The code does not block the web server request handler waiting for completion",
+        "The response explains the difference between .spawn() and .map() in this context"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm running Whisper transcription on Modal and want to batch multiple audio inputs together per GPU call to maximize utilization",
+      "expected_output": "Working Python code using @modal.batched to coalesce multiple Whisper transcription requests per GPU container call, with correct batch_size and wait_ms settings, and an explanation of the batching contract",
+      "files": [],
+      "expectations": [
+        "The code uses @modal.batched decorator on the transcription function",
+        "The code sets a batch_size appropriate for GPU memory and throughput",
+        "The code sets wait_ms to control how long to wait for a batch to fill",
+        "The decorated function receives a list of inputs and returns a list of results (matching length)",
+        "The code uses GPU resources (gpu= parameter) on the batched function",
+        "The response explains or demonstrates how callers invoke the batched function (individual calls that get coalesced)"
+      ]
+    }
+  ]
+}

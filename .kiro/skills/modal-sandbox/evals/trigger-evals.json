@@ -1,0 +1,82 @@
+[
+  {
+    "query": "I want to create a Modal Sandbox and run some Python code inside it securely, then read back the output",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I attach to an existing Modal Sandbox by ID? I do not want to create a new one every time my script runs",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to expose a Flask app running inside a Modal Sandbox as a public HTTPS URL. How do tunnels work?",
+    "should_trigger": true
+  },
+  {
+    "query": "My Modal Sandbox keeps dying after 5 minutes. How do I make it live longer so it can run for a few hours?",
+    "should_trigger": true
+  },
+  {
+    "query": "I am building a code interpreter agent and need Modal Sandbox to maintain state between user messages",
+    "should_trigger": true
+  },
+  {
+    "query": "Snapshot a Modal Sandbox filesystem midway through a long computation so I can restore from checkpoint after a crash",
+    "should_trigger": true
+  },
+  {
+    "query": "Can I upload a file from my laptop into a running Modal Sandbox at runtime instead of baking it into the image?",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I stream stdout from a Modal Sandbox line by line instead of waiting for the process to finish?",
+    "should_trigger": true
+  },
+  {
+    "query": "Modal Sandbox exec is buffering all my output and only printing at the end. I need real-time streaming",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to run untrusted user code safely in an isolated environment on Modal and expose whatever port it opens as a public URL",
+    "should_trigger": true
+  },
+  {
+    "query": "Deploy a FastAPI app on Modal that scales to zero when no requests come in",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I run a Modal function on a schedule every hour?",
+    "should_trigger": false
+  },
+  {
+    "query": "Modal deploy is failing with an import error in my function. How do I debug it?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to fine-tune Llama on Modal using my own dataset",
+    "should_trigger": false
+  },
+  {
+    "query": "Can I mount an S3 bucket in a Modal function so I can read files from it directly?",
+    "should_trigger": false
+  },
+  {
+    "query": "How does Modal billing work? Am I charged per second or per invocation?",
+    "should_trigger": false
+  },
+  {
+    "query": "I need to run a subprocess inside a normal Modal function and capture stdout, not using Sandbox",
+    "should_trigger": false
+  },
+  {
+    "query": "What is the difference between modal.Volume and modal.CloudBucketMount for sharing files between functions?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to spin up a Jupyter notebook server on Modal that I can connect to from my browser",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I pass secrets like API keys to Modal functions without hardcoding them?",
+    "should_trigger": false
+  }
+]

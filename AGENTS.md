@@ -8,7 +8,7 @@ Bộ Agent Skills cho AI/ML Engineering workflows — từ setup Python project,
 npx skills add jayll1303/AIEKit
 ```
 
-## Skills (32)
+## Skills (34)
 
 Skills are organized into profiles:
 
@@ -19,4 +19,5 @@ Skills are organized into profiles:
 - **CV** (2): ultralytics-yolo, paddleocr
 - **RAG** (3): text-embeddings-rag, text-embeddings-inference, semantic-router
 - **Backend** (3): fastapi-at-scale, opentelemetry, python-quality-testing
+- **Modal** (2): modal-batch-processing, modal-sandbox
 - **Standalone**: arxiv-reader, disk-cleanup, freqtrade, ml-brainstorm

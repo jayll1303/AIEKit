@@ -1,0 +1,47 @@
+{
+  "skill_name": "modal-sandbox",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I want to run a Python script securely in a Modal Sandbox and stream back stdout line by line",
+      "expected_output": "Working Python code that creates a Modal Sandbox, runs a script, and streams stdout line by line using Sandbox.exec() with bufsize=1 or an async reader",
+      "files": [],
+      "expectations": [
+        "The code uses modal.Sandbox.create() or Sandbox.exec() to run the script",
+        "The code reads stdout line by line rather than buffering all output",
+        "The code uses bufsize=1 or an equivalent line-buffered or async streaming approach",
+        "The code correctly handles the ContainerProcess object returned by exec()",
+        "The code creates a modal.App with App.lookup() or modal.App() before creating the sandbox",
+        "The code does not assume that the default python/python3 interpreter has modal installed"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I need to expose an HTTP service running inside a Modal Sandbox via a public URL, then shut it down when done",
+      "expected_output": "Working Python code that starts an HTTP service in a Modal Sandbox, obtains a public tunnel URL, uses it, then calls sandbox.terminate() when done",
+      "files": [],
+      "expectations": [
+        "The code uses sandbox.tunnels() to retrieve the public tunnel URL",
+        "The code uses readiness probes or polls sandbox.tunnels() for readiness before returning or using the URL",
+        "The code opens only the port(s) the service actually needs",
+        "The code calls sandbox.terminate() to shut down the sandbox when done",
+        "The tunnel URL is a genuine tunnel object or URL string, not a placeholder",
+        "The code does not rely on the sandbox process itself to know its own public URL"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "How do I checkpoint a Modal Sandbox filesystem mid-computation so I can restore it later if the run fails?",
+      "expected_output": "A clear explanation and working code demonstrating filesystem snapshots: how to create a snapshot mid-run, what the snapshot captures, limitations, and how to restore by passing the snapshot to a new Sandbox.create() call",
+      "files": [],
+      "expectations": [
+        "The response explains how to create a filesystem snapshot using the Modal SDK (e.g., sandbox.snapshot_filesystem())",
+        "The response explains that the snapshot captures filesystem state, not in-memory process state",
+        "The response shows how to restore from a snapshot by passing it to a new Sandbox.create() call",
+        "The response mentions key limitations or caveats of filesystem snapshots",
+        "The code or explanation references the correct Modal SDK method for creating a snapshot",
+        "The response distinguishes between filesystem snapshots and memory snapshots and when each applies"
+      ]
+    }
+  ]
+}
