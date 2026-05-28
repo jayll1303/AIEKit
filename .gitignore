@@ -2,6 +2,7 @@ docs/*
 !docs/skill-interconnection-map.md
 plans/
 .kiro/specs/
+.kiro/skills/
 my-remotion-video/
 .venv/
 ref/extract_pdfs.py

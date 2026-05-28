@@ -1,0 +1,76 @@
+{
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Core",
+      "description": "Foundation skills for any AI/ML project.",
+      "skills": [
+        "aie-skills-installer",
+        "python-project-setup",
+        "python-ml-deps",
+        "hf-hub-datasets",
+        "docker-gpu-setup",
+        "notebook-workflows"
+      ]
+    },
+    {
+      "title": "LLM Fine-tuning",
+      "description": "Train and align large language models.",
+      "skills": [
+        "hf-transformers-trainer",
+        "unsloth-training",
+        "model-quantization",
+        "experiment-tracking"
+      ]
+    },
+    {
+      "title": "LLM Inference",
+      "description": "Deploy and serve LLMs in production.",
+      "skills": [
+        "vllm-tgi-inference",
+        "sglang-serving",
+        "llama-cpp-inference",
+        "ollama-local-llm",
+        "tensorrt-llm",
+        "triton-deployment"
+      ]
+    },
+    {
+      "title": "Speech & Audio",
+      "description": "Speech recognition, synthesis, and audio processing.",
+      "skills": [
+        "k2-training-pipeline",
+        "sherpa-onnx",
+        "hf-speech-to-speech-pipeline",
+        "openai-audio-api"
+      ]
+    },
+    {
+      "title": "Computer Vision",
+      "description": "Object detection, OCR, and image processing.",
+      "skills": [
+        "ultralytics-yolo",
+        "paddleocr"
+      ]
+    },
+    {
+      "title": "RAG & Embeddings",
+      "description": "Retrieval-augmented generation and semantic search.",
+      "skills": [
+        "text-embeddings-rag",
+        "text-embeddings-inference",
+        "semantic-router"
+      ]
+    },
+    {
+      "title": "Backend & DevOps",
+      "description": "API development, observability, and code quality.",
+      "skills": [
+        "fastapi-at-scale",
+        "opentelemetry",
+        "python-quality-testing",
+        "disk-cleanup"
+      ]
+    }
+  ]
+}
