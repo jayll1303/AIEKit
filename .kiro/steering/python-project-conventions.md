@@ -1,27 +1,27 @@
 ---
 inclusion: auto
 name: python-project-conventions
-description: Conventions cho Python projects trong ML/AI context. Match khi user hỏi về pyproject.toml, uv, ruff, pytest, Python dependencies, project setup, hoặc code quality.
+description: Conventions for Python projects in ML/AI context. Match when user asks about pyproject.toml, uv, ruff, pytest, Python dependencies, project setup, or code quality.
 ---
 
 # Python Project Conventions
 
-Khi làm việc với Python projects (đặc biệt ML/AI), tuân thủ các conventions sau.
+When working with Python projects (especially ML/AI), follow these conventions.
 
 ## Package Manager: uv
 
-- LUÔN dùng `uv` thay vì pip/pip3 trực tiếp
-- `uv pip install` cho install, `uv init` cho project mới
-- `uv pip compile` cho lock file
+- ALWAYS use `uv` instead of pip/pip3 directly
+- `uv pip install` for installing, `uv init` for new projects
+- `uv pip compile` for lock files
 
-Tham khảo skill `python-project-setup` cho chi tiết.
+See skill `python-project-setup` for details.
 
 ## Project Structure
 
 ```
 project/
-├── pyproject.toml        # Single source of truth cho deps + config
-├── uv.lock               # Lock file (commit vào git)
+├── pyproject.toml        # Single source of truth for deps + config
+├── uv.lock               # Lock file (commit to git)
 ├── src/
 │   └── package_name/
 │       ├── __init__.py
@@ -59,35 +59,35 @@ testpaths = ["tests"]
 
 ## CUDA Dependencies — HARD GATE
 
-KHÔNG install PyTorch/CUDA packages mà không specify index URL:
+Do NOT install PyTorch/CUDA packages without specifying the index URL:
 
 ```bash
-# Đúng
+# Correct
 uv pip install torch --index-url https://download.pytorch.org/whl/cu121
 
-# Sai — sẽ install CPU version
+# Wrong — will install the CPU version
 uv pip install torch
 ```
 
-Tham khảo skill `python-ml-deps` cho CUDA version matrix và index URLs.
+See skill `python-ml-deps` for CUDA version matrix and index URLs.
 
 ## Linting & Formatting
 
-- Dùng `ruff` (thay thế flake8 + isort + black)
-- `ruff check .` trước khi commit
-- `ruff format .` cho auto-format
+- Use `ruff` (replaces flake8 + isort + black)
+- `ruff check .` before committing
+- `ruff format .` for auto-format
 
 ## Testing
 
-- Dùng `pytest` với `pytest-cov`
+- Use `pytest` with `pytest-cov`
 - `pytest --cov=src/ --cov-report=term-missing`
-- Tham khảo skill `python-quality-testing` cho Hypothesis, mutation testing
+- See skill `python-quality-testing` for Hypothesis and mutation testing
 
 ## Skill Chain Reference
 
-| Cần gì? | Skill |
-|---------|-------|
+| Need | Skill |
+|------|-------|
 | Bootstrap project (uv init, ruff, pytest) | python-project-setup |
-| Install ML deps với CUDA | python-ml-deps |
+| Install ML deps with CUDA | python-ml-deps |
 | Type annotations, property testing | python-quality-testing |
 | GPU Docker container | docker-gpu-setup |

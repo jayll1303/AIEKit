@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Total_Skills-34-blue?style=flat-square" alt="Total Skills" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Profiles-7-teal?style=flat-square" alt="Profiles" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Profiles-8-teal?style=flat-square" alt="Profiles" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square" alt="Maintained" /></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License" /></a>
 </p>
@@ -115,6 +115,47 @@ Skills được nhóm theo domain:
 | **Modal** | `modal-batch-processing`, `modal-sandbox` | Modal platform orchestration |
 
 **Standalone**: `arxiv-reader`, `disk-cleanup`, `freqtrade`, `ml-brainstorm`
+
+---
+
+## Steering (6)
+
+| File | Inclusion | Description |
+|------|-----------|-------------|
+| `gpu-environment.md` | fileMatch (`Dockerfile*`, `docker-compose*`, `.dockerignore`) | Conventions for GPU-enabled Docker containers and docker-compose |
+| `inference-deployment.md` | auto | Conventions for model serving and deployment |
+| `kiro-component-creation.md` | always | Rules for creating Kiro components (Steering, Skills, Hooks, Powers) |
+| `ml-training-workflow.md` | auto | Conventions for ML training and fine-tuning workflows |
+| `notebook-conventions.md` | fileMatch (`*.ipynb`) | Conventions for Jupyter/Colab notebooks |
+| `python-project-conventions.md` | auto | Conventions for Python projects in ML/AI context |
+
+---
+
+## Hooks (8)
+
+> Dev-only — these automate quality checks and README sync within this repo.
+
+| Hook | Event | Description |
+|------|-------|-------------|
+| `check-staleness` | userTriggered | Scan all skills for outdated version references and missing version pins |
+| `readme-index-on-create` | fileCreated | Auto-update README when new component file is created |
+| `readme-index-on-delete` | fileDeleted | Auto-update README when component file is deleted |
+| `skill-effectiveness-tracking` | agentStop | Log which skills were activated and task success metrics |
+| `skill-quality-gate` | fileCreated (SKILL.md) | Check best practices when new skill is created |
+| `skill-quality-on-edit` | fileEdited (SKILL.md) | Check best practices when skill is edited |
+| `steering-consistency` | fileCreated (steering) | Validate frontmatter and domain overlap for new steering |
+| `update-readme-index` | fileEdited | Auto-update README when component file is edited |
+
+---
+
+## Powers (4)
+
+| Power | Description |
+|-------|-------------|
+| `gpu-monitor` | Monitor GPU status, VRAM usage, estimate memory requirements for ML models |
+| `huggingface` | Search models, datasets, papers, spaces on HuggingFace Hub |
+| `remotion` | Create programmatic videos with React using Remotion |
+| `sentry` | Sentry SDK error tracking, performance monitoring, and debugging via MCP |
 
 ---
 

@@ -1,16 +1,16 @@
 ---
 inclusion: fileMatch
 fileMatchPattern: ["**/*.ipynb"]
-description: Conventions cho Jupyter/Colab notebook (.ipynb). Áp dụng khi tạo, edit, hoặc parse notebook files.
+description: Conventions for Jupyter/Colab notebooks (.ipynb). Applies when creating, editing, or parsing notebook files.
 ---
 
 # Notebook File Conventions
 
-Khi làm việc với file `.ipynb` (Jupyter/Colab notebook), tuân thủ các quy tắc sau.
+When working with `.ipynb` (Jupyter/Colab notebook) files, follow these rules.
 
-## .ipynb là JSON
+## .ipynb is JSON
 
-File `.ipynb` là JSON với structure cố định. KHÔNG edit bằng string manipulation — luôn parse JSON, modify, rồi serialize lại.
+`.ipynb` files are JSON with a fixed structure. Do NOT edit via string manipulation — always parse JSON, modify, then serialize back.
 
 ```json
 {
@@ -29,30 +29,30 @@ File `.ipynb` là JSON với structure cố định. KHÔNG edit bằng string m
 }
 ```
 
-## Quy tắc chỉnh sửa cells
+## Cell Editing Rules
 
-- `source` là array of strings, mỗi string kết thúc bằng `\n` (trừ dòng cuối)
-- Khi thêm cell mới, luôn include `"id"` field (uuid, nbformat >= 4.5)
-- Code cells phải có `"outputs": []` và `"execution_count": null`
-- Markdown cells KHÔNG có `outputs` hay `execution_count`
+- `source` is an array of strings, each ending with `\n` (except the last line)
+- When adding a new cell, always include an `"id"` field (uuid, nbformat >= 4.5)
+- Code cells must have `"outputs": []` and `"execution_count": null`
+- Markdown cells do NOT have `outputs` or `execution_count`
 
-## Trước khi commit
+## Before Committing
 
-- Clear ALL outputs: set `"outputs": []`, `"execution_count": null` cho mọi code cell
-- Xóa metadata không cần thiết (widget state, execution timing)
-- Giữ `kernelspec` và `language_info` trong notebook metadata
-- KHÔNG commit file có output chứa data nhạy cảm (API keys, paths, PII)
+- Clear ALL outputs: set `"outputs": []`, `"execution_count": null` for every code cell
+- Remove unnecessary metadata (widget state, execution timing)
+- Keep `kernelspec` and `language_info` in notebook metadata
+- Do NOT commit files with outputs containing sensitive data (API keys, paths, PII)
 
-## Khi tạo notebook mới
+## When Creating New Notebooks
 
-- Luôn bắt đầu bằng markdown cell mô tả purpose
-- Nhóm code cells theo logical sections, ngăn cách bằng markdown headers
-- Cell đầu tiên: imports và setup
-- Cell cuối: cleanup/summary nếu cần
+- Always start with a markdown cell describing the purpose
+- Group code cells into logical sections separated by markdown headers
+- First cell: imports and setup
+- Last cell: cleanup/summary if needed
 
 ## Colab-specific
 
-- Nếu notebook dùng cho Colab, thêm metadata: `"colab": {"name": "...", "provenance": []}`
+- If notebook targets Colab, add metadata: `"colab": {"name": "...", "provenance": []}`
 - Mount Drive: `from google.colab import drive; drive.mount('/content/drive')`
-- GPU check: `!nvidia-smi` trong cell riêng
-- Pip install: dùng `!pip install -q package` (quiet mode)
+- GPU check: `!nvidia-smi` in a separate cell
+- Pip install: use `!pip install -q package` (quiet mode)

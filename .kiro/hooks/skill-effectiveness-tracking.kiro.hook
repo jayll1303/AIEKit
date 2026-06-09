@@ -1,0 +1,12 @@
+{
+  "name": "Skill Effectiveness Tracking",
+  "version": "1.0.0",
+  "description": "After agent completes a task, log which skills were activated and whether the task succeeded without excessive retries. Outputs to .kiro/metrics/skill-usage.jsonl for analysis.",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the conversation that just completed. Identify: 1) Which skills from .kiro/skills/ were activated during this session (list skill names). 2) Whether the task completed successfully (yes/no/partial). 3) How many retries or correction cycles occurred (0 = first attempt success). 4) Brief one-line summary of what was accomplished. Then append a single JSON line to the file `.kiro/metrics/skill-usage.jsonl` with this schema: {\"timestamp\": \"ISO-8601\", \"skills_activated\": [\"skill-name\", ...], \"task_success\": true|false|\"partial\", \"retry_count\": N, \"summary\": \"what was done\"}. Create the metrics directory and file if they don't exist. Do NOT output anything else to the user — this is silent telemetry."
+  }
+}

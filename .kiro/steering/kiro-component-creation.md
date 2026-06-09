@@ -1,73 +1,73 @@
 ---
 inclusion: always
-description: Quy tắc tạo Kiro components (Steering, Skills, Hooks, Powers). Luôn có trong context để đảm bảo tuân thủ cấu trúc và conventions.
+description: Rules for creating Kiro components (Steering, Skills, Hooks, Powers). Always in context to ensure compliance with structure and conventions.
 ---
 
 # Kiro Component Creation Guide
 
-Khi tạo Steering, Skills, Hooks hoặc Powers cho Kiro, PHẢI tuân thủ các quy tắc sau.
-Tham khảo chi tiết: #[[file:docs/kiro-compatible.md]]
+When creating Steering, Skills, Hooks, or Powers for Kiro, you MUST follow these rules.
+See details: #[[file:docs/kiro-compatible.md]]
 
-## Chọn đúng loại component
+## Choose the Right Component Type
 
-| Cần gì? | Dùng gì? | Đặt ở đâu? |
-|---------|----------|-------------|
-| Rule/convention luôn có trong context | **Steering** (`always`) | `.kiro/steering/*.md` |
-| Rule chỉ áp dụng cho file cụ thể | **Steering** (`fileMatch`) | `.kiro/steering/*.md` |
-| Rule agent tự match theo prompt | **Steering** (`auto`) | `.kiro/steering/*.md` |
-| Portable instruction package, share được | **Skill** | `.kiro/skills/<name>/SKILL.md` |
-| Automation trigger theo IDE event | **Hook** | `.kiro/hooks/*.kiro.hook` |
+| Need | Use | Location |
+|------|-----|----------|
+| Rule/convention always in context | **Steering** (`always`) | `.kiro/steering/*.md` |
+| Rule only applies to specific files | **Steering** (`fileMatch`) | `.kiro/steering/*.md` |
+| Rule agent auto-matches by prompt | **Steering** (`auto`) | `.kiro/steering/*.md` |
+| Portable instruction package, shareable | **Skill** | `.kiro/skills/<name>/SKILL.md` |
+| Automation trigger on IDE event | **Hook** | `.kiro/hooks/*.kiro.hook` |
 | Bundle MCP tools + steering + hooks | **Power** | `POWER.md` + `mcp.json` + `steering/` |
 
 ## Steering Rules
 
-- File: `.kiro/steering/<tên-kebab-case>.md`
-- YAML frontmatter bắt buộc ở đầu file:
+- File: `.kiro/steering/<kebab-case-name>.md`
+- YAML frontmatter required at file start:
 
 ```yaml
 ---
 inclusion: always | fileMatch | manual | auto
-# fileMatchPattern: ["**/*.ts"]    # chỉ khi fileMatch
-# name: tên-steering               # chỉ khi manual/auto
-# description: mô tả ngắn          # chỉ khi auto
+# fileMatchPattern: ["**/*.ts"]    # only for fileMatch
+# name: steering-name              # only for manual/auto
+# description: short description   # only for auto
 ---
 ```
 
-- Một file = một domain (api, testing, security...)
-- Dùng natural language + code examples
-- Có thể reference file: `#[[file:path/to/file]]`
-- KHÔNG chứa secret/API key
+- One file = one domain (api, testing, security...)
+- Use natural language + code examples
+- Can reference files: `#[[file:path/to/file]]`
+- Do NOT include secrets/API keys
 
 ## Skill Rules
 
-- Cấu trúc thư mục:
+- Directory structure:
 
 ```
 .kiro/skills/<skill-name>/
-├── SKILL.md          # bắt buộc
-├── references/       # optional - docs chi tiết
+├── SKILL.md          # required
+├── references/       # optional - detailed docs
 ├── scripts/          # optional - executable scripts
 └── assets/           # optional - templates
 ```
 
-- SKILL.md frontmatter bắt buộc:
+- SKILL.md frontmatter required:
 
 ```yaml
 ---
-name: skill-name              # lowercase, hyphen, max 64 ký tự
-description: Mô tả rõ ràng chứa keyword developer hay dùng. Use when...
+name: skill-name              # lowercase, hyphen, max 64 chars
+description: Clear description with keywords developers commonly use. Use when...
 license: MIT                  # optional
 ---
 ```
 
-- Description phải chứa keyword rõ ràng + pattern "Use when..."
-- SKILL.md ngắn gọn, chi tiết đặt trong `references/`
-- Workspace scope cho project-specific, global cho personal workflow
+- Description must contain clear keywords + "Use when..." pattern
+- Keep SKILL.md concise; put details in `references/`
+- Workspace scope for project-specific, global for personal workflow
 
 ## Hook Rules
 
-- File: `.kiro/hooks/<tên-hook>.kiro.hook` (JSON)
-- Schema bắt buộc:
+- File: `.kiro/hooks/<hook-name>.kiro.hook` (JSON)
+- Required schema:
 
 ```json
 {
@@ -87,141 +87,141 @@ license: MIT                  # optional
 }
 ```
 
-- `patterns` chỉ dùng cho file events (fileEdited, fileCreated, fileDeleted)
-- `toolTypes` chỉ dùng cho preToolUse/postToolUse. Valid categories: read, write, shell, web, spec, *
-- Ưu tiên tạo qua Kiro UI (Agent Hooks panel) khi có thể
+- `patterns` only for file events (fileEdited, fileCreated, fileDeleted)
+- `toolTypes` only for preToolUse/postToolUse. Valid categories: read, write, shell, web, spec, *
+- Prefer creating via Kiro UI (Agent Hooks panel) when possible
 
 ## Power Rules (advanced)
 
-### Hai loại Power
+### Two Types of Powers
 
-| Loại | Có mcp.json? | Khi nào dùng |
-|------|-------------|--------------|
-| **Guided MCP Power** | ✅ Có | Document MCP server + workflows |
-| **Knowledge Base Power** | ❌ Không | Pure docs: CLI guide, best practices, troubleshooting |
+| Type | Has mcp.json? | When to use |
+|------|--------------|-------------|
+| **Guided MCP Power** | Yes | Document MCP server + workflows |
+| **Knowledge Base Power** | No | Pure docs: CLI guide, best practices, troubleshooting |
 
-### Cấu trúc thư mục
+### Directory Structure
 
 ```
-power-<name>/                    # hoặc <name>/ — prefix "power-" optional
-├── POWER.md                     # bắt buộc
-├── mcp.json                     # chỉ cho Guided MCP Power
-└── steering/                    # optional, chỉ khi >500 lines hoặc workflows độc lập
+power-<name>/                    # or <name>/ — "power-" prefix optional
+├── POWER.md                     # required
+├── mcp.json                     # only for Guided MCP Power
+└── steering/                    # optional, only when >500 lines or independent workflows
     └── workflow-*.md
 ```
 
 ### POWER.md Frontmatter
 
-Chỉ có 5 fields hợp lệ — KHÔNG dùng version, tags, repository, license:
+Only 5 valid fields — do NOT use version, tags, repository, license:
 
 ```yaml
 ---
-name: "power-name"              # required, kebab-case, KHÔNG prefix "power-"
+name: "power-name"              # required, kebab-case, NO "power-" prefix
 displayName: "Human Readable"   # required, Title Case
-description: "Max 3 câu."       # required, ngắn gọn
-keywords: ["specific", "terms"] # optional, 5-7 keywords, tránh từ quá chung
-author: "Author Name"           # optional nhưng recommended
+description: "Max 3 sentences." # required, concise
+keywords: ["specific", "terms"] # optional, 5-7 keywords, avoid overly generic terms
+author: "Author Name"           # optional but recommended
 ---
 ```
 
 ### Naming Convention
 
 - Default: `{tool-name}` (e.g., `huggingface`, `terraform`)
-- Chỉ split khi workflows hoàn toàn độc lập: `{tool-name}-{workflow}` (e.g., `supabase-local-dev`)
-- Tên kebab-case, không prefix `power-` trong field `name`
+- Only split when workflows are completely independent: `{tool-name}-{workflow}` (e.g., `supabase-local-dev`)
+- Kebab-case name, no `power-` prefix in the `name` field
 
 ### Keyword Rules
 
-- 5-7 keywords specific cho domain
-- TRÁNH keywords quá chung: "test", "debug", "data", "api", "help" → gây false activation
-- Ưu tiên từ khóa cụ thể: "postgresql" thay vì "database", "huggingface" thay vì "model"
+- 5-7 domain-specific keywords
+- AVOID overly generic keywords: "test", "debug", "data", "api", "help" → cause false activation
+- Prefer specific terms: "postgresql" over "database", "huggingface" over "model"
 
-### Khi nào tạo steering/ directory
+### When to Create steering/ Directory
 
 - POWER.md > 500 lines
-- Có workflows độc lập mà user không cần load cùng lúc
-- Mặc định: giữ mọi thứ trong POWER.md, chỉ split khi thực sự cần
+- Has independent workflows users don't need loaded simultaneously
+- Default: keep everything in POWER.md, only split when truly needed
 
-### Steering files trong Power
+### Steering Files in Powers
 
-- KHÔNG cần frontmatter (khác với `.kiro/steering/` files)
-- Được load on-demand qua `readSteering` action, không phải auto-inclusion
-- Đặt tên mô tả: `workflow-model-discovery.md`, `troubleshooting.md`
+- Do NOT need frontmatter (unlike `.kiro/steering/` files)
+- Loaded on-demand via `readSteering` action, not auto-inclusion
+- Use descriptive names: `workflow-model-discovery.md`, `troubleshooting.md`
 
 ### mcp.json Rules
 
-- Chỉ chứa MCP server config, KHÔNG chứa metadata (metadata ở POWER.md frontmatter)
-- `autoApprove`: chỉ list read-only/safe tools
-- `disabledTools`: chỉ disable khi user đồng ý explicitly
-- Env vars dùng `${VAR_NAME}` syntax cho sharing
+- Contains only MCP server config, NOT metadata (metadata goes in POWER.md frontmatter)
+- `autoApprove`: only list read-only/safe tools
+- `disabledTools`: only disable when user explicitly agrees
+- Env vars use `${VAR_NAME}` syntax for sharing
 
-### MCP Config Placeholders (cho sharing)
+### MCP Config Placeholders (for sharing)
 
-Nếu mcp.json có giá trị user-specific (API keys, paths), PHẢI:
-1. Thay bằng placeholder: `YOUR_API_KEY_HERE`, `PLACEHOLDER_PATH`
-2. Thêm section "MCP Config Placeholders" trong POWER.md giải thích cách lấy từng giá trị
-3. Mỗi placeholder cần: tên, mô tả, hướng dẫn cụ thể cách lấy
+If mcp.json has user-specific values (API keys, paths), you MUST:
+1. Replace with placeholder: `YOUR_API_KEY_HERE`, `PLACEHOLDER_PATH`
+2. Add "MCP Config Placeholders" section in POWER.md explaining how to get each value
+3. Each placeholder needs: name, description, specific instructions on how to obtain it
 
-### Granularity — Khi nào split Power
+### Granularity — When to Split Powers
 
-Mặc định: KHÔNG split. Giữ single power.
+Default: do NOT split. Keep as a single power.
 
-Chỉ split khi TẤT CẢ điều kiện đúng:
-1. Workflows hoàn toàn độc lập, không bao giờ dùng cùng nhau
-2. Khác environment (local vs remote, dev vs prod)
-3. User chỉ cần 1 workflow tại 1 thời điểm
-4. Có strong conviction rằng split cải thiện usability
+Only split when ALL conditions are true:
+1. Workflows are completely independent, never used together
+2. Different environments (local vs remote, dev vs prod)
+3. User only needs 1 workflow at a time
+4. Strong conviction that splitting improves usability
 
 ### POWER.md Recommended Sections
 
-1. Overview — power làm gì, tại sao hữu ích
+1. Overview — what the power does, why it's useful
 2. Onboarding — prerequisites, installation, setup
-3. Available Tools — list tools với mô tả ngắn (Guided MCP)
-4. Common Workflows — step-by-step cho use cases chính
-5. Connected Skills — bảng liên kết sang skills liên quan
-6. MCP Config Placeholders — hướng dẫn thay placeholder (nếu có)
+3. Available Tools — list tools with short descriptions (Guided MCP)
+4. Common Workflows — step-by-step for main use cases
+5. Connected Skills — table linking to related skills
+6. MCP Config Placeholders — placeholder replacement guide (if applicable)
 7. Troubleshooting — common errors + solutions
-8. Anti-Patterns — những gì KHÔNG nên làm
+8. Anti-Patterns — what NOT to do
 
 ## Skill Interconnection Requirements
 
-Khi tạo hoặc sửa skill, PHẢI maintain interconnection map.
-Tham khảo: #[[file:docs/skill-interconnection-map.md]]
+When creating or editing a skill, you MUST maintain the interconnection map.
+See: #[[file:docs/skill-interconnection-map.md]]
 
-1. **Scope boundary**: Mỗi skill PHẢI có "Does NOT handle:" với `→ skill-name` syntax
-2. **Layer assignment**: Xác định skill thuộc layer nào (Application / Workflow / Serving / Infrastructure)
-3. **Dependency matrix**: Update matrix trong interconnection map khi thêm skill mới
-4. **Workflow chains**: Nếu skill tham gia pipeline phổ biến, thêm vào workflow chains
-5. **Reverse update**: Khi thêm skill mới, check xem skills hiện tại có cần update scope boundary không
+1. **Scope boundary**: Every skill MUST have "Does NOT handle:" with `→ skill-name` syntax
+2. **Layer assignment**: Determine which layer the skill belongs to (Application / Workflow / Serving / Infrastructure)
+3. **Dependency matrix**: Update matrix in interconnection map when adding a new skill
+4. **Workflow chains**: If skill participates in a common pipeline, add to workflow chains
+5. **Reverse update**: When adding a new skill, check if existing skills need their scope boundaries updated
 
 ## Steering Domain Rules
 
-Mỗi steering file = một domain. Không overlap.
-Tham khảo: #[[file:docs/skill-creation-best-practices.md]]
+One steering file = one domain. No overlap.
+See: #[[file:docs/skill-creation-best-practices.md]]
 
-Steering hiện có:
-- `kiro-component-creation.md` (always) — Quy tắc tạo components
+Existing steering files:
+- `kiro-component-creation.md` (always) — Component creation rules
 - `notebook-conventions.md` (fileMatch: *.ipynb) — Notebook editing
 - `ml-training-workflow.md` (auto) — Training/fine-tuning conventions
 - `inference-deployment.md` (auto) — Serving/deployment conventions
 - `gpu-environment.md` (fileMatch: Dockerfile*, docker-compose*) — GPU container conventions
 - `python-project-conventions.md` (auto) — Python project setup, uv, ruff, pytest
 
-Khi tạo steering mới: check danh sách trên để tránh overlap domain.
+When creating new steering: check the list above to avoid domain overlap.
 
-## Checklist trước khi hoàn thành
+## Checklist Before Completion
 
-- [ ] Đúng thư mục scope (workspace `.kiro/` vs global `~/.kiro/`)
-- [ ] Frontmatter hợp lệ (đúng fields cho từng loại)
-- [ ] Không chứa secret/API key
-- [ ] Tên file kebab-case
-- [ ] Với Hooks: event type và action type khớp nhau
-- [ ] Với Skills: description chứa keyword + "Use when..." + scope boundary
-- [ ] Với Skills: Update `docs/skill-interconnection-map.md` nếu thêm skill mới
-- [ ] Với Steering: Không overlap domain với steering hiện có
-- [ ] Với Powers: chỉ dùng 5 frontmatter fields hợp lệ (name, displayName, description, keywords, author)
-- [ ] Với Powers: description max 3 câu, keywords specific (không quá chung)
-- [ ] Với Powers: steering files trong power KHÔNG có frontmatter
-- [ ] Với Powers: mcp.json chỉ chứa server config, không metadata
-- [ ] Với Powers: có MCP Config Placeholders section nếu mcp.json có user-specific values
-- [ ] Với Powers: autoApprove chỉ list safe/read-only tools
+- [ ] Correct directory scope (workspace `.kiro/` vs global `~/.kiro/`)
+- [ ] Valid frontmatter (correct fields for each type)
+- [ ] No secrets/API keys
+- [ ] Filename in kebab-case
+- [ ] For Hooks: event type and action type match
+- [ ] For Skills: description contains keywords + "Use when..." + scope boundary
+- [ ] For Skills: Update `docs/skill-interconnection-map.md` if adding new skill
+- [ ] For Steering: No domain overlap with existing steering
+- [ ] For Powers: only use 5 valid frontmatter fields (name, displayName, description, keywords, author)
+- [ ] For Powers: description max 3 sentences, specific keywords (not overly generic)
+- [ ] For Powers: steering files in powers do NOT have frontmatter
+- [ ] For Powers: mcp.json contains only server config, no metadata
+- [ ] For Powers: has MCP Config Placeholders section if mcp.json has user-specific values
+- [ ] For Powers: autoApprove only lists safe/read-only tools

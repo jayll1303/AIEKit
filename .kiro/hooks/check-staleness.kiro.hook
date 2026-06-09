@@ -1,0 +1,12 @@
+{
+  "name": "Check Skill Staleness",
+  "version": "1.0.0",
+  "description": "Manually triggered hook to scan all skills for outdated version references and missing version pins.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "python .kiro/scripts/check-skill-staleness.py --skills-dir ."
+  }
+}
